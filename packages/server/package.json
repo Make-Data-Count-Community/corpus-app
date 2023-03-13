@@ -1,0 +1,25 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Yannis Barlas",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "resolutions": {
+    "pg": "8"
+  },
+  "dependencies": {
+    "@coko/server": "3.0.0-beta.3",
+    "config": "^3.3.6",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@coko/lint": "^2.0.0",
+    "faker": "^5.5.3",
+    "jest": "^27.5.1",
+    "node-wait-for-it": "^0.2.0",
+    "nodemon": "^2.0.13"
+  }
+}
