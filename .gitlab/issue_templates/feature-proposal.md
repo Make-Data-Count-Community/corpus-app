@@ -25,13 +25,9 @@
 <!-- Include any known dependencies and an initial estimation (in hours) for this implementation. -->
 
 
-/label ~"feature::new"
-/label ~"scope::to do"
-/assign @DioneMentis
-
-
 
 <!-- Assignee and labels are added automatically. After creating this issue you can link other related or blocking issues with the Gitlab's Linked issues functionality. -->
 
-/label ~feature
-
+/label ~"feature::new"
+/label ~"scope::to do"
+/assign @DioneMentis
