@@ -21,7 +21,7 @@
 
 <!-- Required. Provide the relevant information such as: testing enviroment (local or URL); browser name and version; user machnine (PC or Mac); internet speed if limited, etc.-->
 
-## Error Logs (if avaialable)
+## Error logs (if available)
 
 <!-- Provide the server or client logs -->
 
