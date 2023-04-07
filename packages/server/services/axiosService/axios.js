@@ -2,23 +2,13 @@ const axios = require('axios')
 
 // const { logger } = require('@coko/server')
 
-const apiRoot = ``
-
 /**
  * Create an Axios Client with baseURL as default
  */
 
 const request = async ({ clientOptions, ...options }) => {
-  let client = ''
-
-  if (clientOptions) {
-    client = axios.create(clientOptions)
-  } else {
-    client = axios.create({
-      baseURL: apiRoot,
-    })
-  }
-
+  const client = axios.create(clientOptions)
+ 
   const onSuccess = response => {
     // logger.info('Request successful:', response)
     return response

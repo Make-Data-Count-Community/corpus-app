@@ -2,7 +2,7 @@ const DataCite = require('./datacite')
 
 class Metadata {
     static createInstance(sourceType) {
-        if (sourceType === "dataCite") {
+        if (sourceType === "datacite") {
             return new DataCite();
         }
  
