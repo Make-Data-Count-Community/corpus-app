@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-// const { logger } = require('@coko/server')
+const { logger } = require('@coko/server')
 
 /**
  * Create an Axios Client with baseURL as default
@@ -10,13 +10,13 @@ const request = async ({ clientOptions, ...options }) => {
   const client = axios.create(clientOptions)
  
   const onSuccess = response => {
-    // logger.info('Request successful:', response)
+    logger.info('Request successful:', response)
     return response
   }
 
   const onError = error => {
-    // logger.error(error.response)
-    // logger.error('Request failed:', error.config)
+    logger.error(error.response)
+    logger.error('Request failed:', error.config)
 
     if (error.response) {
       // logger.error('Status:', error.response.status)

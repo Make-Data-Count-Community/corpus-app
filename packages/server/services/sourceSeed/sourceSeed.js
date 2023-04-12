@@ -1,5 +1,5 @@
 const DataCiteEventData = require('./dataCiteEventData')
-const axios = require('../axiosService/axios')
+const axios = require('../axiosService')
 
 class SourceSeed {
   static async createInstance(sourceType) {

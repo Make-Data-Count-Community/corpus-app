@@ -1,5 +1,5 @@
 const SourceSeed = require('./sourceSeed/sourceSeed')
-const Metadata = require('./metadata/metadata')
+// const Metadata = require('./metadata/metadata')
 
 class CorpusData {
   constructor(sourceSeed) {
@@ -24,6 +24,8 @@ class CorpusData {
         data = null
       }
 
+      // eslint-disable-next-line no-console
+      console.log(data)
       // const model = 
 
       hasNext = !result.done
@@ -40,7 +42,7 @@ class CorpusData {
     const sourceSeed = await SourceSeed.createInstance('dataciteEventData')
     const corpusData = new CorpusData(sourceSeed)
 
-    
+    // eslint-disable-next-line no-console
     await corpusData.start()
     
     // const metadata = await Metadata.createInstance('datacite')
