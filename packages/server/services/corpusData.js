@@ -1,36 +1,14 @@
-const SourceSeed = require('./sourceSeed/sourceSeed')
-// const Metadata = require('./metadata/metadata')
+/* eslint-disable no-param-reassign */
 
 class CorpusData {
-  constructor(sourceSeed) {
-    this.sourceSeed = sourceSeed
-    this.model = []
-  }
+  constructor (seedSource, metadataSource) {
+    this.seedSource = seedSource
+    this.metdata = metadataSource
 
-  async start() {
-    const getData = this.sourceSeed.getNextData()
-  
-    let data
-    let hasNext = true
-  
-    while (hasNext) {
-      const result = getData.next(data)
-
-      if (result.value instanceof Promise) {
-        // eslint-disable-next-line no-await-in-loop
-        data = await result.value
-      } else if (result.value) {
-        // process data
-        data = null
-      }
-
-      // eslint-disable-next-line no-console
-      console.log(data)
-      // const model = 
-
-      hasNext = !result.done
-    }
-
+    this.metadataFn = citations => Promise.all
+      (citations.map(citation => metadataSource.retrieveMetadata(citation))
+    )
+    .then(() =>  metadataSource.result )
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -38,19 +16,12 @@ class CorpusData {
     // implement saving to DB
   }
 
-  static async create() {
-    const sourceSeed = await SourceSeed.createInstance('dataciteEventData')
-    const corpusData = new CorpusData(sourceSeed)
+  async execute () {
+    const seedSource = await this.seedSource.readSource()
 
-    // eslint-disable-next-line no-console
-    await corpusData.start()
-    
-    // const metadata = await Metadata.createInstance('datacite')
-    // corpusData.model = metadata
-
-    return corpusData
+    const result = await this.metadataFn(seedSource.citations)
+    return result
   }
 }
-
 
 module.exports = CorpusData
