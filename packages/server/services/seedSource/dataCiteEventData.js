@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 class DataCiteEventData {
-  static BASE_URL = 'https://api.datacite.org/events?page[cursor]=1&page[size]=1000'
+  static BASE_URL = 'https://api.datacite.org/events?page[cursor]=1&page[size]=1&source-id=crossref,datacite-crossref&citation-type=Dataset-ScholarlyArticle'
   
   constructor(axios) {
     this.axios = axios

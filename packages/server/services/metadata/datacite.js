@@ -8,8 +8,8 @@ class Datacite extends Transform  {
   // eslint-disable-next-line class-methods-use-this
   transform(chunk, encoding, callback) {
     // Perform some operation on the chunk
-    // eslint-disable-next-line no-param-reassign
-    chunk.property1 = chunk.property1.toUpperCase();
+    // eslint-disable-next-line no-console
+    console.log({ chunk });
     callback(null, chunk);
   }
 

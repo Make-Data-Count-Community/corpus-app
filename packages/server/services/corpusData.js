@@ -11,14 +11,11 @@ class CorpusData {
     .then(() =>  metadataSource.result )
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  saveModelToDb() {
-    // implement saving to DB
-  }
-
   async execute () {
     const seedSource = await this.seedSource.readSource()
 
+    // eslint-disable-next-line no-console
+    console.log({ citations: seedSource.citations })
     const result = await this.metadataFn(seedSource.citations)
     return result
   }
