@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createClassFromSpec } from 'react-vega'
 
+import { fullColors } from './__helpers__/colors'
+
 const MultiLineChart = props => {
   const {
     data,
@@ -22,10 +24,7 @@ const MultiLineChart = props => {
       data: {
         values: data,
       },
-      mark: {
-        type: 'line',
-        point: 'true',
-      },
+      mark: 'line',
       encoding: {
         x: {
           field: xField,
@@ -44,6 +43,7 @@ const MultiLineChart = props => {
           type: 'nominal',
           scale: {
             domain: stackItems,
+            range: fullColors,
           },
           title: stackTitle,
         },
@@ -67,7 +67,7 @@ MultiLineChart.propTypes = {
 }
 
 MultiLineChart.defaultProps = {
-  xLabelAngle: -90,
+  xLabelAngle: 0,
 }
 
 export default MultiLineChart

@@ -2,8 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createClassFromSpec } from 'react-vega'
 
+import { primaryBlue } from './__helpers__/colors'
+
 const LineChart = props => {
-  const { data, xField, yField } = props
+  const { data, xField, xLabelAngle, yField } = props
 
   const Chart = createClassFromSpec({
     spec: {
@@ -14,8 +16,9 @@ const LineChart = props => {
         values: data,
       },
       encoding: {
-        x: { field: xField },
+        x: { field: xField, axis: { labelAngle: xLabelAngle } },
         y: { field: yField },
+        color: { value: primaryBlue },
       },
     },
   })
@@ -26,7 +29,12 @@ const LineChart = props => {
 LineChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   xField: PropTypes.string.isRequired,
+  xLabelAngle: PropTypes.number,
   yField: PropTypes.string.isRequired,
+}
+
+LineChart.defaultProps = {
+  xLabelAngle: 0,
 }
 
 export default LineChart

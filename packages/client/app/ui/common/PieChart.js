@@ -2,6 +2,8 @@ import { createClassFromSpec } from 'react-vega'
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { fullColors } from './__helpers__/colors'
+
 const PieChart = props => {
   const { data, thetaField, colorField } = props
 
@@ -15,7 +17,13 @@ const PieChart = props => {
       mark: 'arc',
       encoding: {
         theta: { field: thetaField, type: 'quantitative' },
-        color: { field: colorField, type: 'nominal' },
+        color: {
+          field: colorField,
+          type: 'nominal',
+          scale: {
+            range: fullColors,
+          },
+        },
       },
     },
   })

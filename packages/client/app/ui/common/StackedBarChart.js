@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createClassFromSpec } from 'react-vega'
 
+import { fullColors } from './__helpers__/colors'
+
 const StackedBarChart = props => {
   const {
     data,
@@ -41,6 +43,7 @@ const StackedBarChart = props => {
           type: 'nominal',
           scale: {
             domain: stackItems,
+            range: fullColors,
           },
           title: stackTitle,
         },
@@ -64,7 +67,7 @@ StackedBarChart.propTypes = {
 }
 
 StackedBarChart.defaultProps = {
-  xLabelAngle: -90,
+  xLabelAngle: 0,
 }
 
 export default StackedBarChart
