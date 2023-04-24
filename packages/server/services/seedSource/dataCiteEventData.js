@@ -5,6 +5,7 @@ class DataCiteEventData {
   constructor(axios) {
     this.axios = axios
     this.citations = []
+    this.counts = 0
   }
 
   async readSource () {
@@ -15,11 +16,13 @@ class DataCiteEventData {
     let hasNext = true
   
     while (hasNext) {
-      const result = getData.next(data)
-      
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < result.value.length; i++) {
-        this.citations.push(result.value[i])
+      const result = await getData.next(data)
+
+      if (result.done === false) {
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < result.value.data.length; i++) {    
+          this.citations.push(result.value.data[i])
+        }
       }
 
       hasNext = !result.done
@@ -30,12 +33,13 @@ class DataCiteEventData {
 
   async *getNextData(url) {
     let nextUrl = url || DataCiteEventData.BASE_URL
-
+  
     while (nextUrl) {
+      this.counts += 1
       // eslint-disable-next-line no-console
       const response = await this.axios.get(nextUrl)
-      yield response
-      nextUrl = response.data.links.next
+      yield response.data
+      nextUrl = this.counts > 1 ? null : response.data.links.next
     }
   }
 

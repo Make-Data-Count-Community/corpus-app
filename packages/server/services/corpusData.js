@@ -12,11 +12,10 @@ class CorpusData {
   }
 
   async execute () {
-    const seedSource = await this.seedSource.readSource()
+    const citations = await this.seedSource.readSource()
 
     // eslint-disable-next-line no-console
-    console.log({ citations: seedSource.citations })
-    const result = await this.metadataFn(seedSource.citations)
+    const result = await this.metadataFn(citations)
     return result
   }
 }

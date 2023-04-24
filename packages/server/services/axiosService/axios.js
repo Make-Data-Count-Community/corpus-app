@@ -10,7 +10,7 @@ const request = async ({ clientOptions, ...options }) => {
   const client = axios.create(clientOptions)
  
   const onSuccess = response => {
-    logger.info('Request successful:', response)
+    // logger.info('Request successful:', response)
     return response
   }
 
