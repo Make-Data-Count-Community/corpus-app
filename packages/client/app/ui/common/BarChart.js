@@ -22,8 +22,9 @@ const BarChart = props => {
           field: xField,
           type: 'nominal',
           axis: { labelAngle: xLabelAngle },
+          title: null,
         },
-        y: { field: yField, type: 'quantitative' },
+        y: { field: yField, type: 'quantitative', title: null },
         color: {
           value: primaryBlue,
         },

@@ -11,10 +11,8 @@ const MultiLineChart = props => {
     stackItems,
     stackTitle,
     xLabelAngle,
-    xLabelTitle,
     xField,
     yField,
-    yLabelTitle,
   } = props
 
   const Chart = createClassFromSpec({
@@ -30,13 +28,13 @@ const MultiLineChart = props => {
           field: xField,
           type: 'nominal',
           axis: { labelAngle: xLabelAngle },
-          title: xLabelTitle,
+          title: null,
         },
         y: {
           field: yField,
           type: 'quantitative',
           aggregate: 'sum',
-          title: yLabelTitle,
+          title: null,
         },
         color: {
           field: stackField,
@@ -60,10 +58,8 @@ MultiLineChart.propTypes = {
   stackItems: PropTypes.arrayOf(PropTypes.string).isRequired,
   stackTitle: PropTypes.string.isRequired,
   xLabelAngle: PropTypes.number,
-  xLabelTitle: PropTypes.string.isRequired,
   xField: PropTypes.string.isRequired,
   yField: PropTypes.string.isRequired,
-  yLabelTitle: PropTypes.string.isRequired,
 }
 
 MultiLineChart.defaultProps = {

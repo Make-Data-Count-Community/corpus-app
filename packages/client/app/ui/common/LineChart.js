@@ -16,8 +16,8 @@ const LineChart = props => {
         values: data,
       },
       encoding: {
-        x: { field: xField, axis: { labelAngle: xLabelAngle } },
-        y: { field: yField },
+        x: { field: xField, axis: { labelAngle: xLabelAngle }, title: null },
+        y: { field: yField, title: null },
         color: { value: primaryBlue },
       },
     },
