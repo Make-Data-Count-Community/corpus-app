@@ -28,4 +28,6 @@ const fullColors = [
 
 const primaryBlue = '#243B54'
 
-module.exports = { fullColors, primaryBlue }
+const chartBackground = '#F6F7F8'
+
+module.exports = { fullColors, primaryBlue, chartBackground }

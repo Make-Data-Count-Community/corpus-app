@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createClassFromSpec } from 'react-vega'
 
-import { primaryBlue } from './__helpers__/colors'
+import { chartBackground, primaryBlue } from './__helpers__/colors'
 
 const BarChart = props => {
   const { data, xLabelAngle, xField, yField } = props
@@ -11,8 +11,9 @@ const BarChart = props => {
     spec: {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       description: 'Bar Chart',
-      //   width: 'container',
-      //   height: 'container',
+      width: 'container',
+      height: 300,
+      autosize: { type: 'fit', contains: 'padding' },
       data: {
         values: data,
       },
@@ -24,15 +25,26 @@ const BarChart = props => {
           axis: { labelAngle: xLabelAngle },
           title: null,
         },
-        y: { field: yField, type: 'quantitative', title: null },
+        y: {
+          field: yField,
+          type: 'quantitative',
+          title: null,
+          axis: { grid: false },
+        },
         color: {
           value: primaryBlue,
         },
       },
+      config: {
+        view: {
+          stroke: null,
+        },
+        background: chartBackground,
+      },
     },
   })
 
-  return <Chart />
+  return <Chart actions={false} style={{ width: '100%', height: '100%' }} />
 }
 
 BarChart.propTypes = {
