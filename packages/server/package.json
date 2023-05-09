@@ -13,6 +13,7 @@
   "dependencies": {
     "@coko/server": "3.0.0-beta.3",
     "config": "^3.3.6",
+    "objection": "3.0.1",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
