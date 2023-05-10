@@ -14,7 +14,7 @@ const LineChart = props => {
       width: 'container',
       height: 300,
       autosize: { type: 'fit', contains: 'padding' },
-      mark: 'line',
+      mark: { type: 'line', tooltip: true },
       data: {
         values: data,
       },

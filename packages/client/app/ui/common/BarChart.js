@@ -17,7 +17,7 @@ const BarChart = props => {
       data: {
         values: data,
       },
-      mark: 'bar',
+      mark: { type: 'bar', tooltip: true },
       encoding: {
         x: {
           field: xField,
