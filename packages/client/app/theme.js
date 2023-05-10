@@ -1,36 +1,47 @@
+// import '@fontsource/barlow'
+
 module.exports = {
   colorBackground: 'white',
   colorBackgroundHue: '#f5f5f5',
   colorBody: '#000',
-  colorPrimary: '#178387',
-  colorSecondary: '#0a5c5f', // 'gainsboro',
-  colorTertiary: '#8ac341',
+  colorPrimary: '#243B54',
+  colorSecondary: '#00B1E2', // 'gainsboro',
+  colorTertiary: '#037AAD',
   colorBorder: '#777',
   colorSelection: '#3fc2cd',
   colorPrimaryBorder: '#71ada9',
+  colorChartBackground: '#F6F7F8',
+  colorApplyFilters: '#0071B2',
 
   colorInfo: '#178387',
-  colorSuccess: '#00763a',
-  colorError: '#d43131',
-  colorWarning: '#a65b00',
+  colorSuccess: '#46BCAB',
+  colorError: '#F07C73',
+  colorWarning: '#FFA947',
 
-  colorText: '#3F3F3F',
-  colorTextDark: '#222222',
+  colorText: '#243B54',
+  colorTextDark: '#000000',
   colorTextReverse: 'white',
-  colorTextPlaceholder: '#777',
+  colorTextPlaceholder: '#DCE0E4',
 
-  fontInterface: 'Arial, sans-serif',
+  colorDoi: '#46BCAB',
+  colorSubject: '#F07C73',
+  colorPublisher: '#BC2B66',
+  colorRepository: '#D4D438',
+  colorAccession: '#FFA947',
+
+  fontInterface: 'Barlow, sans-serif',
   // font sizes
   fontSize: '16', // actual antd font variable
 
   fontSizeBase: '16px',
-  fontSizeBaseSmall: '14px',
-  fontSizeHeading1: '54px',
+  fontSizeBaseSmall: '12px',
+  fontSizeHeading1: '24px',
   fontSizeHeading2: '36px',
   fontSizeHeading3: '36px',
   fontSizeHeading4: '36px',
   // fontSizeHeading5: '25px',
   // fontSizeHeading6: '16px',
+  fontSizeFilterLabel: '14px',
 
   // outline width
   lineWidth: '0.5',
