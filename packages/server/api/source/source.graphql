@@ -1,0 +1,9 @@
+type Source {
+  id: ID
+  title: String
+  externalId: String
+}
+
+extend type Query {
+  getSources: [Source]
+}

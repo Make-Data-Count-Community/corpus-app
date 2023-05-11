@@ -1,0 +1,9 @@
+type Repository {
+  id: ID
+  title: String
+  externalId: String
+}
+
+extend type Query {
+  getRepository: [Repository]
+}

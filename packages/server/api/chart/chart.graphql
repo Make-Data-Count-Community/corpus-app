@@ -1,0 +1,14 @@
+type Chart {
+  id: ID
+  xField: Integer
+  yField: Integer
+  stackField: String
+  parent: ID
+}
+
+extend type Query {
+  getAssertionsPerYear: [Chart]
+  getAssertionsPerSubject: [Chart]
+  getAssertionsPerPublisher: [Chart]
+  getAssertionCountsPerSource: [Chart]
+}

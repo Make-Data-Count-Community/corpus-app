@@ -13,10 +13,7 @@ class Funder extends BaseModel {
   static get schema() {
     return {
       properties: {
-        firstName: {
-          type: ['string', 'null'],
-        },
-        lastName: {
+        title: {
           type: ['string', 'null'],
         },
         externalId: {

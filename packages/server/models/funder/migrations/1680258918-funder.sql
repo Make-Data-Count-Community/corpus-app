@@ -6,8 +6,7 @@ CREATE TABLE IF NOT EXISTS funders (
   updated timestamp with time zone,
 
   -- own
-  first_name text,
-  last_name text,
+  title text,
   external_id text,
   doi_count bigint,
   accession_number_count bigint

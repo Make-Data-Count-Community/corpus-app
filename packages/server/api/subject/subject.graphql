@@ -1,0 +1,9 @@
+type Subject {
+  id: ID
+  title: String
+  externalId: String
+}
+
+extend type Query {
+  getSubjects: [Subject]
+}
