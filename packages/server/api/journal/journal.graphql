@@ -1,0 +1,9 @@
+type Journal {
+  id: ID
+  title: String
+  externalId: String
+}
+
+extend type Query {
+  getJournals: [Journal]
+}

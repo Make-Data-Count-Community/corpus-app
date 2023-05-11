@@ -1,18 +1,10 @@
-const getAssertionsPerYear = () => {
+const getAssertionsPerYear = () => {}
 
-}
+const getAssertionsPerSubject = () => {}
 
-const getAssertionsPerSubject = () => {
+const getAssertionsPerPublisher = () => {}
 
-}
-
-const getAssertionsPerPublisher = () => {
-
-}
-
-const getAssertionCountsPerSource = () => {
-  
-}
+const getAssertionCountsPerSource = () => {}
 
 module.exports = {
   getAssertionsPerYear,

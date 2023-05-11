@@ -1,9 +1,9 @@
-const { 
+const {
   getAssertionsPerYear,
   getAssertionsPerSubject,
   getAssertionsPerPublisher,
-  getAssertionCountsPerSource
- } = require('../../controllers/chart.controllers')
+  getAssertionCountsPerSource,
+} = require('../../controllers/chart.controllers')
 
 const getAssertionsPerYearResolver = async (_, { id, options }) => {
   return getAssertionsPerYear(id, options)
@@ -26,10 +26,8 @@ module.exports = {
     getAssertionsPerYear: getAssertionsPerYearResolver,
     getAssertionsPerSubject: getAssertionsPerSubjectResolver,
     getAssertionsPerPublisher: getAssertionsPerPublisherResolver,
-    getAssertionCountsPerSource: getAssertionCountsPerSourceResolver
+    getAssertionCountsPerSource: getAssertionCountsPerSourceResolver,
   },
-  Mutation: {
-  },
-  Chart: {
-  }
+  Mutation: {},
+  Chart: {},
 }
