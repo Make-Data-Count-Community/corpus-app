@@ -17,7 +17,7 @@ const PieChart = props => {
       data: {
         values: data,
       },
-      mark: 'arc',
+      mark: { type: 'arc', tooltip: true },
       encoding: {
         theta: { field: thetaField, type: 'quantitative', title: null },
         color: {
