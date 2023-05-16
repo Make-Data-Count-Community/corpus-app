@@ -37,6 +37,10 @@ class ActivityLog extends BaseModel {
           format: 'uuid',
           type: ['string', 'null'],
         },
+        proccessed: {
+          default: false,
+          type: ['boolean', false],
+        },
       },
       required: ['action'],
       type: 'object',

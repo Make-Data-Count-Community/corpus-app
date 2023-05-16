@@ -12,9 +12,13 @@
   },
   "dependencies": {
     "@coko/server": "3.0.0-beta.3",
+    "@pubsweet/models": "^0.3.26",
     "config": "^3.3.6",
+    "cheerio": "^1.0.0-rc.12",
     "objection": "3.0.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "html-entities": "^2.3.3",
+    "axios": "^1.3.5"
   },
   "devDependencies": {
     "@coko/lint": "^2.0.0",
