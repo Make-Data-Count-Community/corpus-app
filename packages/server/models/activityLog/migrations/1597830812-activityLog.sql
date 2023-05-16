@@ -13,5 +13,6 @@ CREATE TABLE IF NOT EXISTS activity_log (
   table_name text,
   action text,
   description text,
+  proccessed boolean default false,
   data text
 );

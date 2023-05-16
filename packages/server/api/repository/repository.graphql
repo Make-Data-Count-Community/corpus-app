@@ -5,5 +5,5 @@ type Repository {
 }
 
 extend type Query {
-  getRepository: [Repository]
+  getRepositories: [Repository]
 }

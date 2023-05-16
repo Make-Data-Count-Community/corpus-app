@@ -1,6 +1,6 @@
 const { BaseModel } = require('@coko/server')
 
-class assertionSubject extends BaseModel {
+class AssertionSubject extends BaseModel {
   constructor(properties) {
     super(properties)
     this.type = 'assertionSubject'
@@ -25,4 +25,4 @@ class assertionSubject extends BaseModel {
   }
 }
 
-module.exports = assertionSubject
+module.exports = AssertionSubject

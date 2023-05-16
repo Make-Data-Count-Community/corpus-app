@@ -1,7 +1,7 @@
 type Chart {
   id: ID
-  xField: Integer
-  yField: Integer
+  xField: Int
+  yField: Int
   stackField: String
   parent: ID
 }

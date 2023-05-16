@@ -1,6 +1,6 @@
 const { BaseModel } = require('@coko/server')
 
-class Subject extends BaseModel {
+class Source extends BaseModel {
   constructor(properties) {
     super(properties)
     this.type = 'subject'
@@ -28,4 +28,4 @@ class Subject extends BaseModel {
   }
 }
 
-module.exports = Subject
+module.exports = Source
