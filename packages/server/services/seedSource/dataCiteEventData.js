@@ -17,7 +17,7 @@ class DataCiteEventData {
     filter = filter.concat(options)
 
     this.url = `/events?${filter.join('&')}`
-    this.counts = 0
+    // this.counts = 0
   }
 
   async readSource() {
@@ -52,13 +52,13 @@ class DataCiteEventData {
     let nextUrl = url || this.url
 
     while (nextUrl) {
-      this.counts += 1
+      // this.counts += 1
       // eslint-disable-next-line no-console
       logger.info(`Request to datacite eventData Api: ${nextUrl}`)
       const response = await this.axios.dataciteApi(nextUrl)
       yield response.data
-      nextUrl = this.counts > 1 ? null : response.data.links.next
-      // nextUrl = response.data.links.next
+      // nextUrl = this.counts > 1 ? null : response.data.links.next
+      nextUrl = response.data.links.next
     }
   }
 }
