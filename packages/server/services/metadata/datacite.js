@@ -58,7 +58,14 @@ class Datacite extends Transform {
   async transformToAssertion(assertionInstance, chunk, trx) {
     assertionInstance.title = chunk.datacite.title
     assertionInstance.id = assertionInstance.id || uuid()
-    assertionInstance.publishedDate = chunk.event.attributes['occurred-at']
+
+    const checkValidYear = new Date(
+      chunk.event.attributes['occurred-at'],
+    ).getFullYear()
+
+    assertionInstance.publishedDate = checkValidYear
+      ? chunk.event.attributes['occurred-at']
+      : null
     assertionInstance.objId = chunk.event.attributes['obj-id']
     assertionInstance.subjId = chunk.event.attributes['subj-id']
 
