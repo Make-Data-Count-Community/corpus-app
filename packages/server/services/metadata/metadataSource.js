@@ -96,7 +96,7 @@ class MetadataSource {
       try {
         const result = await metadataSource.getResult
         useTransaction(async trx => {
-          // const assertions = []
+          const assertions = []
 
           // eslint-disable-next-line no-plusplus
           for (let i = 0; i < result.length; i++) {
@@ -108,15 +108,10 @@ class MetadataSource {
                 api.transformToAssertion(assertion, chunk, trx),
               ),
             )
-            // assertions.push(assertion)
-            // eslint-disable-next-line no-console
-            console.log(assertion)
-            // eslint-disable-next-line no-await-in-loop
-            console.log({ assertion })
-            await Assertion.query(trx).insert(assertion).debug()
+            assertions.push(assertion)
           }
 
-          // await Assertion.query(trx).insert(assertions)
+          await Assertion.query(trx).insert(assertions)
         })
       } catch (e) {
         throw new Error(e)
