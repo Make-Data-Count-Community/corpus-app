@@ -48,6 +48,7 @@ class Crossref extends Transform {
       let publisher = exists
 
       if (!exists) {
+        console.log(title, 'Publisher')
         publisher = await Publisher.query(trx)
           .insert({ title })
           .returning('*')
@@ -63,6 +64,7 @@ class Crossref extends Transform {
       let journal = exists
 
       if (!exists) {
+        console.log(titles, 'journal')
         journal = await Journal.query(trx)
           .insert({ title })
           .returning('*')

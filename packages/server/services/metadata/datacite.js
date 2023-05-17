@@ -67,6 +67,7 @@ class Datacite extends Transform {
         let subject = null
 
         if (!exists) {
+          console.log(titles[i], 'subjects')
           subject = await Subject.query(trx)
             .insert({ title: titles[i] })
             .returning('*')
@@ -90,6 +91,7 @@ class Datacite extends Transform {
         let affiliation = null
 
         if (!exists) {
+          console.log(titles[i], 'affiliations')
           affiliation = await Affiliation.query(trx)
             .insert({ title: titles[i] })
             .returning('*')
@@ -113,6 +115,7 @@ class Datacite extends Transform {
         let funder = null
 
         if (!exists) {
+          console.log(titles[i], 'funder')
           funder = await Funder.query(trx)
             .insert({ title: titles[i] })
             .returning('*')
@@ -133,6 +136,7 @@ class Datacite extends Transform {
       let repository = exists
 
       if (!exists) {
+        console.log(title, 'funder')
         repository = await Repository.query(trx)
           .insert({ title })
           .returning('*')
