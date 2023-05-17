@@ -102,7 +102,7 @@ class Datacite extends Transform {
             .debug()
         }
 
-        const affiliationId = exists.id || affiliation.id
+        const affiliationId = (exists || {}).id || affiliation.id
         await AssertionAffiliation.query(trx).insert({
           assertionId: assertionInstance.id,
           affiliationId,
@@ -126,7 +126,7 @@ class Datacite extends Transform {
             .debug()
         }
 
-        const funderId = exists.id || funder.id
+        const funderId = (exists || {}).id || funder.id
         await AssertionFunder.query(trx).insert({
           assertionId: assertionInstance.id,
           funderId,
