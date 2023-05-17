@@ -5,9 +5,10 @@ const User = require('@coko/server/src/models/user/user.model')
 const ActivityLog = require('./activityLog')
 const assertion = require('./assertion')
 const Affiliation = require('./affiliation')
-const assertionAffiliation = require('./assertionAffiliation')
+const AssertionAffiliation = require('./assertionAffiliation')
 const Funder = require('./funder')
-const assertionFunder = require('./assertionFunder')
+const AssertionFunder = require('./assertionFunder')
+const AssertionSubject = require('./assertionSubject')
 const Repository = require('./repository')
 const Subject = require('./subject')
 const Journal = require('./journal')
@@ -18,8 +19,9 @@ module.exports = {
   ActivityLog,
   assertion,
   Affiliation,
-  assertionAffiliation,
-  assertionFunder,
+  AssertionAffiliation,
+  AssertionFunder,
+  AssertionSubject,
   Funder,
   Team,
   TeamMember,
