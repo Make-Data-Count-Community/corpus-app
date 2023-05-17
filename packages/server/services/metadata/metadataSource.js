@@ -1,9 +1,11 @@
 const { Writable, Readable } = require('stream')
 
+const { useTransaction } = require('@coko/server')
 const DataCite = require('./datacite')
 const Crossref = require('./crossref')
 
 const { model: ActivityLog } = require('../../models/activityLog')
+const { model: Assertion } = require('../../models/assertion')
 
 class MetadataSource {
   constructor(streamApis) {
@@ -92,8 +94,25 @@ class MetadataSource {
       metadataSource.startStreamCitations(null)
 
       try {
-        this.result = await metadataSource.getResult
-        return this.result
+        const result = await metadataSource.getResult
+        useTransaction(async trx => {
+          const assertions = []
+
+          // eslint-disable-next-line no-plusplus
+          for (let i = 0; i < result.length; i++) {
+            const assertion = {}
+            const chunk = result[i]
+            // eslint-disable-next-line no-await-in-loop
+            await Promise.all(
+              metadataSource.streamApis.map(api =>
+                api.transformToAssertion(assertion, chunk, trx),
+              ),
+            )
+            assertions.push(assertion)
+          }
+
+          await Assertion.query(trx).insert(assertions)
+        })
       } catch (e) {
         throw new Error(e)
       }
