@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS assertions (
   source_type uuid references sources,
 
   -- own
-  title text not null,
+  title text,
   obj_id text not null,
   subj_id text not null,
   published_date timestamp with time zone,

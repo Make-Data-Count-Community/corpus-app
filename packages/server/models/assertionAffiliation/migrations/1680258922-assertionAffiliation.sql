@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS assertions_affiliations (
   updated timestamp with time zone,
 
   --foreign
-  assertion_id uuid references assertions,
+  assertion_id uuid references assertions INITIALLY DEFERRED,
   affiliation_id uuid references affiliations
 );

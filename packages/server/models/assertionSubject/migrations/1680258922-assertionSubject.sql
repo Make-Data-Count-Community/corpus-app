@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS assertions_subjects (
   updated timestamp with time zone,
 
   --foreign
-  assertion_id uuid references assertions,
+  assertion_id uuid references assertions INITIALLY DEFERRED,
   subject_id uuid references subjects
 );

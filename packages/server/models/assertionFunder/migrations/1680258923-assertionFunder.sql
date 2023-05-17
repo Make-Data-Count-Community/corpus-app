@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS assertions_funders (
   updated timestamp with time zone,
 
   -- foreign
-  assertion_id uuid references assertions,
+  assertion_id uuid references assertions INITIALLY DEFERRED,
   funder_id uuid references funders
 );
