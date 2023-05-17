@@ -78,7 +78,7 @@ class Datacite extends Transform {
             .debug()
         }
 
-        const subjectId = exists.id || subject.id
+        const subjectId = (exists || {}).id || subject.id
         await AssertionSubject.query(trx).insert({
           assertionId: assertionInstance.id,
           subjectId,
