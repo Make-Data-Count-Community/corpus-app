@@ -37,7 +37,11 @@ class Datacite extends Transform {
 
     if (data && !data.errors) {
       chunk.datacite.title = data.data.attributes.titles[0].title
-      chunk.datacite.subjects = data.data.attributes.subjects
+      chunk.datacite.subjects = flatten(
+        data.data.attributes.subjects
+          .map(creator => creator.subject)
+          .filter(aff => aff.length),
+      )
       chunk.datacite.repository = data.data.attributes.publisher
       chunk.datacite.affiliations = flatten(
         data.data.attributes.creators
