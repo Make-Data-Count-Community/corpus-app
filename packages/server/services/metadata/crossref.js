@@ -48,7 +48,10 @@ class Crossref extends Transform {
       let publisher = exists
 
       if (!exists) {
-        publisher = await Publisher.query(trx).insert({ title }).returning('*')
+        publisher = await Publisher.query(trx)
+          .insert({ title })
+          .returning('*')
+          .debug()
       }
 
       assertionInstance.publisherId = publisher.id
@@ -60,7 +63,10 @@ class Crossref extends Transform {
       let journal = exists
 
       if (!exists) {
-        journal = await Journal.query(trx).insert({ title }).returning('*')
+        journal = await Journal.query(trx)
+          .insert({ title })
+          .returning('*')
+          .debug()
       }
 
       assertionInstance.journalId = journal.id

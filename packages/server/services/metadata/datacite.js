@@ -70,6 +70,7 @@ class Datacite extends Transform {
           subject = await Subject.query(trx)
             .insert({ title: titles[i] })
             .returning('*')
+            .debug()
         }
 
         const subjectId = exists.id || subject.id
@@ -92,6 +93,7 @@ class Datacite extends Transform {
           affiliation = await Affiliation.query(trx)
             .insert({ title: titles[i] })
             .returning('*')
+            .debug()
         }
 
         const affiliationId = exists.id || affiliation.id
@@ -114,6 +116,7 @@ class Datacite extends Transform {
           funder = await Funder.query(trx)
             .insert({ title: titles[i] })
             .returning('*')
+            .debug()
         }
 
         const funderId = exists.id || funder.id
@@ -133,6 +136,7 @@ class Datacite extends Transform {
         repository = await Repository.query(trx)
           .insert({ title })
           .returning('*')
+          .debug()
       }
 
       assertionInstance.repositoryId = repository.id

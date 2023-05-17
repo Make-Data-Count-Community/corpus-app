@@ -112,7 +112,7 @@ class MetadataSource {
             // eslint-disable-next-line no-console
             console.log(assertion)
             // eslint-disable-next-line no-await-in-loop
-            await Assertion.query(trx).insert(assertion)
+            await Assertion.query(trx).insert(assertion).debug()
           }
 
           // await Assertion.query(trx).insert(assertions)
