@@ -64,7 +64,7 @@ class Crossref extends Transform {
       let journal = exists
 
       if (!exists) {
-        console.log(titles, 'journal')
+        console.log(title, 'journal')
         journal = await Journal.query(trx)
           .insert({ title })
           .returning('*')
