@@ -35,7 +35,7 @@ class DataCiteEventData {
           this.citations.push(result.value.data[i])
         }
 
-        if (result.value.data.length > 0) {
+        if (result.value.data && result.value.data.length > 0) {
           await ActivityLog.query().insert({
             action: 'assertion_incoming',
             data: JSON.stringify(result.value.data),
