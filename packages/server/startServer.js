@@ -7,7 +7,7 @@ const init = async () => {
   try {
     if (process.env.START_MIGRATE_DATA) {
       if (process.env.READ_METADATA) {
-        const selected = await db.raw(
+        const { rows } = await db.raw(
           'update migration_cursors set proccessed = true where id = (select id from migration_cursors where proccessed = false order by id asc limit 1) RETURNING "id","end", "start"',
         )
 
@@ -16,7 +16,10 @@ const init = async () => {
           // Wait for some async operation to complete
 
           console.log('still running')
-          await MetadataSource.loadCitationsFromDB(selected)
+
+          if (rows.length > 0) {
+            await MetadataSource.loadCitationsFromDB(rows[0])
+          }
 
           // Call the function again to loop forever
           setImmediate(myAsyncFunction)
