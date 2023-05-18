@@ -74,7 +74,7 @@ class Datacite extends Transform {
 
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
-        const exists = await Subject.query().findOne({ title: titles[i] })
+        const exists = await Subject.query(trx).findOne({ title: titles[i] })
         let subject = null
 
         if (!exists) {
@@ -96,7 +96,10 @@ class Datacite extends Transform {
 
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
-        const exists = await Affiliation.query().findOne({ title: titles[i] })
+        const exists = await Affiliation.query(trx).findOne({
+          title: titles[i],
+        })
+
         let affiliation = null
 
         if (!exists) {
@@ -118,7 +121,7 @@ class Datacite extends Transform {
 
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
-        const exists = await Funder.query().findOne({ title: titles[i] })
+        const exists = await Funder.query(trx).findOne({ title: titles[i] })
         let funder = null
 
         if (!exists) {
@@ -137,7 +140,7 @@ class Datacite extends Transform {
 
     if (chunk.datacite.repository) {
       const title = chunk.datacite.repository
-      const exists = await Repository.query().findOne({ title })
+      const exists = await Repository.query(trx).findOne({ title })
       let repository = exists
 
       if (!exists) {

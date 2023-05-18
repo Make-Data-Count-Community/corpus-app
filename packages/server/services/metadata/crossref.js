@@ -44,7 +44,7 @@ class Crossref extends Transform {
   async transformToAssertion(assertionInstance, chunk, trx) {
     if (chunk.crossref.publisher) {
       const title = chunk.crossref.publisher
-      const exists = await Publisher.query().findOne({ title })
+      const exists = await Publisher.query(trx).findOne({ title })
       let publisher = exists
 
       if (!exists) {
@@ -56,7 +56,7 @@ class Crossref extends Transform {
 
     if (chunk.crossref.journal) {
       const title = chunk.crossref.journal
-      const exists = await Journal.query().findOne({ title })
+      const exists = await Journal.query(trx).findOne({ title })
       let journal = exists
 
       if (!exists) {
