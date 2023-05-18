@@ -71,7 +71,9 @@ class MetadataSource {
 
     const metadataSource = new MetadataSource(metadataApis)
 
-    const citationData = await ActivityLog.query().where({ proccessed: false })
+    const citationData = await ActivityLog.query()
+      .where({ proccessed: false })
+      .limit(1000)
 
     const item = citationData[Math.floor(Math.random() * citationData.length)]
 
