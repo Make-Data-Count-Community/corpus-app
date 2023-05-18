@@ -35,11 +35,13 @@ class DataCiteEventData {
           this.citations.push(result.value.data[i])
         }
 
-        await ActivityLog.query().insert({
-          action: 'assertion_incoming',
-          data: JSON.stringify(result.value.data),
-          tableName: 'assertions',
-        })
+        if (result.value.data.length > 0) {
+          await ActivityLog.query().insert({
+            action: 'assertion_incoming',
+            data: JSON.stringify(result.value.data),
+            tableName: 'assertions',
+          })
+        }
       }
 
       hasNext = !result.done
