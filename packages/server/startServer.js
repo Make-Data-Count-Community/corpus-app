@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const { startServer } = require('@coko/server')
+const { startServer, db } = require('@coko/server')
 const CorpusDataFactory = require('./services/corpusDataFactory')
 const MetadataSource = require('./services/metadata/metadataSource')
 
@@ -7,12 +7,16 @@ const init = async () => {
   try {
     if (process.env.START_MIGRATE_DATA) {
       if (process.env.READ_METADATA) {
+        const selected = await db.raw(
+          'update migration_cursors set proccessed = true where id = (select id from migration_cursors where proccessed = false order by id asc limit 1) RETURNING "id","end", "start"',
+        )
+
         // eslint-disable-next-line no-inner-declarations
         async function myAsyncFunction() {
           // Wait for some async operation to complete
 
           console.log('still running')
-          await MetadataSource.loadCitationsFromDB()
+          await MetadataSource.loadCitationsFromDB(selected)
 
           // Call the function again to loop forever
           setImmediate(myAsyncFunction)

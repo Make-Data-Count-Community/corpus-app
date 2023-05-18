@@ -66,14 +66,19 @@ class MetadataSource {
     return new MetadataSource(metadataApis)
   }
 
-  static async loadCitationsFromDB() {
+  static async loadCitationsFromDB(selected) {
+    // eslint-disable-next-line no-console
+    console.log({ selected })
     const metadataApis = [new DataCite(), new Crossref()]
 
     const metadataSource = new MetadataSource(metadataApis)
 
     const citationData = await ActivityLog.query()
       .where({ proccessed: false })
-      .limit(1000)
+      .andWhere(builder => {
+        builder.whereBetween('cursorId', [selected.start, selected.end])
+      })
+      .debug()
 
     const item = citationData[Math.floor(Math.random() * citationData.length)]
 
@@ -111,13 +116,10 @@ class MetadataSource {
                 api.transformToAssertion(assertion, chunk, trx),
               ),
             )
-            // assertions.push(assertion)
-
-            // eslint-disable-next-line no-console
-            console.log(assertion)
-            // eslint-disable-next-line no-await-in-loop
-            await Assertion.query(trx).insert(assertion).debug()
+            assertions.push(assertion)
           }
+
+          await Assertion.query(trx).insert(assertions)
         })
       } catch (e) {
         throw new Error(e)
