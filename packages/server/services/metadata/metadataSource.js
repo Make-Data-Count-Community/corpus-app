@@ -73,22 +73,23 @@ class MetadataSource {
 
     const metadataSource = new MetadataSource(metadataApis)
 
-    const citationData = await ActivityLog.query()
+    const citationData = await ActivityLog.query('id')
       .where({ proccessed: false })
       .andWhere(builder => {
         builder.whereBetween('cursorId', [selected.start, selected.end])
       })
-      .debug()
 
     const item = citationData[Math.floor(Math.random() * citationData.length)]
 
     if (item) {
-      await ActivityLog.query().patchAndFetchById(item.id, { proccessed: true })
-      const data = JSON.parse(item.data)
-      data.forEach(citation => {
-        // eslint-disable-next-line no-console
-        console.log(`retrieve item ${citation.id}`)
+      const res = await ActivityLog.query().patchAndFetchById(item.id, {
+        proccessed: true,
+      })
 
+      const data = JSON.parse(res.data)
+      // eslint-disable-next-line no-console
+      console.log(`retrieve item ${res.id}`)
+      data.forEach(citation => {
         const assertions = {
           event: citation,
           datacite: {},

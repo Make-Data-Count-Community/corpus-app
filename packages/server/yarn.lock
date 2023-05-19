@@ -3974,6 +3974,11 @@ dns-txt@^2.0.2:
   dependencies:
     buffer-indexof "^1.0.0"
 
+docker-container-id@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/docker-container-id/-/docker-container-id-1.0.1.tgz#851ca4b7d6390551252118fe0f31cb8276dea109"
+  integrity sha512-ptcT7MOZo93cM0MhY/y8Xokvxn99oLMd8s4d/4aLzZD+ST2SlmTND1MaoD5kbSqlyKIzGp5OeFHb2+YRIDqCiQ==
+
 doctrine@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-2.1.0.tgz#5cd01fc101621b42c4cd7f5d1a66243716d3f39d"
