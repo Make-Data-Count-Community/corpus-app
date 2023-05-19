@@ -73,7 +73,8 @@ class MetadataSource {
 
     const metadataSource = new MetadataSource(metadataApis)
 
-    const citationData = await ActivityLog.query('id')
+    const citationData = await ActivityLog.query()
+      .select('id')
       .where({ proccessed: false })
       .andWhere(builder => {
         builder.whereBetween('cursorId', [selected.start, selected.end])
