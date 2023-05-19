@@ -11,7 +11,7 @@ const init = async () => {
         const instanceId = await getId()
 
         const { rows } = await db.raw(
-          `update migration_cursors set proccessed = true, instance_id='${instanceId}' where id = (select id from migration_cursors where proccessed = false order by id asc limit 1) RETURNING "id","end", "start"`,
+          `update migration_cursors set proccessed = true, instance_id='${instanceId}', hostname='${process.env.HOSTNAME}' where id = (select id from migration_cursors where proccessed = false order by id asc limit 1) RETURNING "id","end", "start"`,
         )
 
         // eslint-disable-next-line no-inner-declarations
