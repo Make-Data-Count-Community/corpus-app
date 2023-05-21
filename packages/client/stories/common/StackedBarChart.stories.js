@@ -48,9 +48,7 @@ export const Base = args => (
     stackField="type"
     stackItems={stackItems}
     xField="year"
-    xLabelTitle="Years"
     yField="value"
-    yLabelTitle="Values"
   />
 )
 

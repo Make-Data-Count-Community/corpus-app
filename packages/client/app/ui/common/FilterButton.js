@@ -30,13 +30,9 @@ const FilterSymbol = styled.div`
 `
 
 const FilterButton = props => {
-  const { children, className, handleOnClick } = props
+  const { children, className, onClick } = props
   return (
-    <StyledButton
-      className={className}
-      //   icon={<img alt="Filter" src={FilterSymbol} />}
-      onClick={handleOnClick}
-    >
+    <StyledButton className={className} onClick={onClick}>
       {children}
       <FilterSymbol />
     </StyledButton>
@@ -44,11 +40,11 @@ const FilterButton = props => {
 }
 
 FilterButton.propTypes = {
-  handleOnClick: PropTypes.func,
+  onClick: PropTypes.func,
 }
 
 FilterButton.defaultProps = {
-  handleOnClick: () => {},
+  onClick: () => {},
 }
 
 export default FilterButton

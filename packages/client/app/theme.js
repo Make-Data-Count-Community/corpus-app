@@ -42,6 +42,7 @@ module.exports = {
   // fontSizeHeading5: '25px',
   // fontSizeHeading6: '16px',
   fontSizeFilterLabel: '14px',
+  fontSizeChartFooterLabel: '20px',
 
   // outline width
   lineWidth: '0.5',
