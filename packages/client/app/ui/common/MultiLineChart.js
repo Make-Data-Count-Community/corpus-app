@@ -5,15 +5,7 @@ import { createClassFromSpec } from 'react-vega'
 import { chartBackground, fullColors } from './__helpers__/colors'
 
 const MultiLineChart = props => {
-  const {
-    data,
-    stackField,
-    stackItems,
-    stackTitle,
-    xLabelAngle,
-    xField,
-    yField,
-  } = props
+  const { data, stackField, stackItems, xLabelAngle, xField, yField } = props
 
   const Chart = createClassFromSpec({
     spec: {
@@ -47,7 +39,6 @@ const MultiLineChart = props => {
             domain: stackItems,
             range: fullColors,
           },
-          title: stackTitle,
           legend: {
             title: null,
           },
@@ -69,7 +60,6 @@ MultiLineChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   stackField: PropTypes.string.isRequired,
   stackItems: PropTypes.arrayOf(PropTypes.string).isRequired,
-  stackTitle: PropTypes.string.isRequired,
   xLabelAngle: PropTypes.number,
   xField: PropTypes.string.isRequired,
   yField: PropTypes.string.isRequired,

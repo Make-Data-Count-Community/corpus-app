@@ -1,8 +1,76 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { lorem } from 'faker'
 import { uuid } from '@coko/client/dist'
 
-import { FilterFacet } from '../../app/ui'
+import { UniqueCitationCounts } from '../../app/ui'
+
+const randomNumber = ceiling => {
+  return Math.floor(Math.random() * ceiling)
+}
+
+const data = [
+  {
+    facet: 'Journal',
+    thirdPartyAggr: randomNumber(10000000),
+    pidMetadata: randomNumber(10000000),
+  },
+  {
+    facet: 'Repository',
+    thirdPartyAggr: randomNumber(10000000),
+    pidMetadata: randomNumber(10000000),
+  },
+  {
+    facet: 'Affiliations',
+    thirdPartyAggr: randomNumber(10000000),
+    pidMetadata: randomNumber(10000000),
+  },
+  {
+    facet: 'Subject',
+    thirdPartyAggr: randomNumber(10000000),
+    pidMetadata: randomNumber(10000000),
+  },
+  {
+    facet: 'Funder',
+    thirdPartyAggr: randomNumber(10000000),
+    pidMetadata: randomNumber(10000000),
+  },
+]
+
+const columns = [
+  {
+    title: 'Facet',
+    dataIndex: 'facet',
+    key: 'facet',
+  },
+  {
+    title: 'Third party aggregator',
+    dataIndex: 'thirdPartyAggr',
+    key: 'thirdPartyAggr',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+  {
+    title: 'PID Metadata',
+    dataIndex: 'pidMetadata',
+    key: 'pidMetadata',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+  {
+    title: 'Total',
+    dataIndex: 'total',
+    key: 'total',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+]
+
+const transformData = sourceData => {
+  return sourceData.map(s => {
+    const total = s.pidMetadata + s.thirdPartyAggr
+    return { ...s, key: s.facet, total }
+  })
+}
 
 const filterParams = [
   {
@@ -237,17 +305,24 @@ const fullFacetOptions = [
 const facetNotSelectedLabel = 'Please select a facet'
 const displayListEmptyLabel = 'No matches found'
 
+const defaultTab = 'table'
+
 const Template = args => {
+  const [selectedTab, setSelectedTab] = useState(defaultTab)
   const [filters, setFilters] = useState(filterParams)
   const [displayFacetValues, setDisplayFacetValues] = useState([])
   const [selectedFacetValues, setSelectedFacetValues] = useState([])
   const [totalSelectionCount, setTotalSelectionCount] = useState(0)
+  //   const [visualisationData, setVisualisationData] = useState(data)
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [isDowloadListOpen, setIsDownloadListOpen] = useState(false)
 
   const [emptyFacetValueListLabel, setEmptyFacetValueListLabel] = useState(
     facetNotSelectedLabel,
   )
 
   const countSelections = () => {
+    // console.log(totalSelectionCount)
     let count = 0
     // eslint-disable-next-line no-return-assign
     filters.map(f => (count += f.values.length))
@@ -269,7 +344,17 @@ const Template = args => {
 
   useEffect(setEmptyListLabel, [displayFacetValues])
 
-  const handleApplyFilters = () => {}
+  const handleFooterTabClick = tabTitle => {
+    if (tabTitle === 'download') {
+      setIsDownloadListOpen(!isDowloadListOpen)
+    } else {
+      setSelectedTab(tabTitle)
+    }
+  }
+
+  const handleApplyFilters = () => {
+    setIsFilterOpen(false)
+  }
 
   const handleFacetItemClick = facetType => {
     const facetIndex = filters.findIndex(f => f.type === facetType)
@@ -306,7 +391,15 @@ const Template = args => {
     setSelectedFacetValues(facet.values)
   }
 
-  const handleOnClose = () => {}
+  const handleOnClose = () => {
+    setIsFilterOpen(false)
+  }
+
+  const handleExpandClick = () => {}
+
+  const handleFilterButtonClick = isOpen => {
+    setIsFilterOpen(isOpen)
+  }
 
   const handleSearchChange = rawSearchValue => {
     const searchValue = rawSearchValue.target.value
@@ -323,19 +416,30 @@ const Template = args => {
     }
   }
 
+  const handleDownloadOptionClick = () => {}
+
   return (
-    <FilterFacet
+    <UniqueCitationCounts
       {...args}
+      data={transformData(data)}
       filterParams={filters}
+      filterValueOptions={displayFacetValues}
+      isDownloadListOpen={isDowloadListOpen}
+      isFilterOpen={isFilterOpen}
       onApplyFilters={handleApplyFilters}
-      onClose={handleOnClose}
+      onDownloadOptionClick={handleDownloadOptionClick}
       onEmptyListLabel={emptyFacetValueListLabel}
+      onExpandClick={handleExpandClick}
       onFacetItemClick={handleFacetItemClick}
       onFacetValueClick={handleFacetValueClick}
-      onSearchChange={handleSearchChange}
+      onFilterClick={handleFilterButtonClick}
+      onFilterClose={handleOnClose}
+      onFilterSearchChange={handleSearchChange}
+      onFooterTabClick={handleFooterTabClick}
       selectedFacetValues={selectedFacetValues}
-      showFooter={!!totalSelectionCount}
-      valueOptions={displayFacetValues}
+      selectedFooterTab={selectedTab}
+      showFilterFooter={!!totalSelectionCount}
+      tableColumns={columns}
     />
   )
 }
@@ -343,6 +447,6 @@ const Template = args => {
 export const Base = Template.bind({})
 
 export default {
-  component: FilterFacet,
-  title: 'Common/FilterFacet',
+  component: UniqueCitationCounts,
+  title: 'Visualisation/UniqueCitationCounts',
 }

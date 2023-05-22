@@ -8,7 +8,7 @@ import Tick from '../../../static/symbol-tick.svg'
 import { Text } from './Typography'
 
 const ItemLabel = styled.span`
-  color: ${'colorPrimary'};
+  color: ${th('colorPrimary')};
   font-size: ${th('fontSizeBase')};
   font-weight: 500;
   line-height: ${grid(6)};
