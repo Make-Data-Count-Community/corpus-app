@@ -71,7 +71,7 @@ class Datacite extends Transform {
     assertionInstance.title = chunk.datacite.title
     assertionInstance.id = assertionInstance.id || uuid()
     assertionInstance.relationTypeId =
-      assertionInstance.chunk.event.attributes['relation-type-id']
+      chunk.event.attributes['relation-type-id']
 
     const checkValidYear = new Date(
       chunk.event.attributes['occurred-at'],
