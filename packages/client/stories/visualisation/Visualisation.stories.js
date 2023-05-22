@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { lorem } from 'faker'
-import { uuid } from '@coko/client/dist'
+import { uuid } from '@coko/client'
 
-import { FilterFacet } from '../../app/ui'
+import { Visualisation } from '../../app/ui'
+
+import CsvSymbol from '../../static/symbol-csv-file.svg'
+import PdfSymbol from '../../static/symbol-pdf-file.svg'
+import PngSymbol from '../../static/symbol-png-file.svg'
+import SvgSymbol from '../../static/symbol-svg-file.svg'
+
+const visualisationTitle = 'Visualisation Title'
+
+const showFooterChartTab = true
+
+const defaultTab = 'chart'
 
 const filterParams = [
   {
@@ -237,15 +248,49 @@ const fullFacetOptions = [
 const facetNotSelectedLabel = 'Please select a facet'
 const displayListEmptyLabel = 'No matches found'
 
+const downloadOptions = [
+  {
+    type: 'png',
+    label: 'PNG',
+    symbol: PngSymbol,
+  },
+  {
+    type: 'pdf',
+    label: 'PDF',
+    symbol: PdfSymbol,
+  },
+  {
+    type: 'svg',
+    label: 'SVG',
+    symbol: SvgSymbol,
+  },
+  {
+    type: 'csv',
+    label: 'CSV',
+    symbol: CsvSymbol,
+  },
+]
+
 const Template = args => {
+  const [selectedTab, setSelectedTab] = useState(defaultTab)
   const [filters, setFilters] = useState(filterParams)
   const [displayFacetValues, setDisplayFacetValues] = useState([])
   const [selectedFacetValues, setSelectedFacetValues] = useState([])
   const [totalSelectionCount, setTotalSelectionCount] = useState(0)
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [isDowloadListOpen, setIsDownloadListOpen] = useState(false)
 
   const [emptyFacetValueListLabel, setEmptyFacetValueListLabel] = useState(
     facetNotSelectedLabel,
   )
+
+  const handleFooterTabClick = tabTitle => {
+    if (tabTitle === 'download') {
+      setIsDownloadListOpen(!isDowloadListOpen)
+    } else {
+      setSelectedTab(tabTitle)
+    }
+  }
 
   const countSelections = () => {
     let count = 0
@@ -269,7 +314,9 @@ const Template = args => {
 
   useEffect(setEmptyListLabel, [displayFacetValues])
 
-  const handleApplyFilters = () => {}
+  const handleApplyFilters = () => {
+    setIsFilterOpen(false)
+  }
 
   const handleFacetItemClick = facetType => {
     const facetIndex = filters.findIndex(f => f.type === facetType)
@@ -306,7 +353,15 @@ const Template = args => {
     setSelectedFacetValues(facet.values)
   }
 
-  const handleOnClose = () => {}
+  const handleOnClose = () => {
+    setIsFilterOpen(false)
+  }
+
+  const handleExpandClick = () => {}
+
+  const handleFilterButtonClick = isOpen => {
+    setIsFilterOpen(isOpen)
+  }
 
   const handleSearchChange = rawSearchValue => {
     const searchValue = rawSearchValue.target.value
@@ -323,19 +378,32 @@ const Template = args => {
     }
   }
 
+  const handleDownloadOptionClick = () => {}
+
   return (
-    <FilterFacet
+    <Visualisation
       {...args}
+      chart={null}
+      downloadOptions={downloadOptions}
       filterParams={filters}
+      filterValueOptions={displayFacetValues}
+      isDownloadListOpen={isDowloadListOpen}
+      isFilterOpen={isFilterOpen}
       onApplyFilters={handleApplyFilters}
-      onClose={handleOnClose}
+      onDownloadOptionClick={handleDownloadOptionClick}
       onEmptyListLabel={emptyFacetValueListLabel}
+      onExpandClick={handleExpandClick}
       onFacetItemClick={handleFacetItemClick}
       onFacetValueClick={handleFacetValueClick}
-      onSearchChange={handleSearchChange}
+      onFilterClick={handleFilterButtonClick}
+      onFilterClose={handleOnClose}
+      onFilterSearchChange={handleSearchChange}
+      onFooterTabClick={handleFooterTabClick}
       selectedFacetValues={selectedFacetValues}
-      showFooter={!!totalSelectionCount}
-      valueOptions={displayFacetValues}
+      selectedFooterTab={selectedTab}
+      showFilterFooter={!!totalSelectionCount}
+      showFooterChartTab={showFooterChartTab}
+      visualisationTitle={visualisationTitle}
     />
   )
 }
@@ -343,6 +411,6 @@ const Template = args => {
 export const Base = Template.bind({})
 
 export default {
-  component: FilterFacet,
-  title: 'Common/FilterFacet',
+  component: Visualisation,
+  title: 'Visualisation/Visualisation',
 }

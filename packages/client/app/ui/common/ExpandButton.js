@@ -8,23 +8,23 @@ import ExpandSymbol from '../../../static/symbol-expand.svg'
 const StyledButton = styled(AntButton)``
 
 const FilterButton = props => {
-  const { className, handleOnClick } = props
+  const { className, onClick } = props
   return (
     <StyledButton
       className={className}
       icon={<img alt="Filter" src={ExpandSymbol} />}
-      onClick={handleOnClick}
+      onClick={onClick}
       type="text"
     />
   )
 }
 
 FilterButton.propTypes = {
-  handleOnClick: PropTypes.func,
+  onClick: PropTypes.func,
 }
 
 FilterButton.defaultProps = {
-  handleOnClick: () => {},
+  onClick: () => {},
 }
 
 export default FilterButton

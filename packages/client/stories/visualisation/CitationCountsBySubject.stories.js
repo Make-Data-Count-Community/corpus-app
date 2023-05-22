@@ -1,8 +1,191 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { lorem } from 'faker'
-import { uuid } from '@coko/client/dist'
+import { uuid } from '@coko/client'
 
-import { FilterFacet } from '../../app/ui'
+import { CitationCountsBySubject } from '../../app/ui'
+
+const parentId = uuid()
+
+const randomNumber = ceiling => {
+  return Math.floor(Math.random() * ceiling)
+}
+
+const data = [
+  { id: parentId, name: '', value: 0, parent: null },
+  {
+    id: uuid(),
+    name: 'Subject 0',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 1',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 2',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 3',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 4',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 5',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 6',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 7',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 8',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 9',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 10',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 11',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 12',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 13',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 14',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 15',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 16',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 17',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 18',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+  {
+    id: uuid(),
+    name: 'Subject 19',
+    value: randomNumber(1000),
+    parent: parentId,
+  },
+]
+
+const columns = [
+  //   {
+  //     title: 'Year',
+  //     dataIndex: 'year',
+  //     key: 'year',
+  //   },
+  {
+    title: 'Subject',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'Total Citations',
+    dataIndex: 'value',
+    key: 'value',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+]
+
+// const groupBy = (xs, key) => {
+//   return xs.reduce((rv, x) => {
+//     // eslint-disable-next-line no-param-reassign
+//     ;(rv[x[key]] = rv[x[key]] || []).push(x)
+//     return rv
+//   }, {})
+// }
+
+// const transformData = (sourceData, transformBy, keyField, valueField) => {
+//   const result = []
+
+//   const groupedData = groupBy(sourceData, transformBy)
+
+//   Object.entries(groupedData).forEach(([groupedKey, groupedValue]) => {
+//     const workingObject = {}
+//     let total = 0
+//     workingObject[transformBy] = groupedKey
+
+//     groupedValue.forEach(transformedRaw => {
+//       const key = transformedRaw[keyField]
+//       workingObject[key] = transformedRaw[valueField]
+//       total += transformedRaw[valueField]
+//     })
+
+//     workingObject.total = total
+//     workingObject.key = groupedKey
+
+//     result.push(workingObject)
+//   })
+
+//   return result
+// }
 
 const filterParams = [
   {
@@ -237,17 +420,24 @@ const fullFacetOptions = [
 const facetNotSelectedLabel = 'Please select a facet'
 const displayListEmptyLabel = 'No matches found'
 
+const defaultTab = 'chart'
+
 const Template = args => {
+  const [selectedTab, setSelectedTab] = useState(defaultTab)
   const [filters, setFilters] = useState(filterParams)
   const [displayFacetValues, setDisplayFacetValues] = useState([])
   const [selectedFacetValues, setSelectedFacetValues] = useState([])
   const [totalSelectionCount, setTotalSelectionCount] = useState(0)
+  //   const [visualisationData, setVisualisationData] = useState(data)
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [isDowloadListOpen, setIsDownloadListOpen] = useState(false)
 
   const [emptyFacetValueListLabel, setEmptyFacetValueListLabel] = useState(
     facetNotSelectedLabel,
   )
 
   const countSelections = () => {
+    // console.log(totalSelectionCount)
     let count = 0
     // eslint-disable-next-line no-return-assign
     filters.map(f => (count += f.values.length))
@@ -269,7 +459,17 @@ const Template = args => {
 
   useEffect(setEmptyListLabel, [displayFacetValues])
 
-  const handleApplyFilters = () => {}
+  const handleFooterTabClick = tabTitle => {
+    if (tabTitle === 'download') {
+      setIsDownloadListOpen(!isDowloadListOpen)
+    } else {
+      setSelectedTab(tabTitle)
+    }
+  }
+
+  const handleApplyFilters = () => {
+    setIsFilterOpen(false)
+  }
 
   const handleFacetItemClick = facetType => {
     const facetIndex = filters.findIndex(f => f.type === facetType)
@@ -306,7 +506,15 @@ const Template = args => {
     setSelectedFacetValues(facet.values)
   }
 
-  const handleOnClose = () => {}
+  const handleOnClose = () => {
+    setIsFilterOpen(false)
+  }
+
+  const handleExpandClick = () => {}
+
+  const handleFilterButtonClick = isOpen => {
+    setIsFilterOpen(isOpen)
+  }
 
   const handleSearchChange = rawSearchValue => {
     const searchValue = rawSearchValue.target.value
@@ -323,19 +531,36 @@ const Template = args => {
     }
   }
 
+  const handleDownloadOptionClick = () => {}
+
+  const transformData = sourceData => {
+    return sourceData.map(s => {
+      return { ...s, key: s.id }
+    })
+  }
+
   return (
-    <FilterFacet
+    <CitationCountsBySubject
       {...args}
+      data={selectedTab === 'chart' ? data : transformData(data)}
       filterParams={filters}
+      filterValueOptions={displayFacetValues}
+      isDownloadListOpen={isDowloadListOpen}
+      isFilterOpen={isFilterOpen}
       onApplyFilters={handleApplyFilters}
-      onClose={handleOnClose}
+      onDownloadOptionClick={handleDownloadOptionClick}
       onEmptyListLabel={emptyFacetValueListLabel}
+      onExpandClick={handleExpandClick}
       onFacetItemClick={handleFacetItemClick}
       onFacetValueClick={handleFacetValueClick}
-      onSearchChange={handleSearchChange}
+      onFilterClick={handleFilterButtonClick}
+      onFilterClose={handleOnClose}
+      onFilterSearchChange={handleSearchChange}
+      onFooterTabClick={handleFooterTabClick}
       selectedFacetValues={selectedFacetValues}
-      showFooter={!!totalSelectionCount}
-      valueOptions={displayFacetValues}
+      selectedFooterTab={selectedTab}
+      showFilterFooter={!!totalSelectionCount}
+      tableColumns={columns}
     />
   )
 }
@@ -343,6 +568,6 @@ const Template = args => {
 export const Base = Template.bind({})
 
 export default {
-  component: FilterFacet,
-  title: 'Common/FilterFacet',
+  component: CitationCountsBySubject,
+  title: 'Visualisation/CitationCountsBySubject',
 }

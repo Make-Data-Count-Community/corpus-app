@@ -8,10 +8,17 @@ export { default as TreeMap } from './TreeMap'
 export { default as StackedBarChart } from './StackedBarChart'
 export { default as MultiLineChart } from './MultiLineChart'
 
+export { default as Table } from './Table'
+
 export { default as ChartHeader } from './ChartHeader'
 export { default as FilterButton } from './FilterButton'
 export { default as ExpandButton } from './ExpandButton'
 export { default as CloseButton } from './CloseButton'
+export { default as ChartFooterButton } from './ChartFooterButton'
+export { default as ChartFooter } from './ChartFooter'
+
+export { default as DownloadOption } from './DownloadOption'
+export { default as DownloadOptionList } from './DownloadOptionList'
 
 export { default as Title } from './Title'
 export { default as Input } from './Input'
