@@ -6,6 +6,7 @@ const Crossref = require('./crossref')
 
 const { model: ActivityLog } = require('../../models/activityLog')
 const { model: Assertion } = require('../../models/assertion')
+const { model: AssertionSubject } = require('../../models/assertionSubject')
 
 class MetadataSource {
   constructor(streamApis) {
@@ -66,7 +67,12 @@ class MetadataSource {
     return new MetadataSource(metadataApis)
   }
 
-  static async loadCitationsFromDB(selected) {
+  static async loadCitationsFromDB(
+    selected,
+    allSubjects,
+    repositories,
+    journals,
+  ) {
     // eslint-disable-next-line no-console
     console.log({ selected })
     const metadataApis = [new DataCite(), new Crossref()]
@@ -89,7 +95,6 @@ class MetadataSource {
 
       const data = JSON.parse(res.data)
       // eslint-disable-next-line no-console
-      console.log(`retrieve item ${res.id}`)
       data.forEach(citation => {
         const assertions = {
           event: citation,
@@ -107,6 +112,7 @@ class MetadataSource {
         useTransaction(async trx => {
           // eslint-disable-next-line no-unused-vars
           const assertions = []
+          const subjects = []
 
           // eslint-disable-next-line no-plusplus
           for (let i = 0; i < result.length; i++) {
@@ -115,15 +121,29 @@ class MetadataSource {
             // eslint-disable-next-line no-await-in-loop
             await Promise.all(
               metadataSource.streamApis.map(api =>
-                api.transformToAssertion(assertion, chunk, trx),
+                api.transformToAssertion(
+                  journals,
+                  repositories,
+                  allSubjects,
+                  subjects,
+                  assertion,
+                  chunk,
+                  trx,
+                ),
               ),
             )
+            assertion.activityId = item.id
             assertions.push(assertion)
           }
 
           await Assertion.query(trx).insert(assertions)
+          await AssertionSubject.query(trx).insert(subjects)
+
+          await ActivityLog.query(trx).findById(item.id).patch({ done: true })
         })
       } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(`failed at ${item.id} $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$`)
         throw new Error(e)
       }
     }

@@ -96,6 +96,10 @@ class Assertion extends BaseModel {
         doi: {
           type: ['string', 'null'],
         },
+        activityId: {
+          type: 'string',
+          format: 'uuid',
+        },
         objId: {
           type: ['string', 'null'],
         },

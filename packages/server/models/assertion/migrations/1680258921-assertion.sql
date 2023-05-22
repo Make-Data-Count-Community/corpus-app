@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS assertions (
   updated timestamp with time zone,
   
   -- foreign
+  activity_id uuid references activity_log,
   repository_id uuid references repositories,
   publisher_id uuid references publishers,
   journal_id uuid references journals,

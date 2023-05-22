@@ -2,12 +2,12 @@
 /* eslint-disable no-param-reassign */
 const { Transform } = require('stream')
 const { uuid } = require('@coko/server')
-const { flatten } = require('lodash')
+const { flatten, get } = require('lodash')
 
 const {
   Repository,
   Subject,
-  AssertionSubject,
+  // AssertionSubject,
   Affiliation,
   AssertionAffiliation,
   AssertionFunder,
@@ -36,7 +36,11 @@ class Datacite extends Transform {
     const { data } = await axios.dataciteApi(`${Datacite.URL}${doi}`)
 
     if (data && !data.errors) {
-      chunk.datacite.title = data.data.attributes.titles[0].title
+      chunk.datacite.title = get(
+        data,
+        'data.attributes.titles[0].title',
+        'Untitled',
+      )
       chunk.datacite.subjects = flatten(
         data.data.attributes.subjects
           .map(creator => creator.subject || [])
@@ -55,9 +59,19 @@ class Datacite extends Transform {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  async transformToAssertion(assertionInstance, chunk, trx) {
+  async transformToAssertion(
+    journals,
+    repositories,
+    allSubjects,
+    subjects,
+    assertionInstance,
+    chunk,
+    trx,
+  ) {
     assertionInstance.title = chunk.datacite.title
     assertionInstance.id = assertionInstance.id || uuid()
+    assertionInstance.relationTypeId =
+      assertionInstance.chunk.event.attributes['relation-type-id']
 
     const checkValidYear = new Date(
       chunk.event.attributes['occurred-at'],
@@ -69,12 +83,34 @@ class Datacite extends Transform {
     assertionInstance.objId = chunk.event.attributes['obj-id']
     assertionInstance.subjId = chunk.event.attributes['subj-id']
 
+    // if (chunk.datacite.subjects) {
+    //   const titles = chunk.datacite.subjects
+
+    //   // eslint-disable-next-line no-plusplus
+    //   for (let i = 0; i < titles.length; i++) {
+    //     const exists = await Subject.query(trx).findOne({ title: titles[i] })
+    //     let subject = null
+
+    //     if (!exists) {
+    //       subject = await Subject.query(trx)
+    //         .insert({ title: titles[i] })
+    //         .returning('*')
+    //     }
+
+    //     const subjectId = (exists || {}).id || subject.id
+    //     await AssertionSubject.query(trx).insert({
+    //       assertionId: assertionInstance.id,
+    //       subjectId,
+    //     })
+    //   }
+    // }
+
     if (chunk.datacite.subjects) {
       const titles = chunk.datacite.subjects
 
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
-        const exists = await Subject.query(trx).findOne({ title: titles[i] })
+        const exists = allSubjects.find(subj => subj.title === titles[i])
         let subject = null
 
         if (!exists) {
@@ -84,7 +120,7 @@ class Datacite extends Transform {
         }
 
         const subjectId = (exists || {}).id || subject.id
-        await AssertionSubject.query(trx).insert({
+        subjects.push({
           assertionId: assertionInstance.id,
           subjectId,
         })
@@ -138,12 +174,25 @@ class Datacite extends Transform {
       }
     }
 
+    // if (chunk.datacite.repository) {
+    //   const title = chunk.datacite.repository
+    //   const exists = await Repository.query(trx).findOne({ title })
+    //   let repository = exists
+
+    //   if (!exists) {
+    //     repository = await Repository.query(trx)
+    //       .insert({ title })
+    //       .returning('*')
+    //   }
+
+    //   assertionInstance.repositoryId = repository.id
+    // }
+
     if (chunk.datacite.repository) {
       const title = chunk.datacite.repository
-      const exists = await Repository.query(trx).findOne({ title })
-      let repository = exists
+      let repository = repositories.find(subj => subj.title === title)
 
-      if (!exists) {
+      if (!repository) {
         repository = await Repository.query(trx)
           .insert({ title })
           .returning('*')

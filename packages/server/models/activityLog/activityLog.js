@@ -41,6 +41,10 @@ class ActivityLog extends BaseModel {
           default: false,
           type: ['boolean', false],
         },
+        done: {
+          default: false,
+          type: ['boolean', false],
+        },
         cursorId: {
           default: false,
           type: ['Integer'],

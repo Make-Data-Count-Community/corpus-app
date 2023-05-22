@@ -3,6 +3,9 @@ const { startServer, db } = require('@coko/server')
 const getId = require('docker-container-id')
 const CorpusDataFactory = require('./services/corpusDataFactory')
 const MetadataSource = require('./services/metadata/metadataSource')
+const Subject = require('./models')
+const Repository = require('./models')
+const Journal = require('./models')
 
 const init = async () => {
   try {
@@ -14,6 +17,11 @@ const init = async () => {
           `update migration_cursors set proccessed = true, instance_id='${instanceId}', hostname='${process.env.HOSTNAME}' where id = (select id from migration_cursors where proccessed = false order by id asc limit 1) RETURNING "id","end", "start"`,
         )
 
+        const subjects = await Subject.query()
+        const repositories = await Repository.query()
+        const journals = await Journal.query()
+        let count = 1
+
         // eslint-disable-next-line no-inner-declarations
         async function myAsyncFunction() {
           // Wait for some async operation to complete
@@ -21,9 +29,16 @@ const init = async () => {
           console.log('still running')
 
           if (rows.length > 0) {
-            await MetadataSource.loadCitationsFromDB(rows[0])
+            console.log(`Total items extracted ${count}`)
+            await MetadataSource.loadCitationsFromDB(
+              rows[0],
+              subjects,
+              repositories,
+              journals,
+            )
           }
 
+          count += 1
           // Call the function again to loop forever
           setImmediate(myAsyncFunction)
         }
