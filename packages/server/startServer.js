@@ -3,9 +3,9 @@ const { startServer, db } = require('@coko/server')
 const os = require('os')
 const CorpusDataFactory = require('./services/corpusDataFactory')
 const MetadataSource = require('./services/metadata/metadataSource')
-const Subject = require('./models')
-const Repository = require('./models')
-const Journal = require('./models')
+const { model: Subject } = require('./models/subject')
+const { model: Repository } = require('./models/repository')
+const { model: Journal } = require('./models/journal')
 
 const init = async () => {
   try {
