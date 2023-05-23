@@ -47,6 +47,16 @@ const StackedBarChart = props => {
           stroke: null,
         },
         background: chartBackground,
+        axis: {
+          labelFont: 'Barlow',
+          labelFontWeight: 500,
+          labelFontSize: '12',
+        },
+        legend: {
+          labelFont: 'Barlow',
+          labelFontWeight: 500,
+          labelFontSize: '12',
+        },
       },
     },
   })
