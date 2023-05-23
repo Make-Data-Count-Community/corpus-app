@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from 'react'
 
-import { CitationCountsBySourceBar } from '../../app/ui'
+import { CitationCorpusGrowth } from '../../app/ui'
 
 const randomNumber = ceiling => {
   return Math.floor(Math.random() * ceiling)
 }
 
 const data = [
-  { source: 'CZI', value: randomNumber(10000000), type: 'DOI' },
-  { source: 'DataCite Event Data', value: randomNumber(10000000), type: 'DOI' },
-  { source: 'OpenAIRE', value: randomNumber(10000000), type: 'DOI' },
-  { source: 'CZI', value: randomNumber(10000000), type: 'Accession ID' },
-  { source: 'DataCite Event Data', value: 0, type: 'Accession ID' },
-  { source: 'OpenAIRE', value: randomNumber(10000000), type: 'Accession ID' },
+  { month: '01/2023', value: randomNumber(100000), type: 'DOI' },
+  { month: '02/2023', value: randomNumber(1000000), type: 'DOI' },
+  { month: '03/2023', value: randomNumber(10000000), type: 'DOI' },
+  { month: '04/2023', value: randomNumber(50000000), type: 'DOI' },
+  { month: '01/2023', value: randomNumber(100000), type: 'Accession ID' },
+  { month: '02/2023', value: randomNumber(1000000), type: 'Accession ID' },
+  { month: '03/2023', value: randomNumber(10000000), type: 'Accession ID' },
+  { month: '04/2023', value: randomNumber(50000000), type: 'Accession ID' },
 ]
 
 const columns = [
   {
-    title: 'Source',
-    dataIndex: 'source',
-    key: 'source',
+    title: 'Month',
+    dataIndex: 'month',
+    key: 'month',
   },
   {
     title: 'DOI',
@@ -36,7 +38,7 @@ const columns = [
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
   {
-    title: 'Total Citations',
+    title: 'Total',
     dataIndex: 'total',
     key: 'total',
     render: value =>
@@ -212,12 +214,12 @@ const Template = args => {
   const handleDownloadOptionClick = () => {}
 
   return (
-    <CitationCountsBySourceBar
+    <CitationCorpusGrowth
       {...args}
       data={
         selectedTab === 'chart'
           ? data
-          : transformData(data, 'source', 'type', 'value')
+          : transformData(data, 'month', 'type', 'value')
       }
       filterParams={filters}
       filterValueOptions={displayFacetValues}
@@ -244,6 +246,6 @@ const Template = args => {
 export const Base = Template.bind({})
 
 export default {
-  component: CitationCountsBySourceBar,
-  title: 'Visualisation/CitationCountsBySourceBar',
+  component: CitationCorpusGrowth,
+  title: 'Visualisation/CitationCorpusGrowth',
 }

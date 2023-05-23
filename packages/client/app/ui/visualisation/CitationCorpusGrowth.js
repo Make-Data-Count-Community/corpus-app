@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import Visualisation from './Visualisation'
-import { StackedBarChart, Table } from '../common'
+import { MultiLineChart, Table } from '../common'
 
 import CsvSymbol from '../../../static/symbol-csv-file.svg'
 import PdfSymbol from '../../../static/symbol-pdf-file.svg'
@@ -12,10 +12,10 @@ import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const Wrapper = styled.div``
 
-const title = 'Citation counts by source of citation'
+const title = 'Data citations corpus growth'
 const stackField = 'type'
 const stackItems = ['DOI', 'Accession ID']
-const xField = 'source'
+const xField = 'month'
 const yField = 'value'
 
 const downloadOptions = [
@@ -41,7 +41,7 @@ const downloadOptions = [
   },
 ]
 
-const CitationCountsBySourceBar = props => {
+const CitationCorpusGrowth = props => {
   const {
     data,
     filterParams,
@@ -89,7 +89,7 @@ const CitationCountsBySourceBar = props => {
         visualisationTitle={title}
       >
         {selectedFooterTab === 'chart' && (
-          <StackedBarChart
+          <MultiLineChart
             data={data}
             stackField={stackField}
             stackItems={stackItems}
@@ -105,7 +105,7 @@ const CitationCountsBySourceBar = props => {
   )
 }
 
-CitationCountsBySourceBar.propTypes = {
+CitationCorpusGrowth.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
@@ -154,4 +154,4 @@ CitationCountsBySourceBar.propTypes = {
   ).isRequired,
 }
 
-export default CitationCountsBySourceBar
+export default CitationCorpusGrowth

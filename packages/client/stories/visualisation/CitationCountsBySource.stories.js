@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { CitationCountsBySourceLine } from '../../app/ui'
+import { CitationCountsBySource } from '../../app/ui'
 
 const randomNumber = ceiling => {
   return Math.floor(Math.random() * ceiling)
@@ -212,7 +212,7 @@ const Template = args => {
   const handleDownloadOptionClick = () => {}
 
   return (
-    <CitationCountsBySourceLine
+    <CitationCountsBySource
       {...args}
       data={
         selectedTab === 'chart'
@@ -244,6 +244,6 @@ const Template = args => {
 export const Base = Template.bind({})
 
 export default {
-  component: CitationCountsBySourceLine,
-  title: 'Visualisation/CitationCountsBySourceLine',
+  component: CitationCountsBySource,
+  title: 'Visualisation/CitationCountsBySource',
 }

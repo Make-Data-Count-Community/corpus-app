@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import Visualisation from './Visualisation'
-import { MultiLineChart, Table } from '../common'
+import { StackedBarChart, Table } from '../common'
 
 import CsvSymbol from '../../../static/symbol-csv-file.svg'
 import PdfSymbol from '../../../static/symbol-pdf-file.svg'
@@ -41,7 +41,7 @@ const downloadOptions = [
   },
 ]
 
-const CitationCountsBySourceLine = props => {
+const CitationCountsBySource = props => {
   const {
     data,
     filterParams,
@@ -89,7 +89,7 @@ const CitationCountsBySourceLine = props => {
         visualisationTitle={title}
       >
         {selectedFooterTab === 'chart' && (
-          <MultiLineChart
+          <StackedBarChart
             data={data}
             stackField={stackField}
             stackItems={stackItems}
@@ -105,7 +105,7 @@ const CitationCountsBySourceLine = props => {
   )
 }
 
-CitationCountsBySourceLine.propTypes = {
+CitationCountsBySource.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
@@ -154,4 +154,4 @@ CitationCountsBySourceLine.propTypes = {
   ).isRequired,
 }
 
-export default CitationCountsBySourceLine
+export default CitationCountsBySource
