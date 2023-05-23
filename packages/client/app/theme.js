@@ -30,6 +30,7 @@ module.exports = {
   colorAccession: '#FFA947',
 
   fontInterface: 'Barlow, sans-serif',
+  fontSecondaryInterface: 'DM Sans, sans-serif',
   // font sizes
   fontSize: '16', // actual antd font variable
 
@@ -69,7 +70,7 @@ module.exports = {
   borderStyle: 'solid',
 
   // #region header variables
-  mobileLogoHeight: '44px',
+  mobileLogoHeight: '40px',
   headerPaddingVertical: '10px',
   headerPaddingHorizontal: '24px',
   // #endregion header variables
