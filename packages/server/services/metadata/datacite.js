@@ -42,17 +42,21 @@ class Datacite extends Transform {
         'Untitled',
       )
       chunk.datacite.subjects = flatten(
-        data.data.attributes.subjects
+        get(data, 'data.attributes.subjects', [])
           .map(creator => creator.subject || [])
           .filter(aff => aff.length),
       )
-      chunk.datacite.repository = data.data.attributes.publisher
+      chunk.datacite.repository = get(data, 'data.attributes.publisher', null)
       chunk.datacite.affiliations = flatten(
-        data.data.attributes.creators
+        get(data, 'data.attributes.creators', [])
           .map(creator => creator.affiliation)
           .filter(aff => aff.length),
       )
-      chunk.datacite.funders = data.data.attributes.fundingReference
+      chunk.datacite.funders = get(
+        data,
+        'data.attributes.fundingReference',
+        null,
+      )
     }
 
     callback(null, chunk)
