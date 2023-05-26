@@ -43,7 +43,7 @@ const init = async () => {
 
           console.log(countAssertions)
 
-          if (countAssertions === 0) {
+          if (countAssertions.count === 0) {
             result = await db.raw(
               `update migration_cursors set proccessed = true, instance_id='${os.hostname()}', hostname='${
                 process.env.HOSTNAME
@@ -52,7 +52,9 @@ const init = async () => {
           }
 
           if (result.rows.length > 0) {
-            console.log(`Total items extracted ${count}/${countAssertions}`)
+            console.log(
+              `Total items extracted ${count}/${countAssertions.count}`,
+            )
             await MetadataSource.loadCitationsFromDB(
               result.rows[0],
               subjects,
