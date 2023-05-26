@@ -68,7 +68,7 @@ class Crossref extends Transform {
     if (chunk.crossref.publisher) {
       const title = chunk.crossref.publisher
       // eslint-disable-next-line no-console
-      console.log(publishers)
+
       let publisher = publishers.find(subj => subj.title === title)
 
       if (!publisher) {
