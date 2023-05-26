@@ -30,8 +30,8 @@ const init = async () => {
 
         // eslint-disable-next-line no-inner-declarations
         async function myAsyncFunction() {
-          const { start } = result.rows[0]
-          const { end } = result.rows[0]
+          const { start } = result.rows[0] || { start: 0 }
+          const { end } = result.rows[0] || { end: 0 }
 
           const countAssertions = await ActivityLog.query()
             .count({ count: '*' })
