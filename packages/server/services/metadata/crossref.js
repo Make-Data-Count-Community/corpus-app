@@ -42,6 +42,9 @@ class Crossref extends Transform {
 
   // eslint-disable-next-line class-methods-use-this
   async transformToAssertion(
+    allFunders,
+    funders,
+    publishers,
     journals,
     repositories,
     allSubjects,
@@ -50,12 +53,24 @@ class Crossref extends Transform {
     chunk,
     trx,
   ) {
+    // if (chunk.crossref.publisher) {
+    //   const title = chunk.crossref.publisher
+    //   const exists = await Publisher.query(trx).findOne({ title })
+    //   let publisher = exists
+
+    //   if (!exists) {
+    //     publisher = await Publisher.query(trx).insert({ title }).returning('*')
+    //   }
+
+    //   assertionInstance.publisherId = publisher.id
+    // }
+
     if (chunk.crossref.publisher) {
       const title = chunk.crossref.publisher
-      const exists = await Publisher.query(trx).findOne({ title })
-      let publisher = exists
 
-      if (!exists) {
+      let publisher = publishers.find(subj => subj.title === title)
+
+      if (!publisher) {
         publisher = await Publisher.query(trx).insert({ title }).returning('*')
       }
 

@@ -8,6 +8,7 @@ const Crossref = require('./crossref')
 const { model: ActivityLog } = require('../../models/activityLog')
 const { model: Assertion } = require('../../models/assertion')
 const { model: AssertionSubject } = require('../../models/assertionSubject')
+const { model: AssertionFunder } = require('../../models/assertionFunder')
 
 class MetadataSource {
   constructor(streamApis) {
@@ -73,6 +74,8 @@ class MetadataSource {
     allSubjects,
     repositories,
     journals,
+    publishers,
+    allFunders,
   ) {
     // eslint-disable-next-line no-console
     console.log({ selected })
@@ -114,6 +117,7 @@ class MetadataSource {
           // eslint-disable-next-line no-unused-vars
           const assertions = []
           const subjects = []
+          const funders = []
 
           // eslint-disable-next-line no-plusplus
           for (let i = 0; i < result.length; i++) {
@@ -123,6 +127,9 @@ class MetadataSource {
             await Promise.all(
               metadataSource.streamApis.map(api =>
                 api.transformToAssertion(
+                  allFunders,
+                  funders,
+                  publishers,
                   journals,
                   repositories,
                   allSubjects,
@@ -139,12 +146,17 @@ class MetadataSource {
 
           const assertionsArray = chunk(assertions, 5000)
           const subjectsArray = chunk(subjects, 5000)
+          const fundersArray = chunk(funders, 5000)
 
           await Promise.all(
             assertionsArray.map(assert => Assertion.query(trx).insert(assert)),
           )
           await Promise.all(
             subjectsArray.map(subj => AssertionSubject.query(trx).insert(subj)),
+          )
+
+          await Promise.all(
+            fundersArray.map(fund => AssertionFunder.query(trx).insert(fund)),
           )
 
           await ActivityLog.query(trx).findById(item.id).patch({ done: true })

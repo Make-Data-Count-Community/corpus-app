@@ -6,12 +6,15 @@ const MetadataSource = require('./services/metadata/metadataSource')
 const { model: Subject } = require('./models/subject')
 const { model: Repository } = require('./models/repository')
 const { model: Journal } = require('./models/journal')
+const { model: Publisher } = require('./models/publisher')
+const { model: ActivityLog } = require('./models/activityLog')
+const { model: Funder } = require('./models/funder')
 
 const init = async () => {
   try {
     if (process.env.START_MIGRATE_DATA) {
       if (process.env.READ_METADATA) {
-        const { rows } = await db.raw(
+        let result = await db.raw(
           `update migration_cursors set proccessed = true, instance_id='${os.hostname()}', hostname='${
             process.env.HOSTNAME
           }' where id = (select id from migration_cursors where proccessed = false order by id asc limit 1) RETURNING "id","end", "start"`,
@@ -20,27 +23,48 @@ const init = async () => {
         const subjects = await Subject.query()
         const repositories = await Repository.query()
         const journals = await Journal.query()
+        const publishers = await Publisher.query()
+        const funders = await Funder.query()
+
         let count = 1
 
         // eslint-disable-next-line no-inner-declarations
         async function myAsyncFunction() {
-          // Wait for some async operation to complete
+          const { start } = result.rows[0]
+          const { end } = result.rows[0]
 
-          console.log('still running')
+          const countAssertions = await ActivityLog.query()
+            .count({ count: '*' })
+            .whereBetween('cursorId', [start, end])
+            .andWhere(builder => {
+              builder.where('proccessed', '=', false)
+              builder.andWhere('done', '=', false)
+            })
 
-          if (rows.length > 0) {
-            console.log(`Total items extracted ${count}`)
-            await MetadataSource.loadCitationsFromDB(
-              rows[0],
-              subjects,
-              repositories,
-              journals,
+          console.log(countAssertions)
+
+          if (countAssertions === 0) {
+            result = await db.raw(
+              `update migration_cursors set proccessed = true, instance_id='${os.hostname()}', hostname='${
+                process.env.HOSTNAME
+              }' where id = (select id from migration_cursors where proccessed = false order by id asc limit 1) RETURNING "id","end", "start"`,
             )
           }
 
-          count += 1
-          // Call the function again to loop forever
-          setImmediate(myAsyncFunction)
+          if (result.rows.length > 0) {
+            console.log(`Total items extracted ${count}/${countAssertions}`)
+            await MetadataSource.loadCitationsFromDB(
+              result.rows[0],
+              subjects,
+              repositories,
+              journals,
+              publishers,
+              funders,
+            )
+            count += 1
+            // Call the function again to loop forever
+            setImmediate(myAsyncFunction)
+          }
         }
 
         // Start the infinite loop

@@ -6,11 +6,11 @@ const { flatten, get } = require('lodash')
 
 const {
   Repository,
-  Subject,
+  // Subject,
   // AssertionSubject,
   Affiliation,
   AssertionAffiliation,
-  AssertionFunder,
+  // AssertionFunder,
   Funder,
 } = require('@pubsweet/models')
 
@@ -52,10 +52,10 @@ class Datacite extends Transform {
           .map(creator => creator.affiliation)
           .filter(aff => aff.length),
       )
-      chunk.datacite.funders = get(
-        data,
-        'data.attributes.fundingReference',
-        null,
+      chunk.datacite.funders = flatten(
+        get(data, 'data.attributes.fundingReferences', [])
+          .map(funder => funder.funderName)
+          .filter(fund => fund.length),
       )
     }
 
@@ -64,6 +64,9 @@ class Datacite extends Transform {
 
   // eslint-disable-next-line class-methods-use-this
   async transformToAssertion(
+    allFunders,
+    funders,
+    publishers,
     journals,
     repositories,
     allSubjects,
@@ -114,20 +117,20 @@ class Datacite extends Transform {
 
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
-        const exists = allSubjects.find(subj => subj.title === titles[i])
-        let subject = null
+        const exists = allSubjects.find(
+          subj => subj.title.toLowerCase() === titles[i].toLowerCase(),
+        )
 
-        if (!exists) {
-          subject = await Subject.query(trx)
-            .insert({ title: titles[i] })
-            .returning('*')
+        if (exists) {
+          const subjectId = (exists || {}).id
+
+          if (subjectId) {
+            subjects.push({
+              assertionId: assertionInstance.id,
+              subjectId,
+            })
+          }
         }
-
-        const subjectId = (exists || {}).id || subject.id
-        subjects.push({
-          assertionId: assertionInstance.id,
-          subjectId,
-        })
       }
     }
 
@@ -156,12 +159,34 @@ class Datacite extends Transform {
       }
     }
 
+    // if (chunk.datacite.funders) {
+    //   const titles = chunk.datacite.funders
+
+    //   // eslint-disable-next-line no-plusplus
+    //   for (let i = 0; i < titles.length; i++) {
+    //     const exists = await Funder.query(trx).findOne({ title: titles[i] })
+    //     let funder = null
+
+    //     if (!exists) {
+    //       funder = await Funder.query(trx)
+    //         .insert({ title: titles[i] })
+    //         .returning('*')
+    //     }
+
+    //     const funderId = (exists || {}).id || funder.id
+    //     await AssertionFunder.query(trx).insert({
+    //       assertionId: assertionInstance.id,
+    //       funderId,
+    //     })
+    //   }
+    // }
+
     if (chunk.datacite.funders) {
       const titles = chunk.datacite.funders
 
       // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < titles.length; i++) {
-        const exists = await Funder.query(trx).findOne({ title: titles[i] })
+      for (let i = 0; i < funders.length; i++) {
+        const exists = allFunders.find(fund => fund.title === titles[i])
         let funder = null
 
         if (!exists) {
@@ -171,7 +196,7 @@ class Datacite extends Transform {
         }
 
         const funderId = (exists || {}).id || funder.id
-        await AssertionFunder.query(trx).insert({
+        funders.push({
           assertionId: assertionInstance.id,
           funderId,
         })
