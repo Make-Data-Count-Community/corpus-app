@@ -76,6 +76,7 @@ class Datacite extends Transform {
     trx,
   ) {
     assertionInstance.title = chunk.datacite.title
+    assertionInstance.sourceType = chunk.event.attributes['source-id']
     assertionInstance.id = assertionInstance.id || uuid()
     assertionInstance.relationTypeId =
       chunk.event.attributes['relation-type-id']
