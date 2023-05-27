@@ -51,6 +51,8 @@ const init = async () => {
             )
           }
 
+          console.log(result.rows)
+
           if (result.rows.length > 0) {
             console.log(
               `Total items extracted ${count}/${countAssertions[0].count}`,
