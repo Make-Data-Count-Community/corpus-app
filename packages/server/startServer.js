@@ -41,17 +41,13 @@ const init = async () => {
               builder.andWhere('done', '=', false)
             })
 
-          console.log(countAssertions)
-
-          if (countAssertions[0].count === 0) {
+          if (countAssertions[0].count === '0') {
             result = await db.raw(
               `update migration_cursors set proccessed = true, instance_id='${os.hostname()}', hostname='${
                 process.env.HOSTNAME
               }' where id = (select id from migration_cursors where proccessed = false order by id asc limit 1) RETURNING "id","end", "start"`,
             )
           }
-
-          console.log(result.rows)
 
           if (result.rows.length > 0) {
             console.log(
