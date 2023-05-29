@@ -1,6 +1,7 @@
-// import '@fontsource/barlow'
+import '@fontsource/barlow'
+import '@fontsource/dm-sans'
 
-module.exports = {
+const theme = {
   colorBackground: 'white',
   colorBackgroundHue: '#f5f5f5',
   colorBody: '#000',
@@ -23,6 +24,8 @@ module.exports = {
   colorTextReverse: 'white',
   colorTextPlaceholder: '#DCE0E4',
 
+  colorIconsFooter: '#E7E7E7',
+
   colorDoi: '#46BCAB',
   colorSubject: '#F07C73',
   colorPublisher: '#BC2B66',
@@ -42,7 +45,7 @@ module.exports = {
   fontSizeHeading4: '36px',
   // fontSizeHeading5: '25px',
   // fontSizeHeading6: '16px',
-  fontSizeFilterLabel: '14px',
+  fontSizeBaseMedium: '14px',
   fontSizeChartFooterLabel: '20px',
 
   // outline width
@@ -82,3 +85,5 @@ module.exports = {
     large: '1200px',
   },
 }
+
+export default theme
