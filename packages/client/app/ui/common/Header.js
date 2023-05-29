@@ -93,7 +93,7 @@ const StyledList = styled.ul`
     align-items: center;
     display: flex;
     height: 3.0625rem;
-    padding: ${grid(1)} 0 0 0;
+    padding: 0;
 
     > li {
       align-items: center;
