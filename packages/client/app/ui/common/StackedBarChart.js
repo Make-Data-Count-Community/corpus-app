@@ -2,10 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createClassFromSpec } from 'react-vega'
 
-import { chartBackground, fullColors } from './__helpers__/colors'
+import { chartBackground, idColors } from './__helpers__/colors'
 
 const StackedBarChart = props => {
-  const { data, stackField, stackItems, xLabelAngle, xField, yField } = props
+  const {
+    data,
+    stackField,
+    stackItems,
+    xLabelAngle,
+    xField,
+    yField,
+    stackFieldTooltipTitle,
+    yFieldTooltipTitle,
+  } = props
 
   const Chart = createClassFromSpec({
     spec: {
@@ -17,7 +26,7 @@ const StackedBarChart = props => {
       data: {
         values: data,
       },
-      mark: { type: 'bar', tooltip: true },
+      mark: { type: 'bar' },
       encoding: {
         x: {
           field: xField,
@@ -37,10 +46,25 @@ const StackedBarChart = props => {
           type: 'nominal',
           scale: {
             domain: stackItems,
-            range: fullColors,
+            range: idColors,
           },
           title: null,
         },
+        order: {
+          field: stackField,
+        },
+        tooltip: [
+          {
+            field: stackField,
+            type: 'nominal',
+            title: stackFieldTooltipTitle,
+          },
+          {
+            field: yField,
+            type: 'quantitative',
+            title: yFieldTooltipTitle,
+          },
+        ],
       },
       config: {
         view: {
@@ -61,7 +85,15 @@ const StackedBarChart = props => {
     },
   })
 
-  return <Chart actions={false} style={{ width: '100%', height: '100%' }} />
+  return (
+    <Chart
+      actions={false}
+      style={{ width: '100%', height: '100%' }}
+      tooltip={{
+        theme: 'custom',
+      }}
+    />
+  )
 }
 
 StackedBarChart.propTypes = {
@@ -71,6 +103,8 @@ StackedBarChart.propTypes = {
   xLabelAngle: PropTypes.number,
   xField: PropTypes.string.isRequired,
   yField: PropTypes.string.isRequired,
+  stackFieldTooltipTitle: PropTypes.string.isRequired,
+  yFieldTooltipTitle: PropTypes.string.isRequired,
 }
 
 StackedBarChart.defaultProps = {

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createClassFromSpec } from 'react-vega'
 
-import { chartBackground, fullColors } from './__helpers__/colors'
+import { chartBackground, idColors } from './__helpers__/colors'
 
 const MultiLineChart = props => {
   const { data, stackField, stackItems, xLabelAngle, xField, yField } = props
@@ -37,7 +37,7 @@ const MultiLineChart = props => {
           type: 'nominal',
           scale: {
             domain: stackItems,
-            range: fullColors,
+            range: idColors,
           },
           legend: {
             title: null,

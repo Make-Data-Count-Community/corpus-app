@@ -20,7 +20,14 @@ const data = [
 
 // eslint-disable-next-line react/jsx-props-no-spreading
 export const Base = args => (
-  <PieChart {...args} colorField="publisher" data={data} thetaField="value" />
+  <PieChart
+    {...args}
+    colorField="publisher"
+    colorFieldTooltipTitle="Publisher"
+    data={data}
+    thetaField="value"
+    thetaFieldTooltipTitle="Citations"
+  />
 )
 
 export default {
