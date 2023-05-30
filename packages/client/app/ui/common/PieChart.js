@@ -2,10 +2,16 @@ import { createClassFromSpec } from 'react-vega'
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { chartBackground, fullColors } from './__helpers__/colors'
+import { chartBackground, publisherColors } from './__helpers__/colors'
 
 const PieChart = props => {
-  const { data, thetaField, colorField } = props
+  const {
+    data,
+    thetaField,
+    colorField,
+    colorFieldTooltipTitle,
+    thetaFieldTooltipTitle,
+  } = props
 
   const Chart = createClassFromSpec({
     spec: {
@@ -24,9 +30,21 @@ const PieChart = props => {
           field: colorField,
           type: 'nominal',
           scale: {
-            range: fullColors,
+            range: publisherColors,
           },
         },
+        tooltip: [
+          {
+            field: colorField,
+            type: 'nominal',
+            title: colorFieldTooltipTitle,
+          },
+          {
+            field: thetaField,
+            type: 'quantitative',
+            title: thetaFieldTooltipTitle,
+          },
+        ],
       },
       config: {
         background: chartBackground,
@@ -52,6 +70,8 @@ PieChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   thetaField: PropTypes.string.isRequired,
   colorField: PropTypes.string.isRequired,
+  colorFieldTooltipTitle: PropTypes.string.isRequired,
+  thetaFieldTooltipTitle: PropTypes.string.isRequired,
 }
 
 export default PieChart

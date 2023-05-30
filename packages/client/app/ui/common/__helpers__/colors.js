@@ -1,33 +1,49 @@
-const fullColors = [
-  //  primary
-  '#243B54',
-  '#25596F',
-  '#479FC7',
-  '#4FAEDD',
-  '#62BFE4',
-  '#82CFEA',
-  '#A9DFF1',
-  '#D3EFF8',
-  //  grey
-  '#757C80',
-  '#C2CED5',
-  '#D9E0E4',
-  //  turquoise
-  '#3E7067',
-  '#69BAAB',
-  '#9AD2CA',
-  //  light red
-  '#874E49',
-  '#E18277',
-  '#EAAFA8',
-  //  lime
-  '#888840',
-  '#E2E16C',
-  '#EDED9D',
+const idColors = ['#243B54', '#00B1E2']
+
+const subjectColors = [
+  '#0D60D4',
+  '#E2E254',
+  'rgba(240, 124, 115, 0.75)',
+  '#46BCAB',
+  'rgba(226, 226, 84, 0.75)',
+  '#FFA947',
+  'rgba(0, 177, 226, 0.75)',
+  'rgba(188, 43, 102, 0.5)',
+  'rgba(70, 188, 171, 0.5)',
+  'rgba(255, 169, 71, 0.5)',
+  '#F2C57C',
+  'rgba(104, 186, 171, 0.75)',
+  'rgba(226, 226, 84, 0.5)',
+  '#00B1E2',
+  'rgba(188, 43, 102, 0.75)',
+  'rgba(13, 96, 212, 0.75)',
+  'rgba(255, 169, 71, 0.75)',
+  'rgba(240, 124, 115, 0.5)',
+  'rgba(226, 225, 108, 0.5)',
+  'rgba(0, 177, 226, 0.5)',
+]
+
+const publisherColors = [
+  '#0D60D4',
+  'rgba(0 177 226 / 75%)',
+  'rgba(188 43 102 / 75%)',
+  'rgba(104 186 171 / 75%)',
+  'rgba(226 225 108 / 50%)',
+  'rgba(13 96 212 / 75%)',
+  '#00B1E2',
+  '#BC2B66',
+  '#E2E254',
+  '#46BCAB',
 ]
 
 const primaryBlue = '#243B54'
 
 const chartBackground = '#F6F7F8'
 
-module.exports = { fullColors, primaryBlue, chartBackground }
+module.exports = {
+  primaryBlue,
+  chartBackground,
+  idColors,
+  subjectColors,
+  publisherColors,
+}
