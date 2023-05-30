@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import Visualisation from './Visualisation'
@@ -9,8 +8,6 @@ import CsvSymbol from '../../../static/symbol-csv-file.svg'
 import PdfSymbol from '../../../static/symbol-pdf-file.svg'
 import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
-
-const Wrapper = styled.div``
 
 const title = 'Citation counts by subject'
 const colorField = 'name'
@@ -63,41 +60,37 @@ const CitationCountsBySubject = props => {
   } = props
 
   return (
-    <Wrapper>
-      <Visualisation
-        downloadOptions={downloadOptions}
-        filterParams={filterParams}
-        filterValueOptions={filterValueOptions}
-        isDownloadListOpen={isDownloadListOpen}
-        isFilterOpen={isFilterOpen}
-        onApplyFilters={onApplyFilters}
-        onDownloadOptionClick={onDownloadOptionClick}
-        onEmptyListLabel={onEmptyListLabel}
-        onExpandClick={onExpandClick}
-        onFacetItemClick={onFacetItemClick}
-        onFacetValueClick={onFacetValueClick}
-        onFilterClick={onFilterClick}
-        onFilterClose={onFilterClose}
-        onFilterSearchChange={onFilterSearchChange}
-        onFooterTabClick={onFooterTabClick}
-        selectedFacetValues={selectedFacetValues}
-        selectedFooterTab={selectedFooterTab}
-        showFilterFooter={showFilterFooter}
-        showFooterChartTab
-        visualisationTitle={title}
-      >
-        {selectedFooterTab === 'chart' && (
-          <TreeMap
-            colorField={colorField}
-            data={data}
-            valueField={valueField}
-          />
-        )}
-        {selectedFooterTab === 'table' && (
-          <Table columns={tableColumns} data={data} />
-        )}
-      </Visualisation>
-    </Wrapper>
+    <Visualisation
+      downloadOptions={downloadOptions}
+      filterParams={filterParams}
+      filterValueOptions={filterValueOptions}
+      isDownloadListOpen={isDownloadListOpen}
+      isFilterOpen={isFilterOpen}
+      onApplyFilters={onApplyFilters}
+      onDownloadOptionClick={onDownloadOptionClick}
+      onEmptyListLabel={onEmptyListLabel}
+      onExpandClick={onExpandClick}
+      onFacetItemClick={onFacetItemClick}
+      onFacetValueClick={onFacetValueClick}
+      onFilterClick={onFilterClick}
+      onFilterClose={onFilterClose}
+      onFilterSearchChange={onFilterSearchChange}
+      onFooterTabClick={onFooterTabClick}
+      selectedFacetValues={selectedFacetValues}
+      selectedFooterTab={selectedFooterTab}
+      showFilterButton
+      showFilterFooter={showFilterFooter}
+      showFooterChartTab
+      visualisationTitle={title}
+    >
+      {selectedFooterTab === 'chart' && (
+        <TreeMap colorField={colorField} data={data} valueField={valueField} />
+      )}
+      {selectedFooterTab === 'table' && (
+        <Table columns={tableColumns} data={data} />
+      )}
+    </Visualisation>
+    // </Wrapper>
   )
 }
 

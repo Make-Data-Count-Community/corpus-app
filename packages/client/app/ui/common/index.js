@@ -7,6 +7,7 @@ export { default as BarChart } from './BarChart'
 export { default as TreeMap } from './TreeMap'
 export { default as StackedBarChart } from './StackedBarChart'
 export { default as MultiLineChart } from './MultiLineChart'
+export { default as Footer } from './Footer'
 
 export { default as Table } from './Table'
 

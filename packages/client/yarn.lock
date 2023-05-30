@@ -1441,6 +1441,16 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
+"@fontsource/barlow@^4.5.9":
+  version "4.5.9"
+  resolved "https://registry.yarnpkg.com/@fontsource/barlow/-/barlow-4.5.9.tgz#e3b18084e839c1c0a5ac30f7fef6737cd720f6df"
+  integrity sha512-Nzg7bpw6raZtNdHwvLIt6ue/Gas/tpsNyf7zrRvVdV38iOrtOip2aabO3lexEyiYkKjKrlqAjEyAtTrC2XfkRg==
+
+"@fontsource/dm-sans@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/dm-sans/-/dm-sans-5.0.1.tgz#6870a7f27203c282dd4c5a8dd7bc3ae5b095fb5a"
+  integrity sha512-53R0bBG8Dz9258Ah5rsHnWmWNy/fVUkNi+AWUg0CC3Pf+xPvrE3h8MO+mabX2ZMDglJ4vM5nEIiy5kWCWqP+Dw==
+
 "@graphql-typed-document-node/core@^3.1.1":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
@@ -5454,6 +5464,11 @@ dedent@^0.7.0:
   resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
   integrity sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==
 
+deeks@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/deeks/-/deeks-3.0.0.tgz#1f66b6c78b6daf39a90a39389592e12397990a9b"
+  integrity sha512-go4YE5vDMzDNzC9OqK7iIQd6agUUqZdBiw3TD2niRxsKGdGdB1FW8eZdrWsyCRZCNkBjV5Vutcx5uT1AikEPCg==
+
 deep-is@~0.1.3:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.4.tgz#a6f2dce612fadd2ef1f519b73551f17e85199831"
@@ -5606,6 +5621,11 @@ dns-packet@^5.2.2:
   integrity sha512-USawdAUzRkV6xrqTjiAEp6M9YagZEzWcSUaZTcIFAiyQWW1SoI6KyId8y2+/71wbgHKQAKd+iupLv4YvEwYWvA==
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
+
+doc-path@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/doc-path/-/doc-path-4.0.0.tgz#8edad83bdc31da53f7bf0b0b3c08d7b5f53517dd"
+  integrity sha512-By/OF7rbws/bgExPZW10gHASoy3sACwXKKpKBIzYk/E19nX8q8IbILbreCeCYAVFIcO9FOxDjFYbm45wvn4I6w==
 
 doctrine@^3.0.0:
   version "3.0.0"
@@ -7910,6 +7930,14 @@ jsesc@~0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha512-uZz5UnB7u4T9LvwmFqXii7pZSouaRPorGs5who1Ip7VO0wxanFvBL7GkM6dTHlgX+jhBApRetaWpnDabOeTcnA==
+
+json-2-csv@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/json-2-csv/-/json-2-csv-4.0.0.tgz#b65cf5256f003cc64b241d0a21f68df8347e9150"
+  integrity sha512-r8WXuuLgVbeufMuCyzUXSp8VP9YK4BTuzM7rTG0X85MPKuHKa8JD6LHrp0rEKVCtBSgHA3LMu/VjrZHx+851DQ==
+  dependencies:
+    deeks "3.0.0"
+    doc-path "4.0.0"
 
 json-parse-even-better-errors@^2.3.0, json-parse-even-better-errors@^2.3.1:
   version "2.3.1"

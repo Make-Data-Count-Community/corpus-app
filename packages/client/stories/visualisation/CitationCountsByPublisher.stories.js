@@ -285,7 +285,7 @@ const Template = args => {
   const [totalSelectionCount, setTotalSelectionCount] = useState(0)
   //   const [visualisationData, setVisualisationData] = useState(data)
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [isDowloadListOpen, setIsDownloadListOpen] = useState(false)
+  const [isDownloadListOpen, setIsDownloadListOpen] = useState(false)
 
   const [emptyFacetValueListLabel, setEmptyFacetValueListLabel] = useState(
     facetNotSelectedLabel,
@@ -316,7 +316,7 @@ const Template = args => {
 
   const handleFooterTabClick = tabTitle => {
     if (tabTitle === 'download') {
-      setIsDownloadListOpen(!isDowloadListOpen)
+      setIsDownloadListOpen(!isDownloadListOpen)
     } else {
       setSelectedTab(tabTitle)
     }
@@ -394,7 +394,7 @@ const Template = args => {
       data={selectedTab === 'chart' ? data : transformData(data)}
       filterParams={filters}
       filterValueOptions={displayFacetValues}
-      isDownloadListOpen={isDowloadListOpen}
+      isDownloadListOpen={isDownloadListOpen}
       isFilterOpen={isFilterOpen}
       onApplyFilters={handleApplyFilters}
       onDownloadOptionClick={handleDownloadOptionClick}

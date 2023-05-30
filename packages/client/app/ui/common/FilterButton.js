@@ -14,7 +14,7 @@ const StyledButton = styled(AntButton)`
   border-radius: ${grid(20)};
   box-sizing: border-box;
   display: flex;
-  font-size: ${th('fontSizeFilterLabel')};
+  font-size: ${th('fontSizeBaseMedium')};
   font-weight: 500;
   gap: ${grid(4)};
   /* height: 48px; */

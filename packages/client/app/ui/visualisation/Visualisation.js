@@ -7,19 +7,28 @@ import { grid, th } from '@coko/client'
 import { ChartHeader, ChartFooter } from '../common'
 
 const Wrapper = styled.div`
-  align-items: flex-start;
+  align-items: flex-end;
   background: ${th('colorChartBackground')};
   display: flex;
   flex-direction: column;
+  /* flex-grow: 1; */
+  height: 100%;
+  justify-content: flex-end;
+  margin: ${grid(2)};
   padding: ${grid(0)};
   width: 100%;
+  /* padding-bottom: 99999px;
+  margin-bottom: -99999px; */
 `
 
 const DataWrapper = styled.div`
+  /* flex-grow: 3; */
   height: ${grid(80)};
   overflow: auto;
   width: 100%;
 `
+
+// const BodyWrapper = styled.div``
 
 const Visualisation = props => {
   const {
@@ -41,13 +50,14 @@ const Visualisation = props => {
     onFooterTabClick,
     selectedFacetValues,
     selectedFooterTab,
+    showFilterButton,
     showFilterFooter,
     showFooterChartTab,
     visualisationTitle,
   } = props
 
   return (
-    <Wrapper>
+    <Wrapper id="visWrapper">
       <ChartHeader
         filterParams={filterParams}
         filterValueOptions={filterValueOptions}
@@ -61,6 +71,7 @@ const Visualisation = props => {
         onFilterClose={onFilterClose}
         onFilterSearchChange={onFilterSearchChange}
         selectedFacetValues={selectedFacetValues}
+        showFilterButton={showFilterButton}
         showFilterFooter={showFilterFooter}
         title={visualisationTitle}
       />
@@ -96,39 +107,51 @@ Visualisation.propTypes = {
         }),
       ).isRequired,
     }),
-  ).isRequired,
+  ),
   filterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
     }),
-  ).isRequired,
+  ),
   isDownloadListOpen: PropTypes.bool.isRequired,
   isFilterOpen: PropTypes.bool,
-  onApplyFilters: PropTypes.func.isRequired,
+  onApplyFilters: PropTypes.func,
   onDownloadOptionClick: PropTypes.func.isRequired,
-  onEmptyListLabel: PropTypes.string.isRequired,
+  onEmptyListLabel: PropTypes.string,
   onExpandClick: PropTypes.func.isRequired,
-  onFacetItemClick: PropTypes.func.isRequired,
-  onFacetValueClick: PropTypes.func.isRequired,
-  onFilterClick: PropTypes.func.isRequired,
-  onFilterClose: PropTypes.func.isRequired,
-  onFilterSearchChange: PropTypes.func.isRequired,
+  onFacetItemClick: PropTypes.func,
+  onFacetValueClick: PropTypes.func,
+  onFilterClick: PropTypes.func,
+  onFilterClose: PropTypes.func,
+  onFilterSearchChange: PropTypes.func,
   onFooterTabClick: PropTypes.func.isRequired,
-  selectedFooterTab: PropTypes.string.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
     }),
-  ).isRequired,
+  ),
+  selectedFooterTab: PropTypes.string.isRequired,
+  showFilterButton: PropTypes.bool,
   showFilterFooter: PropTypes.bool,
   showFooterChartTab: PropTypes.bool,
   visualisationTitle: PropTypes.string.isRequired,
 }
 
 Visualisation.defaultProps = {
+  filterParams: [],
+  filterValueOptions: [],
   isFilterOpen: false,
+  onApplyFilters: () => {},
+  onEmptyListLabel: '',
+  onFacetItemClick: () => {},
+  onFacetValueClick: () => {},
+  onFilterClick: () => {},
+  onFilterClose: () => {},
+  onFilterSearchChange: () => {},
+  selectedFacetValues: [],
+  showFilterButton: false,
   showFilterFooter: false,
   showFooterChartTab: false,
 }

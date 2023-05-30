@@ -13,7 +13,8 @@ import FilterFacet from './FilterFacet'
 const Wrapper = styled.div`
   background-color: ${th('colorChartBackground')};
   display: flex;
-  font-size: ${th('fontSizeFilterLabel')};
+  flex-grow: 2;
+  font-size: ${th('fontSizeBaseMedium')};
   justify-content: space-between;
   margin: 0;
   padding: 0 ${grid(2)};
@@ -21,8 +22,9 @@ const Wrapper = styled.div`
 `
 
 const Actions = styled.div`
-  align-items: center;
+  align-items: flex-start;
   display: flex;
+  margin: ${grid(4)} 0;
 `
 
 const ExpandButtonWrapper = styled(ExpandButton)`
@@ -44,6 +46,7 @@ const ChartHeader = props => {
     onFilterSearchChange,
     selectedFacetValues,
     showFilterFooter,
+    showFilterButton,
     filterValueOptions,
   } = props
 
@@ -51,27 +54,30 @@ const ChartHeader = props => {
     <Wrapper>
       <Title>{title}</Title>
       <Actions>
-        <AntPopover
-          content={
-            <FilterFacet
-              filterParams={filterParams}
-              onApplyFilters={onApplyFilters}
-              onClose={onFilterClose}
-              onEmptyListLabel={onEmptyListLabel}
-              onFacetItemClick={onFacetItemClick}
-              onFacetValueClick={onFacetValueClick}
-              onSearchChange={onFilterSearchChange}
-              selectedFacetValues={selectedFacetValues}
-              showFooter={showFilterFooter}
-              valueOptions={filterValueOptions}
-            />
-          }
-          onOpenChange={onFilterClick}
-          open={isFilterOpen}
-          trigger="click"
-        >
-          <FilterButton>Filter Facets</FilterButton>
-        </AntPopover>
+        {showFilterButton && (
+          <AntPopover
+            content={
+              <FilterFacet
+                filterParams={filterParams}
+                onApplyFilters={onApplyFilters}
+                onClose={onFilterClose}
+                onEmptyListLabel={onEmptyListLabel}
+                onFacetItemClick={onFacetItemClick}
+                onFacetValueClick={onFacetValueClick}
+                onSearchChange={onFilterSearchChange}
+                selectedFacetValues={selectedFacetValues}
+                showFooter={showFilterFooter}
+                valueOptions={filterValueOptions}
+              />
+            }
+            onOpenChange={onFilterClick}
+            open={isFilterOpen}
+            placement="bottomRight"
+            trigger="click"
+          >
+            <FilterButton>Filter Facets</FilterButton>
+          </AntPopover>
+        )}
 
         <ExpandButtonWrapper onClick={onExpandClick} />
       </Actions>
@@ -91,30 +97,47 @@ ChartHeader.propTypes = {
         }),
       ).isRequired,
     }),
-  ).isRequired,
-  isFilterOpen: PropTypes.bool.isRequired,
-  onApplyFilters: PropTypes.func.isRequired,
+  ),
+  isFilterOpen: PropTypes.bool,
+  onApplyFilters: PropTypes.func,
   filterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
     }),
-  ).isRequired,
+  ),
   onExpandClick: PropTypes.func.isRequired,
-  onEmptyListLabel: PropTypes.string.isRequired,
-  onFacetItemClick: PropTypes.func.isRequired,
-  onFacetValueClick: PropTypes.func.isRequired,
-  onFilterClick: PropTypes.func.isRequired,
-  onFilterClose: PropTypes.func.isRequired,
-  onFilterSearchChange: PropTypes.func.isRequired,
+  onEmptyListLabel: PropTypes.string,
+  onFacetItemClick: PropTypes.func,
+  onFacetValueClick: PropTypes.func,
+  onFilterClick: PropTypes.func,
+  onFilterClose: PropTypes.func,
+  onFilterSearchChange: PropTypes.func,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
     }),
-  ).isRequired,
-  showFilterFooter: PropTypes.bool.isRequired,
+  ),
+  showFilterButton: PropTypes.bool,
+  showFilterFooter: PropTypes.bool,
   title: PropTypes.string.isRequired,
+}
+
+ChartHeader.defaultProps = {
+  filterParams: [],
+  filterValueOptions: [],
+  isFilterOpen: false,
+  onApplyFilters: () => {},
+  onEmptyListLabel: '',
+  onFacetItemClick: () => {},
+  onFacetValueClick: () => {},
+  onFilterClick: () => {},
+  onFilterClose: () => {},
+  onFilterSearchChange: () => {},
+  selectedFacetValues: [],
+  showFilterButton: false,
+  showFilterFooter: false,
 }
 
 export default ChartHeader

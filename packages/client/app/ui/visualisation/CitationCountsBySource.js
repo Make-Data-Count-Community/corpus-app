@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import Visualisation from './Visualisation'
@@ -9,8 +8,6 @@ import CsvSymbol from '../../../static/symbol-csv-file.svg'
 import PdfSymbol from '../../../static/symbol-pdf-file.svg'
 import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
-
-const Wrapper = styled.div``
 
 const title = 'Citation counts by source of citation'
 const stackField = 'type'
@@ -41,7 +38,7 @@ const downloadOptions = [
   },
 ]
 
-const CitationCountsBySourceBar = props => {
+const CitationCountsBySource = props => {
   const {
     data,
     filterParams,
@@ -65,47 +62,46 @@ const CitationCountsBySourceBar = props => {
   } = props
 
   return (
-    <Wrapper>
-      <Visualisation
-        downloadOptions={downloadOptions}
-        filterParams={filterParams}
-        filterValueOptions={filterValueOptions}
-        isDownloadListOpen={isDownloadListOpen}
-        isFilterOpen={isFilterOpen}
-        onApplyFilters={onApplyFilters}
-        onDownloadOptionClick={onDownloadOptionClick}
-        onEmptyListLabel={onEmptyListLabel}
-        onExpandClick={onExpandClick}
-        onFacetItemClick={onFacetItemClick}
-        onFacetValueClick={onFacetValueClick}
-        onFilterClick={onFilterClick}
-        onFilterClose={onFilterClose}
-        onFilterSearchChange={onFilterSearchChange}
-        onFooterTabClick={onFooterTabClick}
-        selectedFacetValues={selectedFacetValues}
-        selectedFooterTab={selectedFooterTab}
-        showFilterFooter={showFilterFooter}
-        showFooterChartTab
-        visualisationTitle={title}
-      >
-        {selectedFooterTab === 'chart' && (
-          <StackedBarChart
-            data={data}
-            stackField={stackField}
-            stackItems={stackItems}
-            xField={xField}
-            yField={yField}
-          />
-        )}
-        {selectedFooterTab === 'table' && (
-          <Table columns={tableColumns} data={data} />
-        )}
-      </Visualisation>
-    </Wrapper>
+    <Visualisation
+      downloadOptions={downloadOptions}
+      filterParams={filterParams}
+      filterValueOptions={filterValueOptions}
+      isDownloadListOpen={isDownloadListOpen}
+      isFilterOpen={isFilterOpen}
+      onApplyFilters={onApplyFilters}
+      onDownloadOptionClick={onDownloadOptionClick}
+      onEmptyListLabel={onEmptyListLabel}
+      onExpandClick={onExpandClick}
+      onFacetItemClick={onFacetItemClick}
+      onFacetValueClick={onFacetValueClick}
+      onFilterClick={onFilterClick}
+      onFilterClose={onFilterClose}
+      onFilterSearchChange={onFilterSearchChange}
+      onFooterTabClick={onFooterTabClick}
+      selectedFacetValues={selectedFacetValues}
+      selectedFooterTab={selectedFooterTab}
+      showFilterButton
+      showFilterFooter={showFilterFooter}
+      showFooterChartTab
+      visualisationTitle={title}
+    >
+      {selectedFooterTab === 'chart' && (
+        <StackedBarChart
+          data={data}
+          stackField={stackField}
+          stackItems={stackItems}
+          xField={xField}
+          yField={yField}
+        />
+      )}
+      {selectedFooterTab === 'table' && (
+        <Table columns={tableColumns} data={data} />
+      )}
+    </Visualisation>
   )
 }
 
-CitationCountsBySourceBar.propTypes = {
+CitationCountsBySource.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
@@ -154,4 +150,4 @@ CitationCountsBySourceBar.propTypes = {
   ).isRequired,
 }
 
-export default CitationCountsBySourceBar
+export default CitationCountsBySource

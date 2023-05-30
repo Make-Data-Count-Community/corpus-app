@@ -19,6 +19,7 @@ import ShareSelectedSymbol from '../../../static/symbol-share-selected.svg'
 
 const ChartFooterWrapper = styled.div`
   display: flex;
+  /* flex-grow: 1; */
   padding: ${grid(0)};
   width: 100%;
 `
@@ -63,6 +64,7 @@ const ChartFooter = props => {
         }
         onOpenChange={() => onTabClick('download')}
         open={isDowloadListOpen}
+        placement="top"
         trigger="click"
       >
         <ChartFooterButton

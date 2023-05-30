@@ -5,10 +5,12 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { grid, th } from '@coko/client'
 
+import DataCiteLogo from '../../../static/logo-datacite-header.svg'
+
 // #region styles
 const StyledHeader = styled.header`
   align-items: center;
-  background-color: ${th('colorBody')};
+  background-color: ${th('colorPrimary')};
   /* box-shadow: -5px 5px 18px -2px ${th('colorText')}; */
   display: flex;
   flex-flow: row wrap;
@@ -29,12 +31,13 @@ const StyledHeader = styled.header`
 `
 
 const Branding = styled(Link)`
+  background-image: url(${DataCiteLogo});
   display: block;
   height: ${th('mobileLogoHeight')};
   margin-right: 30px;
   overflow: hidden;
   transition: outline 200ms ease-in;
-  width: 95px;
+  width: 195px;
 
   h1 {
     height: 0;
@@ -57,7 +60,9 @@ const Navigation = styled.nav`
   overflow: visible;
 
   @media screen and (min-width: ${th('mediaQueries.large')}) {
+    align-items: center;
     background-color: ${th('colorBody')};
+    display: flex;
     flex-grow: 1;
     /* height: auto; */
     justify-content: space-between;
@@ -67,7 +72,8 @@ const Navigation = styled.nav`
 `
 
 const StyledList = styled.ul`
-  display: block;
+  align-items: center;
+  display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -84,10 +90,10 @@ const StyledList = styled.ul`
   }
 
   @media screen and (min-width: ${th('mediaQueries.large')}) {
-    align-items: start;
+    align-items: center;
     display: flex;
     height: 3.0625rem;
-    padding: ${grid(4)} 0 0 0;
+    padding: 0;
 
     > li {
       align-items: center;
@@ -103,7 +109,7 @@ const StyledList = styled.ul`
 `
 
 const NavLinks = styled.div`
-  background-color: ${th('colorBackground')};
+  background-color: ${th('colorPrimary')};
   display: none;
   height: calc(
     100vh - (${th('mobileLogoHeight')} + 2 * ${th('headerPaddingVertical')})
@@ -116,7 +122,7 @@ const NavLinks = styled.div`
   width: 100%;
 
   @media screen and (min-width: ${th('mediaQueries.large')}) {
-    background-color: ${th('colorBody')};
+    background-color: ${th('colorPrimary')};
     display: flex;
     height: auto;
     justify-content: space-between;
@@ -131,9 +137,9 @@ const NavLinks = styled.div`
 const StyledLink = styled(Link)`
   color: inherit;
   display: inline-block;
-  font-size: inherit;
-  font-weight: 700;
-  line-height: 1.25;
+  font-size: ${th('fontSizeHeading1')};
+  font-weight: 500;
+  line-height: ${grid(7.75)};
   overflow-x: hidden;
   padding: 10px 0;
   text-decoration: none;
@@ -210,7 +216,7 @@ const Header = props => {
         Skip to main content
       </SkipLink>
       <Branding to={homepage}>
-        <h1>App Template</h1>
+        <h1>Data Citation Corpus</h1>
       </Branding>
       <Navigation role="navigation">
         <NavLinks id="main-nav">
@@ -220,7 +226,7 @@ const Header = props => {
                 aria-current={currentPath === dashboard ? 'page' : false}
                 to={dashboard}
               >
-                <span>Dashboard</span>
+                <span>Data Citation Corpus</span>
               </StyledLink>
             </li>
           </StyledList>
