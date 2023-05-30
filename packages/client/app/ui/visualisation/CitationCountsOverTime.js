@@ -14,6 +14,8 @@ const stackField = 'type'
 const stackItems = ['DOI', 'Accession ID']
 const xField = 'year'
 const yField = 'value'
+const stackFieldTooltipTitle = 'Value'
+const yFieldTooltipTitle = 'Citations'
 
 const downloadOptions = [
   {
@@ -89,9 +91,11 @@ const CitationCountsOverTime = props => {
         <StackedBarChart
           data={data}
           stackField={stackField}
+          stackFieldTooltipTitle={stackFieldTooltipTitle}
           stackItems={stackItems}
           xField={xField}
           yField={yField}
+          yFieldTooltipTitle={yFieldTooltipTitle}
         />
       )}
       {selectedFooterTab === 'table' && (

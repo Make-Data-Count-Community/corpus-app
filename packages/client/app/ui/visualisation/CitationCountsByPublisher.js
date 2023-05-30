@@ -12,6 +12,8 @@ import SvgSymbol from '../../../static/symbol-svg-file.svg'
 const title = 'Citation counts by publisher'
 const colorField = 'publisher'
 const thetaField = 'value'
+const colorFieldTooltipTitle = 'Publisher'
+const thetaFieldTooltipTitle = 'Citations'
 
 const downloadOptions = [
   {
@@ -84,7 +86,13 @@ const CitationCountsByPublisher = props => {
       visualisationTitle={title}
     >
       {selectedFooterTab === 'chart' && (
-        <PieChart colorField={colorField} data={data} thetaField={thetaField} />
+        <PieChart
+          colorField={colorField}
+          colorFieldTooltipTitle={colorFieldTooltipTitle}
+          data={data}
+          thetaField={thetaField}
+          thetaFieldTooltipTitle={thetaFieldTooltipTitle}
+        />
       )}
       {selectedFooterTab === 'table' && (
         <Table columns={tableColumns} data={data} />

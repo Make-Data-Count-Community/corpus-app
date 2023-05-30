@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createClassFromSpec } from 'react-vega'
 
-import { chartBackground, fullColors } from './__helpers__/colors'
+import { chartBackground, subjectColors } from './__helpers__/colors'
 
 const TreeMap = props => {
   const { data, colorField, valueField } = props
@@ -36,7 +36,7 @@ const TreeMap = props => {
         {
           name: 'color',
           type: 'ordinal',
-          range: fullColors,
+          range: subjectColors,
         },
       ],
 
