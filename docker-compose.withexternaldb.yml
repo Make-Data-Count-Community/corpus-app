@@ -1,6 +1,26 @@
 version: '3'
 
 services:
+  client:
+    build:
+      context: ./packages/client
+      dockerfile: ./Dockerfile-development
+    command: ['node_modules/.bin/coko-client-dev']
+    ports:
+      - ${CLIENT_PORT:-4000}:${CLIENT_PORT:-4000}
+    environment:
+      - NODE_ENV=development
+      - CLIENT_PORT=${CLIENT_PORT:-4000}
+      - CLIENT_FAST_REFRESH=1
+      - CLIENT_FAVICON_PATH=../static/favicon.ico
+      - CLIENT_PAGE_TITLE=${CLIENT_PAGE_TITLE:-"Basic App Template"}
+      - CLIENT_LANGUAGE=${CLIENT_LANGUAGE:-"en-US"}
+      - SERVER_URL=${SERVER_URL:-http://localhost:3000}
+    volumes:
+      - ./packages/client/app:/home/node/app/app
+      - ./packages/client/static:/home/node/app/static
+    tty: true
+
   server:
     build:
       context: ./packages/server
@@ -36,7 +56,7 @@ services:
         'js,graphql',
       ]
     ports:
-      - 3000
+      - ${SERVER_PORT:-3000}:${SERVER_PORT:-3000}
     environment:
       - NODE_ENV=development
       - POSTGRES_HOST=${POSTGRES_HOST}
