@@ -7,8 +7,7 @@ const Crossref = require('./crossref')
 
 const { model: ActivityLog } = require('../../models/activityLog')
 const { model: Assertion } = require('../../models/assertion')
-const { model: AssertionSubject } = require('../../models/assertionSubject')
-const { model: AssertionFunder } = require('../../models/assertionFunder')
+const { model: Subject } = require('../../models/subject')
 
 class MetadataSource {
   constructor(streamApis) {
@@ -69,17 +68,12 @@ class MetadataSource {
     return new MetadataSource(metadataApis)
   }
 
-  static async loadCitationsFromDB(
-    selected,
-    allSubjects,
-    repositories,
-    journals,
-    publishers,
-    allFunders,
-  ) {
+  static async loadCitationsFromDB(selected) {
     // eslint-disable-next-line no-console
     console.log({ selected })
-    const metadataApis = [new DataCite(), new Crossref()]
+    const subjects = await Subject.query()
+
+    const metadataApis = [new DataCite(subjects), new Crossref()]
 
     const metadataSource = new MetadataSource(metadataApis)
 
@@ -116,8 +110,6 @@ class MetadataSource {
         useTransaction(async trx => {
           // eslint-disable-next-line no-unused-vars
           const assertions = []
-          const subjects = []
-          const funders = []
 
           // eslint-disable-next-line no-plusplus
           for (let i = 0; i < result.length; i++) {
@@ -126,18 +118,7 @@ class MetadataSource {
             // eslint-disable-next-line no-await-in-loop
             await Promise.all(
               metadataSource.streamApis.map(api =>
-                api.transformToAssertion(
-                  allFunders,
-                  funders,
-                  publishers,
-                  journals,
-                  repositories,
-                  allSubjects,
-                  subjects,
-                  assertion,
-                  chunks,
-                  trx,
-                ),
+                api.transformToAssertion(assertion, chunks, trx),
               ),
             )
             assertion.activityId = item.id
@@ -145,18 +126,9 @@ class MetadataSource {
           }
 
           const assertionsArray = chunk(assertions, 5000)
-          const subjectsArray = chunk(subjects, 5000)
-          const fundersArray = chunk(funders, 5000)
 
           await Promise.all(
             assertionsArray.map(assert => Assertion.query(trx).insert(assert)),
-          )
-          await Promise.all(
-            subjectsArray.map(subj => AssertionSubject.query(trx).insert(subj)),
-          )
-
-          await Promise.all(
-            fundersArray.map(fund => AssertionFunder.query(trx).insert(fund)),
           )
 
           await ActivityLog.query(trx).findById(item.id).patch({ done: true })

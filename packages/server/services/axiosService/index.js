@@ -1,7 +1,10 @@
+/* eslint-disable no-param-reassign */
 const request = require('./axios')
 
 module.exports = {
   dataciteApi: (url, headers = {}) => {
+    url = `${url}?affiliation=true`
+
     const response = request({
       url,
       baseURL: 'https://api.datacite.org',
@@ -15,7 +18,6 @@ module.exports = {
     return response
   },
   crossrefApi: (url, headers = {}) => {
-    // eslint-disable-next-line no-param-reassign
     url = `${url}/transform/application/vnd.crossref.unixsd+xml`
 
     const response = request({

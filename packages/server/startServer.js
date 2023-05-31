@@ -3,12 +3,7 @@ const { startServer, db } = require('@coko/server')
 const os = require('os')
 const CorpusDataFactory = require('./services/corpusDataFactory')
 const MetadataSource = require('./services/metadata/metadataSource')
-const { model: Subject } = require('./models/subject')
-const { model: Repository } = require('./models/repository')
-const { model: Journal } = require('./models/journal')
-const { model: Publisher } = require('./models/publisher')
 const { model: ActivityLog } = require('./models/activityLog')
-const { model: Funder } = require('./models/funder')
 
 const init = async () => {
   try {
@@ -19,12 +14,6 @@ const init = async () => {
             process.env.HOSTNAME
           }' where id = (select id from migration_cursors where proccessed = false order by id asc limit 1) RETURNING "id","end", "start"`,
         )
-
-        const subjects = await Subject.query()
-        const repositories = await Repository.query()
-        const journals = await Journal.query()
-        const publishers = await Publisher.query()
-        const funders = await Funder.query()
 
         let count = 1
 
@@ -53,14 +42,7 @@ const init = async () => {
             console.log(
               `Total items extracted ${count}/${countAssertions[0].count}`,
             )
-            await MetadataSource.loadCitationsFromDB(
-              result.rows[0],
-              subjects,
-              repositories,
-              journals,
-              publishers,
-              funders,
-            )
+            await MetadataSource.loadCitationsFromDB(result.rows[0])
             count += 1
             // Call the function again to loop forever
             setImmediate(myAsyncFunction)
