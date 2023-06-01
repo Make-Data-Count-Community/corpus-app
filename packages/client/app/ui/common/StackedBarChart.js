@@ -14,6 +14,7 @@ const StackedBarChart = props => {
     yField,
     stackFieldTooltipTitle,
     yFieldTooltipTitle,
+    onNewView,
   } = props
 
   const Chart = createClassFromSpec({
@@ -88,6 +89,7 @@ const StackedBarChart = props => {
   return (
     <Chart
       actions={false}
+      onNewView={onNewView}
       style={{ width: '100%', height: '100%' }}
       tooltip={{
         theme: 'custom',
@@ -105,10 +107,12 @@ StackedBarChart.propTypes = {
   yField: PropTypes.string.isRequired,
   stackFieldTooltipTitle: PropTypes.string.isRequired,
   yFieldTooltipTitle: PropTypes.string.isRequired,
+  onNewView: PropTypes.func,
 }
 
 StackedBarChart.defaultProps = {
   xLabelAngle: 0,
+  onNewView: () => {},
 }
 
 export default StackedBarChart

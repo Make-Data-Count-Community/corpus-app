@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { CitationCorpusGrowth } from '../../app/ui'
 
@@ -84,6 +84,7 @@ const defaultTab = 'table'
 const Template = args => {
   const [selectedTab, setSelectedTab] = useState(defaultTab)
   const [isDowloadListOpen, setIsDownloadListOpen] = useState(false)
+  const newView = useRef(null)
 
   const handleFooterTabClick = tabTitle => {
     if (tabTitle === 'download') {
@@ -97,6 +98,10 @@ const Template = args => {
 
   const handleDownloadOptionClick = () => {}
 
+  const handleNewView = view => {
+    newView.current = view
+  }
+
   return (
     <CitationCorpusGrowth
       {...args}
@@ -109,6 +114,7 @@ const Template = args => {
       onDownloadOptionClick={handleDownloadOptionClick}
       onExpandClick={handleExpandClick}
       onFooterTabClick={handleFooterTabClick}
+      onNewView={handleNewView}
       selectedFooterTab={selectedTab}
       tableColumns={columns}
     />

@@ -45,6 +45,7 @@ const CitationCorpusGrowth = props => {
     onDownloadOptionClick,
     onExpandClick,
     onFooterTabClick,
+    onNewView,
     selectedFooterTab,
     tableColumns,
   } = props
@@ -63,6 +64,7 @@ const CitationCorpusGrowth = props => {
       {selectedFooterTab === 'chart' && (
         <MultiLineChart
           data={data}
+          onNewView={onNewView}
           stackField={stackField}
           stackItems={stackItems}
           xField={xField}
@@ -82,6 +84,7 @@ CitationCorpusGrowth.propTypes = {
   onDownloadOptionClick: PropTypes.func.isRequired,
   onExpandClick: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
+  onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
