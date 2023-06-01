@@ -43,8 +43,9 @@ class CrossrefMetadataXml extends XmlBase {
             date: { year = null, month = 1, day = 1 },
           } = value
 
-          month = parseInt(month, 10) > 0 && parseInt(month, 10) < 13
-          day = parseInt(day, 10) > 0 && parseInt(day, 10) < 32
+          month =
+            parseInt(month, 10) > 0 && parseInt(month, 10) < 13 ? month : null
+          day = parseInt(day, 10) > 0 && parseInt(day, 10) < 32 ? day : null
 
           const dt = [year, month, day].filter(d => d !== null).join('-')
 
