@@ -40,10 +40,10 @@ class CrossrefMetadataXml extends XmlBase {
         { explicitArray: false, trim: true },
         (_err, value) => {
           const {
-            date: { year = '', month = '', day = '' },
+            date: { year = null, month = null, day = null },
           } = value
 
-          resolve([year, month, day].join('-'))
+          resolve([year, month, day].filter(d => d !== null).join('-'))
         },
       )
     })
