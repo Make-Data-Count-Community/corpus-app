@@ -42,6 +42,13 @@ class Crossref extends Transform {
 
   // eslint-disable-next-line class-methods-use-this
   async transformToAssertion(assertionInstance, chunk, trx) {
+    const publishedDate = await chunk.crossref.publishedDate
+    // eslint-disable-next-line no-console
+    console.log(`##########33 ${publishedDate} #############33`)
+    const checkValidYear = new Date(publishedDate).getFullYear()
+
+    assertionInstance.publishedDate = checkValidYear ? publishedDate : null
+
     if (chunk.crossref.publisher) {
       const title = chunk.crossref.publisher
       const exists = await Publisher.query(trx).findOne({ title })
