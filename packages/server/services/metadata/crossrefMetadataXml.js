@@ -49,8 +49,6 @@ class CrossrefMetadataXml extends XmlBase {
 
           const dt = [year, month, day].filter(d => d !== null).join('-')
 
-          // eslint-disable-next-line no-console
-          console.log(dt)
           const checkValidYear = new Date(dt).getFullYear()
 
           resolve(checkValidYear ? dt : null)
