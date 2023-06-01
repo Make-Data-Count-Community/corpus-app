@@ -24,7 +24,7 @@ class CrossrefMetadataXml extends XmlBase {
       publishedDate: {
         path: {
           location: [
-            `crossref_result query_result body query doi_record crossref journal journal_article publication_date[media_type=print]`,
+            `crossref_result query_result body query doi_record crossref journal journal_article publication_date`,
           ],
         },
         defaultValue: null,
