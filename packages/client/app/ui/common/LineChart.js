@@ -5,7 +5,7 @@ import { createClassFromSpec } from 'react-vega'
 import { chartBackground, primaryBlue } from './__helpers__/colors'
 
 const LineChart = props => {
-  const { data, xField, xLabelAngle, yField } = props
+  const { data, xField, xLabelAngle, yField, onNewView } = props
 
   const Chart = createClassFromSpec({
     spec: {
@@ -47,7 +47,16 @@ const LineChart = props => {
     },
   })
 
-  return <Chart actions={false} style={{ width: '100%', height: '100%' }} />
+  return (
+    <Chart
+      actions={false}
+      onNewView={onNewView}
+      style={{ width: '100%', height: '100%' }}
+      tooltip={{
+        theme: 'custom',
+      }}
+    />
+  )
 }
 
 LineChart.propTypes = {
@@ -55,10 +64,12 @@ LineChart.propTypes = {
   xField: PropTypes.string.isRequired,
   xLabelAngle: PropTypes.number,
   yField: PropTypes.string.isRequired,
+  onNewView: PropTypes.func,
 }
 
 LineChart.defaultProps = {
   xLabelAngle: 0,
+  onNewView: () => {},
 }
 
 export default LineChart

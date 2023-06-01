@@ -11,6 +11,7 @@ const PieChart = props => {
     colorField,
     colorFieldTooltipTitle,
     thetaFieldTooltipTitle,
+    onNewView,
   } = props
 
   const Chart = createClassFromSpec({
@@ -63,7 +64,16 @@ const PieChart = props => {
     },
   })
 
-  return <Chart actions={false} style={{ width: '100%', height: '100%' }} />
+  return (
+    <Chart
+      actions={false}
+      onNewView={onNewView}
+      style={{ width: '100%', height: '100%' }}
+      tooltip={{
+        theme: 'custom',
+      }}
+    />
+  )
 }
 
 PieChart.propTypes = {
@@ -72,6 +82,11 @@ PieChart.propTypes = {
   colorField: PropTypes.string.isRequired,
   colorFieldTooltipTitle: PropTypes.string.isRequired,
   thetaFieldTooltipTitle: PropTypes.string.isRequired,
+  onNewView: PropTypes.func,
+}
+
+PieChart.defaultProps = {
+  onNewView: () => {},
 }
 
 export default PieChart

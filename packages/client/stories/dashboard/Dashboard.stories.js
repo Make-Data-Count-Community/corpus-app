@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { lorem } from 'faker'
 import { uuid } from '@coko/client'
 import { json2csv } from 'json-2-csv'
@@ -8,8 +8,11 @@ import { Dashboard } from '../../app/ui'
 const facetNotSelectedLabel = 'Please select a facet'
 const displayListEmptyLabel = 'No matches found'
 
-const downloadFile = (inputData, fileName) => {
-  const url = window.URL.createObjectURL(new Blob([inputData]))
+const downloadFile = (inputData, fileName, type = 'csv') => {
+  const url =
+    type === 'csv'
+      ? window.URL.createObjectURL(new Blob([inputData]))
+      : inputData
 
   const link = document.createElement('a')
   link.href = url
@@ -1386,6 +1389,8 @@ const Template = args => {
   const [uniqueCountIsDowloadListOpen, setUniqueCountIsDownloadListOpen] =
     useState(false)
 
+  const corpusGrowthNewView = useRef(null)
+
   // #region bySourceStates
 
   const [bySourceSelectedTab, setBySourceSelectedTab] =
@@ -1414,6 +1419,8 @@ const Template = args => {
     bySourceEmptyFacetValueListLabel,
     setBySourceEmptyFacetValueListLabel,
   ] = useState(facetNotSelectedLabel)
+
+  const bySourceNewView = useRef(null)
 
   const setBySourceEmptyListLabel = () => {
     const selectedFacet = bySourceFilters.find(f => f.isFacetSelected)
@@ -1458,6 +1465,8 @@ const Template = args => {
     setBySubjectEmptyFacetValueListLabel,
   ] = useState(facetNotSelectedLabel)
 
+  const bySubjectNewView = useRef(null)
+
   const setBySubjectEmptyListLabel = () => {
     const selectedFacet = bySubjectFilters.find(f => f.isFacetSelected)
 
@@ -1498,6 +1507,8 @@ const Template = args => {
     overTimeEmptyFacetValueListLabel,
     setOverTimeEmptyFacetValueListLabel,
   ] = useState(facetNotSelectedLabel)
+
+  const overTimeNewView = useRef(null)
 
   const setOverTimeEmptyListLabel = () => {
     const selectedFacet = overTimeFilters.find(f => f.isFacetSelected)
@@ -1542,6 +1553,8 @@ const Template = args => {
     byPublisherEmptyFacetValueListLabel,
     setByPublisherEmptyFacetValueListLabel,
   ] = useState(facetNotSelectedLabel)
+
+  const byPublisherNewView = useRef(null)
 
   const setByPublisherEmptyListLabel = () => {
     const selectedFacet = byPublisherFilters.find(f => f.isFacetSelected)
@@ -1649,7 +1662,18 @@ const Template = args => {
       )
 
       downloadFile(csvString, 'Data citations corpus growth.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await corpusGrowthNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Data citations corpus growth.${type}`, type)
     }
+  }
+
+  const handleCorpusGrowthNewView = view => {
+    corpusGrowthNewView.current = view
   }
 
   const handleUniqueCountFooterTabClick = tabTitle => {
@@ -1662,7 +1686,28 @@ const Template = args => {
 
   const handleUniqueCountExpandClick = () => {}
 
-  const handleUniqueCountDownloadOptionClick = () => {}
+  const handleUniqueCountDownloadOptionClick = async type => {
+    setUniqueCountIsDownloadListOpen(false)
+
+    if (type === 'csv') {
+      const csvString = await json2csv(
+        transformUniqueCountData(unqiueCountData),
+        {
+          keys: [
+            { field: 'facet', title: 'Facet' },
+            { field: 'thirdPartyAggr', title: 'Third party aggregator' },
+            { field: 'pidMetadata', title: 'PID Metadata' },
+            { field: 'total', title: 'Total' },
+          ],
+        },
+      )
+
+      downloadFile(
+        csvString,
+        'Counts of unique repositories, journals, subjects, affiliations, funders.csv',
+      )
+    }
+  }
 
   // #region bySourceFilters
 
@@ -1788,7 +1833,22 @@ const Template = args => {
       )
 
       downloadFile(csvString, 'Citation counts by source of citation.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await bySourceNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(
+        imgString,
+        `Citation counts by source of citation.${type}`,
+        type,
+      )
     }
+  }
+
+  const handleBySourceNewView = view => {
+    bySourceNewView.current = view
   }
 
   // #endregion bySourceFilters
@@ -1920,7 +1980,18 @@ const Template = args => {
       )
 
       downloadFile(csvString, 'Citation counts by publisher.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await byPublisherNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Citation counts by publisher.${type}`, type)
     }
+  }
+
+  const handleByPublisherNewView = view => {
+    byPublisherNewView.current = view
   }
 
   // #endregion byPublisherFilters
@@ -2045,7 +2116,18 @@ const Template = args => {
       )
 
       downloadFile(csvString, 'Citation counts by subject.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await bySubjectNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Citation counts by subject.${type}`, type)
     }
+  }
+
+  const handleBySubjectNewView = view => {
+    bySubjectNewView.current = view
   }
 
   // #endregion bySubjectFilters
@@ -2170,7 +2252,18 @@ const Template = args => {
       )
 
       downloadFile(csvString, 'Citation counts over time.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await overTimeNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Citation counts over time.${type}`, type)
     }
+  }
+
+  const handlOverTimeOnNewView = view => {
+    overTimeNewView.current = view
   }
 
   // #endregion overTimeFilters
@@ -2196,6 +2289,7 @@ const Template = args => {
       byPublisherOnFilterClose={handleByPublisherOnClose}
       byPublisherOnFilterSearchChange={handleByPublisherSearchChange}
       byPublisherOnFooterTabClick={handleByPublisherFooterTabClick}
+      byPublisherOnNewView={handleByPublisherNewView}
       byPublisherSelectedFacetValues={byPublisherSelectedFacetValues}
       byPublisherSelectedFooterTab={byPublisherSelectedTab}
       byPublisherShowFilterFooter={byPublisherShowApplyFilter}
@@ -2224,6 +2318,7 @@ const Template = args => {
       bySourceOnFilterClose={handleBySourceOnClose}
       bySourceOnFilterSearchChange={handleBySourceSearchChange}
       bySourceOnFooterTabClick={handleBySourceFooterTabClick}
+      bySourceOnNewView={handleBySourceNewView}
       bySourceSelectedFacetValues={bySourceSelectedFacetValues}
       bySourceSelectedFooterTab={bySourceSelectedTab}
       bySourceShowFilterFooter={bySourceShowApplyFilter}
@@ -2247,6 +2342,7 @@ const Template = args => {
       bySubjectOnFilterClose={handleBySubjectOnClose}
       bySubjectOnFilterSearchChange={handleBySubjectSearchChange}
       bySubjectOnFooterTabClick={handleBySubjectFooterTabClick}
+      bySubjectOnNewView={handleBySubjectNewView}
       bySubjectSelectedFacetValues={bySubjectSelectedFacetValues}
       bySubjectSelectedFooterTab={bySubjectSelectedTab}
       bySubjectShowFilterFooter={bySubjectShowApplyFilter}
@@ -2260,6 +2356,7 @@ const Template = args => {
       corpusGrowthOnDownloadOptionClick={handleCorpusGrowthDownloadOptionClick}
       corpusGrowthOnExpandClick={handleCorpusGrowthExpandClick}
       corpusGrowthOnFooterTabClick={handleCorpusGrowthFooterTabClick}
+      corpusGrowthOnNewView={handleCorpusGrowthNewView}
       corpusGrowthSelectedFooterTab={corpusGrowthSelectedTab}
       corpusGrowthTableColumns={corpusGrowthTableColumns}
       overTimeData={
@@ -2286,6 +2383,7 @@ const Template = args => {
       overTimeOnFilterClose={handleOverTimeOnClose}
       overTimeOnFilterSearchChange={handleOverTimeSearchChange}
       overTimeOnFooterTabClick={handleOverTimeFooterTabClick}
+      overTimeOnNewView={handlOverTimeOnNewView}
       overTimeSelectedFacetValues={overTimeSelectedFacetValues}
       overTimeSelectedFooterTab={overTimeSelectedTab}
       overTimeShowFilterFooter={overTimeShowApplyFilter}

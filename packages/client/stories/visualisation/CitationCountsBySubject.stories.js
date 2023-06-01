@@ -533,6 +533,8 @@ const Template = args => {
 
   const handleDownloadOptionClick = () => {}
 
+  const handleNewView = () => {}
+
   const transformData = sourceData => {
     return sourceData.map(s => {
       return { ...s, key: s.id }
@@ -557,6 +559,7 @@ const Template = args => {
       onFilterClose={handleOnClose}
       onFilterSearchChange={handleSearchChange}
       onFooterTabClick={handleFooterTabClick}
+      onNewView={handleNewView}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedTab}
       showFilterFooter={!!totalSelectionCount}
