@@ -39,11 +39,18 @@ class CrossrefMetadataXml extends XmlBase {
         `<date>${date}</date>`,
         { explicitArray: false, trim: true },
         (_err, value) => {
-          const {
-            date: { year = null, month = null, day = null },
+          let {
+            date: { year = null, month = 1, day = 1 },
           } = value
 
-          resolve([year, month, day].filter(d => d !== null).join('-'))
+          month = parseInt(month, 10) > 0 && parseInt(month, 10) < 13
+          day = parseInt(day, 10) > 0 && parseInt(day, 10) < 32
+
+          const dt = [year, month, day].filter(d => d !== null).join('-')
+
+          const checkValidYear = new Date(dt).getFullYear()
+
+          resolve(checkValidYear ? dt : null)
         },
       )
     })
