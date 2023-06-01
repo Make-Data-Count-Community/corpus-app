@@ -211,6 +211,8 @@ const Template = args => {
 
   const handleDownloadOptionClick = () => {}
 
+  const handleNewView = () => {}
+
   return (
     <CitationCountsBySource
       {...args}
@@ -233,6 +235,7 @@ const Template = args => {
       onFilterClose={handleOnClose}
       onFilterSearchChange={handleSearchChange}
       onFooterTabClick={handleFooterTabClick}
+      onNewView={handleNewView}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedTab}
       showFilterFooter={!!totalSelectionCount}

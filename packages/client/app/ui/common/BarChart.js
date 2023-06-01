@@ -5,7 +5,7 @@ import { createClassFromSpec } from 'react-vega'
 import { chartBackground, primaryBlue } from './__helpers__/colors'
 
 const BarChart = props => {
-  const { data, xLabelAngle, xField, yField } = props
+  const { data, xLabelAngle, xField, yField, onNewView } = props
 
   const Chart = createClassFromSpec({
     spec: {
@@ -54,7 +54,16 @@ const BarChart = props => {
     },
   })
 
-  return <Chart actions={false} style={{ width: '100%', height: '100%' }} />
+  return (
+    <Chart
+      actions={false}
+      onNewView={onNewView}
+      style={{ width: '100%', height: '100%' }}
+      tooltip={{
+        theme: 'custom',
+      }}
+    />
+  )
 }
 
 BarChart.propTypes = {
@@ -62,10 +71,12 @@ BarChart.propTypes = {
   xLabelAngle: PropTypes.number,
   xField: PropTypes.string.isRequired,
   yField: PropTypes.string.isRequired,
+  onNewView: PropTypes.func,
 }
 
 BarChart.defaultProps = {
   xLabelAngle: 0,
+  onNewView: () => {},
 }
 
 export default BarChart

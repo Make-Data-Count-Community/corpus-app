@@ -5,7 +5,15 @@ import { createClassFromSpec } from 'react-vega'
 import { chartBackground, idColors } from './__helpers__/colors'
 
 const MultiLineChart = props => {
-  const { data, stackField, stackItems, xLabelAngle, xField, yField } = props
+  const {
+    data,
+    stackField,
+    stackItems,
+    xLabelAngle,
+    xField,
+    yField,
+    onNewView,
+  } = props
 
   const Chart = createClassFromSpec({
     spec: {
@@ -63,7 +71,16 @@ const MultiLineChart = props => {
     },
   })
 
-  return <Chart actions={false} style={{ width: '100%', height: '100%' }} />
+  return (
+    <Chart
+      actions={false}
+      onNewView={onNewView}
+      style={{ width: '100%', height: '100%' }}
+      tooltip={{
+        theme: 'custom',
+      }}
+    />
+  )
 }
 
 MultiLineChart.propTypes = {
@@ -73,10 +90,12 @@ MultiLineChart.propTypes = {
   xLabelAngle: PropTypes.number,
   xField: PropTypes.string.isRequired,
   yField: PropTypes.string.isRequired,
+  onNewView: PropTypes.func,
 }
 
 MultiLineChart.defaultProps = {
   xLabelAngle: 0,
+  onNewView: () => {},
 }
 
 export default MultiLineChart

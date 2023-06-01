@@ -53,6 +53,7 @@ const Dashboard = props => {
     corpusGrowthOnDownloadOptionClick,
     corpusGrowthOnExpandClick,
     corpusGrowthOnFooterTabClick,
+    corpusGrowthOnNewView,
     corpusGrowthSelectedFooterTab,
     corpusGrowthTableColumns,
 
@@ -79,6 +80,7 @@ const Dashboard = props => {
     bySourceOnFilterClose,
     bySourceOnFilterSearchChange,
     bySourceOnFooterTabClick,
+    bySourceOnNewView,
     bySourceSelectedFacetValues,
     bySourceSelectedFooterTab,
     bySourceShowFilterFooter,
@@ -99,6 +101,7 @@ const Dashboard = props => {
     byPublisherOnFilterClose,
     byPublisherOnFilterSearchChange,
     byPublisherOnFooterTabClick,
+    byPublisherOnNewView,
     byPublisherSelectedFacetValues,
     byPublisherSelectedFooterTab,
     byPublisherShowFilterFooter,
@@ -119,6 +122,7 @@ const Dashboard = props => {
     bySubjectOnFilterClose,
     bySubjectOnFilterSearchChange,
     bySubjectOnFooterTabClick,
+    bySubjectOnNewView,
     bySubjectSelectedFacetValues,
     bySubjectSelectedFooterTab,
     bySubjectShowFilterFooter,
@@ -139,6 +143,7 @@ const Dashboard = props => {
     overTimeOnFilterClose,
     overTimeOnFilterSearchChange,
     overTimeOnFooterTabClick,
+    overTimeOnNewView,
     overTimeSelectedFacetValues,
     overTimeSelectedFooterTab,
     overTimeShowFilterFooter,
@@ -166,6 +171,7 @@ const Dashboard = props => {
           onFilterClose={overTimeOnFilterClose}
           onFilterSearchChange={overTimeOnFilterSearchChange}
           onFooterTabClick={overTimeOnFooterTabClick}
+          onNewView={overTimeOnNewView}
           selectedFacetValues={overTimeSelectedFacetValues}
           selectedFooterTab={overTimeSelectedFooterTab}
           showFilterFooter={overTimeShowFilterFooter}
@@ -187,6 +193,7 @@ const Dashboard = props => {
           onFilterClose={bySubjectOnFilterClose}
           onFilterSearchChange={bySubjectOnFilterSearchChange}
           onFooterTabClick={bySubjectOnFooterTabClick}
+          onNewView={bySubjectOnNewView}
           selectedFacetValues={bySubjectSelectedFacetValues}
           selectedFooterTab={bySubjectSelectedFooterTab}
           showFilterFooter={bySubjectShowFilterFooter}
@@ -213,6 +220,7 @@ const Dashboard = props => {
           onFilterClose={byPublisherOnFilterClose}
           onFilterSearchChange={byPublisherOnFilterSearchChange}
           onFooterTabClick={byPublisherOnFooterTabClick}
+          onNewView={byPublisherOnNewView}
           selectedFacetValues={byPublisherSelectedFacetValues}
           selectedFooterTab={byPublisherSelectedFooterTab}
           showFilterFooter={byPublisherShowFilterFooter}
@@ -234,6 +242,7 @@ const Dashboard = props => {
           onFilterClose={bySourceOnFilterClose}
           onFilterSearchChange={bySourceOnFilterSearchChange}
           onFooterTabClick={bySourceOnFooterTabClick}
+          onNewView={bySourceOnNewView}
           selectedFacetValues={bySourceSelectedFacetValues}
           selectedFooterTab={bySourceSelectedFooterTab}
           showFilterFooter={bySourceShowFilterFooter}
@@ -258,6 +267,7 @@ const Dashboard = props => {
           onDownloadOptionClick={corpusGrowthOnDownloadOptionClick}
           onExpandClick={corpusGrowthOnExpandClick}
           onFooterTabClick={corpusGrowthOnFooterTabClick}
+          onNewView={corpusGrowthOnNewView}
           selectedFooterTab={corpusGrowthSelectedFooterTab}
           tableColumns={corpusGrowthTableColumns}
         />
@@ -335,6 +345,7 @@ Dashboard.propTypes = {
   overTimeOnFilterClose: PropTypes.func.isRequired,
   overTimeOnFilterSearchChange: PropTypes.func.isRequired,
   overTimeOnFooterTabClick: PropTypes.func.isRequired,
+  overTimeOnNewView: PropTypes.func.isRequired,
   overTimeSelectedFooterTab: PropTypes.string.isRequired,
   overTimeSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -382,6 +393,7 @@ Dashboard.propTypes = {
   bySubjectOnFilterClose: PropTypes.func.isRequired,
   bySubjectOnFilterSearchChange: PropTypes.func.isRequired,
   bySubjectOnFooterTabClick: PropTypes.func.isRequired,
+  bySubjectOnNewView: PropTypes.func.isRequired,
   bySubjectSelectedFooterTab: PropTypes.string.isRequired,
   bySubjectSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -429,6 +441,7 @@ Dashboard.propTypes = {
   byPublisherOnFilterClose: PropTypes.func.isRequired,
   byPublisherOnFilterSearchChange: PropTypes.func.isRequired,
   byPublisherOnFooterTabClick: PropTypes.func.isRequired,
+  byPublisherOnNewView: PropTypes.func.isRequired,
   byPublisherSelectedFooterTab: PropTypes.string.isRequired,
   byPublisherSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -476,6 +489,7 @@ Dashboard.propTypes = {
   bySourceOnFilterClose: PropTypes.func.isRequired,
   bySourceOnFilterSearchChange: PropTypes.func.isRequired,
   bySourceOnFooterTabClick: PropTypes.func.isRequired,
+  bySourceOnNewView: PropTypes.func.isRequired,
   bySourceSelectedFooterTab: PropTypes.string.isRequired,
   bySourceSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -512,6 +526,7 @@ Dashboard.propTypes = {
   corpusGrowthOnExpandClick: PropTypes.func.isRequired,
   corpusGrowthOnFooterTabClick: PropTypes.func.isRequired,
   corpusGrowthSelectedFooterTab: PropTypes.string.isRequired,
+  corpusGrowthOnNewView: PropTypes.func.isRequired,
   corpusGrowthTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,

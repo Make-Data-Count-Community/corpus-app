@@ -5,7 +5,7 @@ import Visualisation from './Visualisation'
 import { StackedBarChart, Table } from '../common'
 
 import CsvSymbol from '../../../static/symbol-csv-file.svg'
-import PdfSymbol from '../../../static/symbol-pdf-file.svg'
+// import PdfSymbol from '../../../static/symbol-pdf-file.svg'
 import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
@@ -23,11 +23,11 @@ const downloadOptions = [
     label: 'PNG',
     symbol: PngSymbol,
   },
-  {
-    type: 'pdf',
-    label: 'PDF',
-    symbol: PdfSymbol,
-  },
+  //   {
+  //     type: 'pdf',
+  //     label: 'PDF',
+  //     symbol: PdfSymbol,
+  //   },
   {
     type: 'svg',
     label: 'SVG',
@@ -57,6 +57,7 @@ const CitationCountsBySource = props => {
     onFilterClose,
     onFilterSearchChange,
     onFooterTabClick,
+    onNewView,
     selectedFooterTab,
     selectedFacetValues,
     showFilterFooter,
@@ -90,6 +91,7 @@ const CitationCountsBySource = props => {
       {selectedFooterTab === 'chart' && (
         <StackedBarChart
           data={data}
+          onNewView={onNewView}
           stackField={stackField}
           stackFieldTooltipTitle={stackFieldTooltipTitle}
           stackItems={stackItems}
@@ -137,6 +139,7 @@ CitationCountsBySource.propTypes = {
   onFilterClose: PropTypes.func.isRequired,
   onFilterSearchChange: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
+  onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
