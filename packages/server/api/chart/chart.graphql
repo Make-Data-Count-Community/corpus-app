@@ -7,8 +7,8 @@ type Chart {
 }
 
 extend type Query {
-  getAssertionsPerYear: [Chart]
-  getAssertionsPerSubject: [Chart]
-  getAssertionsPerPublisher: [Chart]
-  getAssertionCountsPerSource: [Chart]
+  getAssertionsPerYear(input: SearchModelInput): [Chart]
+  getAssertionsPerSubject(input: SearchModelInput): [Chart]
+  getAssertionsPerPublisher(input: SearchModelInput): [Chart]
+  getAssertionCountsPerSource(input: SearchModelInput): [Chart]
 }

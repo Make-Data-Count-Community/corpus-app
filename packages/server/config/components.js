@@ -13,6 +13,7 @@ module.exports = [
   // models
   './models/activityLog',
   './models/assertion',
+  './models/assertionLastTenYear',
   './models/affiliation',
   './models/assertionAffiliation',
   './models/journal',

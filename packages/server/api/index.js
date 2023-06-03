@@ -7,10 +7,12 @@ const publisher = require('./publisher')
 const journal = require('./journal')
 const repository = require('./repository')
 const source = require('./source')
+const common = require('./common')
 
 module.exports = {
   typeDefs: [
     // Add Here your TypeDefs
+    common.typeDefs,
     chart.typeDefs,
     affiliation.typeDefs,
     funder.typeDefs,

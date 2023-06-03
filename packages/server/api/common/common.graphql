@@ -1,0 +1,38 @@
+input SortInput {
+  field: [String]!
+  direction: String
+}
+
+input SearchInput {
+  criteria: [SearchCriteria]!
+}
+
+input SearchCriteria {
+  field: String
+  operator: OperatorInput
+  conjunction: String
+  or: [SearchCriteria!]
+}
+
+input SearchModelInput {
+  skip: ID
+  take: ID
+  search: SearchInput
+  sort: SortInput
+}
+
+input OperatorInput {
+  fullSearch: String
+  ne: String
+  eq: String
+  noteq: String
+  is: Boolean
+  in: [String]
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  beginsWith: String
+}

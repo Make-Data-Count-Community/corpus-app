@@ -5,8 +5,8 @@ const {
   getAssertionCountsPerSource,
 } = require('../../controllers/chart.controllers')
 
-const getAssertionsPerYearResolver = async (_, { id, options }) => {
-  return getAssertionsPerYear(id, options)
+const getAssertionsPerYearResolver = async (_, input) => {
+  return getAssertionsPerYear(input)
 }
 
 const getAssertionsPerSubjectResolver = async (_, { id, options }) => {
