@@ -9,12 +9,12 @@ const getAssertionsPerYearResolver = async (_, input) => {
   return getAssertionsPerYear(input)
 }
 
-const getAssertionsPerSubjectResolver = async (_, { id, options }) => {
-  return getAssertionsPerSubject(id, options)
+const getAssertionsPerSubjectResolver = async (_, input) => {
+  return getAssertionsPerSubject(input)
 }
 
-const getAssertionsPerPublisherResolver = async (_, { id, options }) => {
-  return getAssertionsPerPublisher(id, options)
+const getAssertionsPerPublisherResolver = async (_, input) => {
+  return getAssertionsPerPublisher(input)
 }
 
 const getAssertionCountsPerSourceResolver = async (_, { id, options }) => {
