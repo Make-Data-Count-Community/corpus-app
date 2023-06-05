@@ -7,19 +7,27 @@ const randomNumber = ceiling => {
 }
 
 const data = [
-  { source: 'CZI', value: randomNumber(10000000), type: 'DOI' },
-  { source: 'DataCite Event Data', value: randomNumber(10000000), type: 'DOI' },
-  { source: 'OpenAIRE', value: randomNumber(10000000), type: 'DOI' },
-  { source: 'CZI', value: randomNumber(10000000), type: 'Accession ID' },
-  { source: 'DataCite Event Data', value: 0, type: 'Accession ID' },
-  { source: 'OpenAIRE', value: randomNumber(10000000), type: 'Accession ID' },
+  { xField: 'CZI', yField: randomNumber(10000000), stackField: 'DOI' },
+  {
+    xField: 'DataCite Event Data',
+    yField: randomNumber(10000000),
+    stackField: 'DOI',
+  },
+  { xField: 'OpenAIRE', yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 'CZI', yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 'DataCite Event Data', yField: 0, stackField: 'Accession ID' },
+  {
+    xField: 'OpenAIRE',
+    yField: randomNumber(10000000),
+    stackField: 'Accession ID',
+  },
 ]
 
 const columns = [
   {
     title: 'Source',
-    dataIndex: 'source',
-    key: 'source',
+    dataIndex: 'xField',
+    key: 'xField',
   },
   {
     title: 'DOI',
@@ -219,7 +227,7 @@ const Template = args => {
       data={
         selectedTab === 'chart'
           ? data
-          : transformData(data, 'source', 'type', 'value')
+          : transformData(data, 'xField', 'stackField', 'yField')
       }
       filterParams={filters}
       filterValueOptions={displayFacetValues}

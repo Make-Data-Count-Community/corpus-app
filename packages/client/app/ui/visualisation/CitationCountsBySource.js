@@ -10,10 +10,10 @@ import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Citation counts by source of citation'
-const stackField = 'type'
+const stackField = 'stackField'
 const stackItems = ['DOI', 'Accession ID']
-const xField = 'source'
-const yField = 'value'
+const xField = 'xField'
+const yField = 'yField'
 const stackFieldTooltipTitle = 'Value'
 const yFieldTooltipTitle = 'Citations'
 

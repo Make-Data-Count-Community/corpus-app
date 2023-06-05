@@ -7,33 +7,33 @@ const randomNumber = ceiling => {
 }
 
 const data = [
-  { year: 2010, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2011, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2012, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2013, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2014, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2015, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2016, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2017, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2018, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2019, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2010, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2011, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2012, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2013, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2014, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2015, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2016, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2017, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2018, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2019, value: randomNumber(10000000), type: 'Accession ID' },
+  { xField: 2010, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2011, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2012, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2013, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2014, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2015, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2016, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2017, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2018, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2019, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2010, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2011, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2012, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2013, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2014, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2015, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2016, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2017, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2018, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2019, yField: randomNumber(10000000), stackField: 'Accession ID' },
 ]
 
 const columns = [
   {
     title: 'Year',
-    dataIndex: 'year',
-    key: 'year',
+    dataIndex: 'xField',
+    key: 'xField',
   },
   {
     title: 'DOI',
@@ -233,7 +233,7 @@ const Template = args => {
       data={
         selectedTab === 'chart'
           ? data
-          : transformData(data, 'year', 'type', 'value')
+          : transformData(data, 'xField', 'stackField', 'yField')
       }
       filterParams={filters}
       filterValueOptions={displayFacetValues}
