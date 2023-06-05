@@ -23,8 +23,9 @@ const Wrapper = styled.div`
 
 const DataWrapper = styled.div`
   /* flex-grow: 3; */
-  height: ${grid(80)};
+  height: ${grid(84)};
   overflow: auto;
+  padding: ${grid(2)} ${grid(4)};
   width: 100%;
 `
 

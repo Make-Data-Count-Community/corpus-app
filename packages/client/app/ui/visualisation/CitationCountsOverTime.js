@@ -10,10 +10,10 @@ import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Citation counts over time'
-const stackField = 'type'
+const stackField = 'stackField'
 const stackItems = ['DOI', 'Accession ID']
-const xField = 'year'
-const yField = 'value'
+const xField = 'xField'
+const yField = 'yField'
 const stackFieldTooltipTitle = 'Value'
 const yFieldTooltipTitle = 'Citations'
 

@@ -10,8 +10,8 @@ import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Citation counts by publisher'
-const colorField = 'publisher'
-const thetaField = 'value'
+const colorField = 'xField'
+const thetaField = 'yField'
 const colorFieldTooltipTitle = 'Publisher'
 const thetaFieldTooltipTitle = 'Citations'
 

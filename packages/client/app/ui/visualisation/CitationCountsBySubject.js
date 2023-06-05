@@ -10,8 +10,8 @@ import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Citation counts by subject'
-const colorField = 'name'
-const valueField = 'value'
+const colorField = 'xField'
+const valueField = 'yField'
 
 const downloadOptions = [
   {

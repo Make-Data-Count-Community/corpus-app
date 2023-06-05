@@ -4,7 +4,8 @@ import styled from 'styled-components'
 
 import { th, grid } from '@coko/client'
 
-import { Header, Footer } from '../common'
+import { Footer } from '../common'
+
 import {
   CitationCorpusGrowth,
   CitationCountsByPublisher,
@@ -44,9 +45,7 @@ const VisualisationRow = styled.div`
 
 const Dashboard = props => {
   const {
-    currentPath,
     footerLinks,
-    headerLinks,
 
     corpusGrowthData,
     corpusGrowthIsDownloadListOpen,
@@ -152,7 +151,6 @@ const Dashboard = props => {
 
   return (
     <DashboardWrapper>
-      <Header currentPath={currentPath} links={headerLinks} />
       <VisualisationRow>
         {/* <VisualisationWrapper> */}
         <CitationCountsOverTime
@@ -279,7 +277,6 @@ const Dashboard = props => {
 }
 
 Dashboard.propTypes = {
-  currentPath: PropTypes.string,
   footerLinks: PropTypes.shape({
     homepage: PropTypes.string,
     twitterUrl: PropTypes.string,
@@ -534,10 +531,6 @@ Dashboard.propTypes = {
       key: PropTypes.string.isRequired,
     }),
   ).isRequired,
-}
-
-Dashboard.defaultProps = {
-  currentPath: '/dashboard',
 }
 
 export default Dashboard
