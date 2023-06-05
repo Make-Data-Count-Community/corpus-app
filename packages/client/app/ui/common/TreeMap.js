@@ -10,7 +10,7 @@ const TreeMap = props => {
   const Chart = createClassFromSpec({
     spec: {
       $schema: 'https://vega.github.io/schema/vega/v5.json',
-      width: 500,
+      width: 400,
       height: 280,
       padding: 10,
       // autosize: { type: 'fit', contains: 'padding' },
@@ -41,6 +41,21 @@ const TreeMap = props => {
           range: subjectColors,
         },
       ],
+      //   encoding: {
+      //     tooltip: [
+      //       {
+      //         field: colorField,
+      //         type: 'nominal',
+      //         //   title: colorFieldTooltipTitle,
+      //       },
+      //       {
+      //         field: valueField,
+      //         format: ',',
+      //         type: 'quantitative',
+      //         //   title: thetaFieldTooltipTitle,
+      //       },
+      //     ],
+      //   },
 
       marks: [
         {

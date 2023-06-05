@@ -42,6 +42,7 @@ const PieChart = props => {
           },
           {
             field: thetaField,
+            format: ',',
             type: 'quantitative',
             title: thetaFieldTooltipTitle,
           },

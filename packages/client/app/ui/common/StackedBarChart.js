@@ -62,6 +62,7 @@ const StackedBarChart = props => {
           },
           {
             field: yField,
+            format: ',',
             type: 'quantitative',
             title: yFieldTooltipTitle,
           },

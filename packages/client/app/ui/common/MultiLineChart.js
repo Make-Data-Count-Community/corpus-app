@@ -8,10 +8,12 @@ const MultiLineChart = props => {
   const {
     data,
     stackField,
+    stackFieldTooltipTitle,
     stackItems,
     xLabelAngle,
     xField,
     yField,
+    yFieldTooltipTitle,
     onNewView,
   } = props
 
@@ -51,6 +53,19 @@ const MultiLineChart = props => {
             title: null,
           },
         },
+        tooltip: [
+          {
+            field: stackField,
+            type: 'nominal',
+            title: stackFieldTooltipTitle,
+          },
+          {
+            field: yField,
+            format: ',',
+            type: 'quantitative',
+            title: yFieldTooltipTitle,
+          },
+        ],
       },
       config: {
         view: {
@@ -86,10 +101,12 @@ const MultiLineChart = props => {
 MultiLineChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   stackField: PropTypes.string.isRequired,
+  stackFieldTooltipTitle: PropTypes.string.isRequired,
   stackItems: PropTypes.arrayOf(PropTypes.string).isRequired,
   xLabelAngle: PropTypes.number,
   xField: PropTypes.string.isRequired,
   yField: PropTypes.string.isRequired,
+  yFieldTooltipTitle: PropTypes.string.isRequired,
   onNewView: PropTypes.func,
 }
 

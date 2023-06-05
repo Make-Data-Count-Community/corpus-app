@@ -6,16 +6,16 @@ const randomNumber = ceiling => {
 }
 
 const data = [
-  { publisher: 'Publisher 1', value: randomNumber(1000) },
-  { publisher: 'Publisher 2', value: randomNumber(1000) },
-  { publisher: 'Publisher 3', value: randomNumber(1000) },
-  { publisher: 'Publisher 4', value: randomNumber(1000) },
-  { publisher: 'Publisher 5', value: randomNumber(1000) },
-  { publisher: 'Publisher 6', value: randomNumber(1000) },
-  { publisher: 'Publisher 7', value: randomNumber(1000) },
-  { publisher: 'Publisher 8', value: randomNumber(1000) },
-  { publisher: 'Publisher 9', value: randomNumber(1000) },
-  { publisher: 'Publisher 10', value: randomNumber(1000) },
+  { publisher: 'Publisher 1', value: randomNumber(10000) },
+  { publisher: 'Publisher 2', value: randomNumber(10000) },
+  { publisher: 'Publisher 3', value: randomNumber(10000) },
+  { publisher: 'Publisher 4', value: randomNumber(10000) },
+  { publisher: 'Publisher 5', value: randomNumber(10000) },
+  { publisher: 'Publisher 6', value: randomNumber(10000) },
+  { publisher: 'Publisher 7', value: randomNumber(10000) },
+  { publisher: 'Publisher 8', value: randomNumber(10000) },
+  { publisher: 'Publisher 9', value: randomNumber(10000) },
+  { publisher: 'Publisher 10', value: randomNumber(10000) },
 ]
 
 // eslint-disable-next-line react/jsx-props-no-spreading
