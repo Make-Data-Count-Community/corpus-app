@@ -40,6 +40,8 @@ const downloadOptions = [
   },
 ]
 
+const expandPath = '/visualisation/citation-counts-by-source'
+
 const CitationCountsBySource = props => {
   const {
     data,
@@ -60,6 +62,7 @@ const CitationCountsBySource = props => {
     onNewView,
     selectedFooterTab,
     selectedFacetValues,
+    showExpandButton,
     showFilterFooter,
     tableColumns,
   } = props
@@ -67,6 +70,7 @@ const CitationCountsBySource = props => {
   return (
     <Visualisation
       downloadOptions={downloadOptions}
+      expandPath={expandPath}
       filterParams={filterParams}
       filterValueOptions={filterValueOptions}
       isDownloadListOpen={isDownloadListOpen}
@@ -83,6 +87,7 @@ const CitationCountsBySource = props => {
       onFooterTabClick={onFooterTabClick}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
+      showExpandButton={showExpandButton}
       showFilterButton
       showFilterFooter={showFilterFooter}
       showFooterChartTab
@@ -147,6 +152,7 @@ CitationCountsBySource.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  showExpandButton: PropTypes.bool.isRequired,
   showFilterFooter: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({

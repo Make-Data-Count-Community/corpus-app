@@ -40,6 +40,8 @@ const downloadOptions = [
   },
 ]
 
+const expandPath = '/visualisation/citation-counts-over-time'
+
 const CitationCountsOverTime = props => {
   const {
     data,
@@ -60,6 +62,7 @@ const CitationCountsOverTime = props => {
     onNewView,
     selectedFooterTab,
     selectedFacetValues,
+    showExpandButton,
     showFilterFooter,
     tableColumns,
   } = props
@@ -67,6 +70,7 @@ const CitationCountsOverTime = props => {
   return (
     <Visualisation
       downloadOptions={downloadOptions}
+      expandPath={expandPath}
       filterParams={filterParams}
       filterValueOptions={filterValueOptions}
       isDownloadListOpen={isDownloadListOpen}
@@ -83,6 +87,7 @@ const CitationCountsOverTime = props => {
       onFooterTabClick={onFooterTabClick}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
+      showExpandButton={showExpandButton}
       showFilterButton
       showFilterFooter={showFilterFooter}
       showFooterChartTab
@@ -147,6 +152,7 @@ CitationCountsOverTime.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  showExpandButton: PropTypes.bool.isRequired,
   showFilterFooter: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({

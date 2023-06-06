@@ -2316,6 +2316,7 @@ const Template = args => {
       byPublisherOnNewView={handleByPublisherNewView}
       byPublisherSelectedFacetValues={byPublisherSelectedFacetValues}
       byPublisherSelectedFooterTab={byPublisherSelectedTab}
+      byPublisherShowExpandButton
       byPublisherShowFilterFooter={byPublisherShowApplyFilter}
       byPublisherTableColumns={byPublisherTableColumns}
       bySourceData={
@@ -2345,6 +2346,7 @@ const Template = args => {
       bySourceOnNewView={handleBySourceNewView}
       bySourceSelectedFacetValues={bySourceSelectedFacetValues}
       bySourceSelectedFooterTab={bySourceSelectedTab}
+      bySourceShowExpandButton
       bySourceShowFilterFooter={bySourceShowApplyFilter}
       bySourceTableColumns={bySourceTableColumns}
       bySubjectData={
@@ -2369,6 +2371,7 @@ const Template = args => {
       bySubjectOnNewView={handleBySubjectNewView}
       bySubjectSelectedFacetValues={bySubjectSelectedFacetValues}
       bySubjectSelectedFooterTab={bySubjectSelectedTab}
+      bySubjectShowExpandButton
       bySubjectShowFilterFooter={bySubjectShowApplyFilter}
       bySubjectTableColumns={bySubjectTableColumns}
       corpusGrowthData={
@@ -2387,6 +2390,7 @@ const Template = args => {
       corpusGrowthOnFooterTabClick={handleCorpusGrowthFooterTabClick}
       corpusGrowthOnNewView={handleCorpusGrowthNewView}
       corpusGrowthSelectedFooterTab={corpusGrowthSelectedTab}
+      corpusGrowthShowExpandButton
       corpusGrowthTableColumns={corpusGrowthTableColumns}
       overTimeData={
         overTimeSelectedTab === 'chart'
@@ -2415,6 +2419,7 @@ const Template = args => {
       overTimeOnNewView={handlOverTimeOnNewView}
       overTimeSelectedFacetValues={overTimeSelectedFacetValues}
       overTimeSelectedFooterTab={overTimeSelectedTab}
+      overTimeShowExpandButton
       overTimeShowFilterFooter={overTimeShowApplyFilter}
       overTimeTableColumns={overTimeTableColumns}
       uniqueCountData={transformUniqueCountData(unqiueCountData)}
@@ -2423,6 +2428,7 @@ const Template = args => {
       uniqueCountOnExpandClick={handleUniqueCountExpandClick}
       uniqueCountOnFooterTabClick={handleUniqueCountFooterTabClick}
       uniqueCountSelectedFooterTab={uniqueCountSelectedTab}
+      uniqueCountShowExpandButton
       uniqueCountTableColumns={uniqueCountColumns}
     />
   )

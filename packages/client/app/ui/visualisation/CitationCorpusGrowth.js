@@ -38,6 +38,8 @@ const downloadOptions = [
   },
 ]
 
+const expandPath = '/visualisation/citation-corpus-growth'
+
 const CitationCorpusGrowth = props => {
   const {
     data,
@@ -47,18 +49,20 @@ const CitationCorpusGrowth = props => {
     onFooterTabClick,
     onNewView,
     selectedFooterTab,
+    showExpandButton,
     tableColumns,
   } = props
 
   return (
     <Visualisation
       downloadOptions={downloadOptions}
+      expandPath={expandPath}
       isDownloadListOpen={isDownloadListOpen}
       onDownloadOptionClick={onDownloadOptionClick}
       onExpandClick={onExpandClick}
       onFooterTabClick={onFooterTabClick}
       selectedFooterTab={selectedFooterTab}
-      //   showFooterChartTab
+      showExpandButton={showExpandButton}
       visualisationTitle={title}
     >
       {selectedFooterTab === 'chart' && (
@@ -86,6 +90,7 @@ CitationCorpusGrowth.propTypes = {
   onFooterTabClick: PropTypes.func.isRequired,
   onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
+  showExpandButton: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,

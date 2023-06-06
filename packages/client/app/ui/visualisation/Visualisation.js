@@ -14,11 +14,9 @@ const Wrapper = styled.div`
   /* flex-grow: 1; */
   height: 100%;
   justify-content: flex-end;
-  margin: ${grid(2)};
-  padding: ${grid(0)};
+  /* margin: ${grid(2)}; */
+  padding: ${grid(1)};
   width: 100%;
-  /* padding-bottom: 99999px;
-  margin-bottom: -99999px; */
 `
 
 const DataWrapper = styled.div`
@@ -35,13 +33,13 @@ const Visualisation = props => {
   const {
     children,
     downloadOptions,
+    expandPath,
     filterParams,
     filterValueOptions,
     isDownloadListOpen,
     isFilterOpen,
     onApplyFilters,
     onDownloadOptionClick,
-    onExpandClick,
     onEmptyListLabel,
     onFacetItemClick,
     onFacetValueClick,
@@ -51,6 +49,7 @@ const Visualisation = props => {
     onFooterTabClick,
     selectedFacetValues,
     selectedFooterTab,
+    showExpandButton,
     showFilterButton,
     showFilterFooter,
     showFooterChartTab,
@@ -60,18 +59,19 @@ const Visualisation = props => {
   return (
     <Wrapper id="visWrapper">
       <ChartHeader
+        expandPath={expandPath}
         filterParams={filterParams}
         filterValueOptions={filterValueOptions}
         isFilterOpen={isFilterOpen}
         onApplyFilters={onApplyFilters}
         onEmptyListLabel={onEmptyListLabel}
-        onExpandClick={onExpandClick}
         onFacetItemClick={onFacetItemClick}
         onFacetValueClick={onFacetValueClick}
         onFilterClick={onFilterClick}
         onFilterClose={onFilterClose}
         onFilterSearchChange={onFilterSearchChange}
         selectedFacetValues={selectedFacetValues}
+        showExpandButton={showExpandButton}
         showFilterButton={showFilterButton}
         showFilterFooter={showFilterFooter}
         title={visualisationTitle}
@@ -97,6 +97,7 @@ Visualisation.propTypes = {
       symbol: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  expandPath: PropTypes.string.isRequired,
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
       isFacetSelected: PropTypes.bool.isRequired,
@@ -120,7 +121,6 @@ Visualisation.propTypes = {
   onApplyFilters: PropTypes.func,
   onDownloadOptionClick: PropTypes.func.isRequired,
   onEmptyListLabel: PropTypes.string,
-  onExpandClick: PropTypes.func.isRequired,
   onFacetItemClick: PropTypes.func,
   onFacetValueClick: PropTypes.func,
   onFilterClick: PropTypes.func,
@@ -134,6 +134,7 @@ Visualisation.propTypes = {
     }),
   ),
   selectedFooterTab: PropTypes.string.isRequired,
+  showExpandButton: PropTypes.bool,
   showFilterButton: PropTypes.bool,
   showFilterFooter: PropTypes.bool,
   showFooterChartTab: PropTypes.bool,
@@ -152,6 +153,7 @@ Visualisation.defaultProps = {
   onFilterClose: () => {},
   onFilterSearchChange: () => {},
   selectedFacetValues: [],
+  showExpandButton: false,
   showFilterButton: false,
   showFilterFooter: false,
   showFooterChartTab: false,
