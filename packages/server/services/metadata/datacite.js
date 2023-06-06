@@ -70,12 +70,10 @@ class Datacite extends Transform {
 
       // Get funders
       chunk.datacite.funders = flatten(
-        get(data, 'data.attributes.fundingReferences', [])
-          .map(funder => ({
-            name: funder.funderName,
-            identifier: funder.funderIdentifier,
-          }))
-          .filter(fund => fund.length),
+        get(data, 'data.attributes.fundingReferences', []).map(funder => ({
+          name: funder.funderName,
+          identifier: funder.funderIdentifier,
+        })),
       )
     }
 
@@ -112,8 +110,8 @@ class Datacite extends Transform {
       }
     }
 
-    if (chunk.datacite.affialiations) {
-      const titles = chunk.datacite.affialiations
+    if (chunk.datacite.affiliations) {
+      const titles = chunk.datacite.affiliations
 
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
