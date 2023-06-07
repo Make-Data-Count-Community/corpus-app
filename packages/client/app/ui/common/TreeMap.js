@@ -2,17 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { createClassFromSpec } from 'react-vega'
 
-import { chartBackground, fullColors } from './__helpers__/colors'
+import { chartBackground, subjectColors } from './__helpers__/colors'
 
 const TreeMap = props => {
-  const { data, colorField, valueField } = props
+  const { data, colorField, valueField, onNewView } = props
 
   const Chart = createClassFromSpec({
     spec: {
       $schema: 'https://vega.github.io/schema/vega/v5.json',
-      width: 500,
-      height: 300,
-      autosize: { type: 'fit', contains: 'padding' },
+      width: 400,
+      height: 280,
+      padding: 10,
+      // autosize: { type: 'fit', contains: 'padding' },
+      autosize: { type: 'pad', resize: true, contains: 'padding' },
       data: [
         {
           name: 'tree',
@@ -36,9 +38,24 @@ const TreeMap = props => {
         {
           name: 'color',
           type: 'ordinal',
-          range: fullColors,
+          range: subjectColors,
         },
       ],
+      //   encoding: {
+      //     tooltip: [
+      //       {
+      //         field: colorField,
+      //         type: 'nominal',
+      //         //   title: colorFieldTooltipTitle,
+      //       },
+      //       {
+      //         field: valueField,
+      //         format: ',',
+      //         type: 'quantitative',
+      //         //   title: thetaFieldTooltipTitle,
+      //       },
+      //     ],
+      //   },
 
       marks: [
         {
@@ -80,13 +97,25 @@ const TreeMap = props => {
     },
   })
 
-  return <Chart actions={false} style={{ width: '100%', height: '100%' }} />
+  return (
+    <Chart
+      actions={false}
+      onNewView={onNewView}
+      style={{ width: '100%', height: '100%' }}
+      tooltip={{ theme: 'custom' }}
+    />
+  )
 }
 
 TreeMap.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   colorField: PropTypes.string.isRequired,
   valueField: PropTypes.string.isRequired,
+  onNewView: PropTypes.func,
+}
+
+TreeMap.defaultProps = {
+  onNewView: () => {},
 }
 
 export default TreeMap

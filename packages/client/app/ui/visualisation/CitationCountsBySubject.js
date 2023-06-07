@@ -5,13 +5,13 @@ import Visualisation from './Visualisation'
 import { TreeMap, Table } from '../common'
 
 import CsvSymbol from '../../../static/symbol-csv-file.svg'
-import PdfSymbol from '../../../static/symbol-pdf-file.svg'
+// import PdfSymbol from '../../../static/symbol-pdf-file.svg'
 import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Citation counts by subject'
-const colorField = 'name'
-const valueField = 'value'
+const colorField = 'xField'
+const valueField = 'yField'
 
 const downloadOptions = [
   {
@@ -19,11 +19,11 @@ const downloadOptions = [
     label: 'PNG',
     symbol: PngSymbol,
   },
-  {
-    type: 'pdf',
-    label: 'PDF',
-    symbol: PdfSymbol,
-  },
+  //   {
+  //     type: 'pdf',
+  //     label: 'PDF',
+  //     symbol: PdfSymbol,
+  //   },
   {
     type: 'svg',
     label: 'SVG',
@@ -35,6 +35,8 @@ const downloadOptions = [
     symbol: CsvSymbol,
   },
 ]
+
+const expandPath = '/visualisation/citation-counts-by-subject'
 
 const CitationCountsBySubject = props => {
   const {
@@ -53,8 +55,10 @@ const CitationCountsBySubject = props => {
     onFilterClose,
     onFilterSearchChange,
     onFooterTabClick,
+    onNewView,
     selectedFooterTab,
     selectedFacetValues,
+    showExpandButton,
     showFilterFooter,
     tableColumns,
   } = props
@@ -62,6 +66,7 @@ const CitationCountsBySubject = props => {
   return (
     <Visualisation
       downloadOptions={downloadOptions}
+      expandPath={expandPath}
       filterParams={filterParams}
       filterValueOptions={filterValueOptions}
       isDownloadListOpen={isDownloadListOpen}
@@ -78,19 +83,24 @@ const CitationCountsBySubject = props => {
       onFooterTabClick={onFooterTabClick}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
+      showExpandButton={showExpandButton}
       showFilterButton
       showFilterFooter={showFilterFooter}
       showFooterChartTab
       visualisationTitle={title}
     >
       {selectedFooterTab === 'chart' && (
-        <TreeMap colorField={colorField} data={data} valueField={valueField} />
+        <TreeMap
+          colorField={colorField}
+          data={data}
+          onNewView={onNewView}
+          valueField={valueField}
+        />
       )}
       {selectedFooterTab === 'table' && (
         <Table columns={tableColumns} data={data} />
       )}
     </Visualisation>
-    // </Wrapper>
   )
 }
 
@@ -126,6 +136,7 @@ CitationCountsBySubject.propTypes = {
   onFilterClose: PropTypes.func.isRequired,
   onFilterSearchChange: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
+  onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -133,6 +144,7 @@ CitationCountsBySubject.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  showExpandButton: PropTypes.bool.isRequired,
   showFilterFooter: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({

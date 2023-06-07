@@ -9,28 +9,28 @@ const randomNumber = ceiling => {
 }
 
 const data = [
-  { id: uuid(), publisher: 'Publisher 1', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 2', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 3', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 4', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 5', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 6', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 7', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 8', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 9', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 10', value: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 1', yField: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 2', yField: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 3', yField: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 4', yField: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 5', yField: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 6', yField: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 7', yField: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 8', yField: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 9', yField: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 10', yField: randomNumber(1000) },
 ]
 
 const columns = [
   {
     title: 'Publisher',
-    dataIndex: 'publisher',
-    key: 'publisher',
+    dataIndex: 'xField',
+    key: 'xField',
   },
   {
     title: 'Total Citations',
-    dataIndex: 'value',
-    key: 'value',
+    dataIndex: 'yField',
+    key: 'yField',
     render: value =>
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
@@ -388,6 +388,8 @@ const Template = args => {
 
   const handleDownloadOptionClick = () => {}
 
+  const handleNewView = () => {}
+
   return (
     <CitationCountsByPublisher
       {...args}
@@ -406,6 +408,7 @@ const Template = args => {
       onFilterClose={handleOnClose}
       onFilterSearchChange={handleSearchChange}
       onFooterTabClick={handleFooterTabClick}
+      onNewView={handleNewView}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedTab}
       showFilterFooter={!!totalSelectionCount}

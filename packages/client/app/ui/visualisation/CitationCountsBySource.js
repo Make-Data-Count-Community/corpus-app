@@ -5,15 +5,17 @@ import Visualisation from './Visualisation'
 import { StackedBarChart, Table } from '../common'
 
 import CsvSymbol from '../../../static/symbol-csv-file.svg'
-import PdfSymbol from '../../../static/symbol-pdf-file.svg'
+// import PdfSymbol from '../../../static/symbol-pdf-file.svg'
 import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Citation counts by source of citation'
-const stackField = 'type'
+const stackField = 'stackField'
 const stackItems = ['DOI', 'Accession ID']
-const xField = 'source'
-const yField = 'value'
+const xField = 'xField'
+const yField = 'yField'
+const stackFieldTooltipTitle = 'Value'
+const yFieldTooltipTitle = 'Citations'
 
 const downloadOptions = [
   {
@@ -21,11 +23,11 @@ const downloadOptions = [
     label: 'PNG',
     symbol: PngSymbol,
   },
-  {
-    type: 'pdf',
-    label: 'PDF',
-    symbol: PdfSymbol,
-  },
+  //   {
+  //     type: 'pdf',
+  //     label: 'PDF',
+  //     symbol: PdfSymbol,
+  //   },
   {
     type: 'svg',
     label: 'SVG',
@@ -37,6 +39,8 @@ const downloadOptions = [
     symbol: CsvSymbol,
   },
 ]
+
+const expandPath = '/visualisation/citation-counts-by-source'
 
 const CitationCountsBySource = props => {
   const {
@@ -55,8 +59,10 @@ const CitationCountsBySource = props => {
     onFilterClose,
     onFilterSearchChange,
     onFooterTabClick,
+    onNewView,
     selectedFooterTab,
     selectedFacetValues,
+    showExpandButton,
     showFilterFooter,
     tableColumns,
   } = props
@@ -64,6 +70,7 @@ const CitationCountsBySource = props => {
   return (
     <Visualisation
       downloadOptions={downloadOptions}
+      expandPath={expandPath}
       filterParams={filterParams}
       filterValueOptions={filterValueOptions}
       isDownloadListOpen={isDownloadListOpen}
@@ -80,6 +87,7 @@ const CitationCountsBySource = props => {
       onFooterTabClick={onFooterTabClick}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
+      showExpandButton={showExpandButton}
       showFilterButton
       showFilterFooter={showFilterFooter}
       showFooterChartTab
@@ -88,10 +96,13 @@ const CitationCountsBySource = props => {
       {selectedFooterTab === 'chart' && (
         <StackedBarChart
           data={data}
+          onNewView={onNewView}
           stackField={stackField}
+          stackFieldTooltipTitle={stackFieldTooltipTitle}
           stackItems={stackItems}
           xField={xField}
           yField={yField}
+          yFieldTooltipTitle={yFieldTooltipTitle}
         />
       )}
       {selectedFooterTab === 'table' && (
@@ -133,6 +144,7 @@ CitationCountsBySource.propTypes = {
   onFilterClose: PropTypes.func.isRequired,
   onFilterSearchChange: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
+  onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -140,6 +152,7 @@ CitationCountsBySource.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  showExpandButton: PropTypes.bool.isRequired,
   showFilterFooter: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({

@@ -10,10 +10,10 @@ import CsvSymbol from '../../../static/symbol-csv-file.svg'
 // import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Data citations corpus growth'
-const stackField = 'type'
+const stackField = 'stackField'
 const stackItems = ['DOI', 'Accession ID']
-const xField = 'month'
-const yField = 'value'
+const xField = 'xField'
+const yField = 'yField'
 
 const downloadOptions = [
   //   {
@@ -38,6 +38,8 @@ const downloadOptions = [
   },
 ]
 
+const expandPath = '/visualisation/citation-corpus-growth'
+
 const CitationCorpusGrowth = props => {
   const {
     data,
@@ -45,24 +47,28 @@ const CitationCorpusGrowth = props => {
     onDownloadOptionClick,
     onExpandClick,
     onFooterTabClick,
+    onNewView,
     selectedFooterTab,
+    showExpandButton,
     tableColumns,
   } = props
 
   return (
     <Visualisation
       downloadOptions={downloadOptions}
+      expandPath={expandPath}
       isDownloadListOpen={isDownloadListOpen}
       onDownloadOptionClick={onDownloadOptionClick}
       onExpandClick={onExpandClick}
       onFooterTabClick={onFooterTabClick}
       selectedFooterTab={selectedFooterTab}
-      //   showFooterChartTab
+      showExpandButton={showExpandButton}
       visualisationTitle={title}
     >
       {selectedFooterTab === 'chart' && (
         <MultiLineChart
           data={data}
+          onNewView={onNewView}
           stackField={stackField}
           stackItems={stackItems}
           xField={xField}
@@ -82,7 +88,9 @@ CitationCorpusGrowth.propTypes = {
   onDownloadOptionClick: PropTypes.func.isRequired,
   onExpandClick: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
+  onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
+  showExpandButton: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,

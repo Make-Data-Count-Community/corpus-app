@@ -11,125 +11,125 @@ const randomNumber = ceiling => {
 }
 
 const data = [
-  { id: parentId, name: '', value: 0, parent: null },
+  { id: parentId, xField: '', yField: 0, parent: null },
   {
     id: uuid(),
-    name: 'Subject 0',
-    value: randomNumber(1000),
+    xField: 'Subject 0',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 1',
-    value: randomNumber(1000),
+    xField: 'Subject 1',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 2',
-    value: randomNumber(1000),
+    xField: 'Subject 2',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 3',
-    value: randomNumber(1000),
+    xField: 'Subject 3',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 4',
-    value: randomNumber(1000),
+    xField: 'Subject 4',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 5',
-    value: randomNumber(1000),
+    xField: 'Subject 5',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 6',
-    value: randomNumber(1000),
+    xField: 'Subject 6',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 7',
-    value: randomNumber(1000),
+    xField: 'Subject 7',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 8',
-    value: randomNumber(1000),
+    xField: 'Subject 8',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 9',
-    value: randomNumber(1000),
+    xField: 'Subject 9',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 10',
-    value: randomNumber(1000),
+    xField: 'Subject 10',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 11',
-    value: randomNumber(1000),
+    xField: 'Subject 11',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 12',
-    value: randomNumber(1000),
+    xField: 'Subject 12',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 13',
-    value: randomNumber(1000),
+    xField: 'Subject 13',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 14',
-    value: randomNumber(1000),
+    xField: 'Subject 14',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 15',
-    value: randomNumber(1000),
+    xField: 'Subject 15',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 16',
-    value: randomNumber(1000),
+    xField: 'Subject 16',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 17',
-    value: randomNumber(1000),
+    xField: 'Subject 17',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 18',
-    value: randomNumber(1000),
+    xField: 'Subject 18',
+    yField: randomNumber(1000),
     parent: parentId,
   },
   {
     id: uuid(),
-    name: 'Subject 19',
-    value: randomNumber(1000),
+    xField: 'Subject 19',
+    yField: randomNumber(1000),
     parent: parentId,
   },
 ]
@@ -142,13 +142,13 @@ const columns = [
   //   },
   {
     title: 'Subject',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'xField',
+    key: 'xField',
   },
   {
     title: 'Total Citations',
-    dataIndex: 'value',
-    key: 'value',
+    dataIndex: 'yField',
+    key: 'yField',
     render: value =>
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
@@ -533,6 +533,8 @@ const Template = args => {
 
   const handleDownloadOptionClick = () => {}
 
+  const handleNewView = () => {}
+
   const transformData = sourceData => {
     return sourceData.map(s => {
       return { ...s, key: s.id }
@@ -557,6 +559,7 @@ const Template = args => {
       onFilterClose={handleOnClose}
       onFilterSearchChange={handleSearchChange}
       onFooterTabClick={handleFooterTabClick}
+      onNewView={handleNewView}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedTab}
       showFilterFooter={!!totalSelectionCount}

@@ -5,13 +5,15 @@ import Visualisation from './Visualisation'
 import { PieChart, Table } from '../common'
 
 import CsvSymbol from '../../../static/symbol-csv-file.svg'
-import PdfSymbol from '../../../static/symbol-pdf-file.svg'
+// import PdfSymbol from '../../../static/symbol-pdf-file.svg'
 import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Citation counts by publisher'
-const colorField = 'publisher'
-const thetaField = 'value'
+const colorField = 'xField'
+const thetaField = 'yField'
+const colorFieldTooltipTitle = 'Publisher'
+const thetaFieldTooltipTitle = 'Citations'
 
 const downloadOptions = [
   {
@@ -19,11 +21,11 @@ const downloadOptions = [
     label: 'PNG',
     symbol: PngSymbol,
   },
-  {
-    type: 'pdf',
-    label: 'PDF',
-    symbol: PdfSymbol,
-  },
+  //   {
+  //     type: 'pdf',
+  //     label: 'PDF',
+  //     symbol: PdfSymbol,
+  //   },
   {
     type: 'svg',
     label: 'SVG',
@@ -35,6 +37,8 @@ const downloadOptions = [
     symbol: CsvSymbol,
   },
 ]
+
+const expandPath = '/visualisation/citation-counts-by-publisher'
 
 const CitationCountsByPublisher = props => {
   const {
@@ -53,8 +57,10 @@ const CitationCountsByPublisher = props => {
     onFilterClose,
     onFilterSearchChange,
     onFooterTabClick,
+    onNewView,
     selectedFooterTab,
     selectedFacetValues,
+    showExpandButton,
     showFilterFooter,
     tableColumns,
   } = props
@@ -62,6 +68,7 @@ const CitationCountsByPublisher = props => {
   return (
     <Visualisation
       downloadOptions={downloadOptions}
+      expandPath={expandPath}
       filterParams={filterParams}
       filterValueOptions={filterValueOptions}
       isDownloadListOpen={isDownloadListOpen}
@@ -78,13 +85,21 @@ const CitationCountsByPublisher = props => {
       onFooterTabClick={onFooterTabClick}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
+      showExpandButton={showExpandButton}
       showFilterButton
       showFilterFooter={showFilterFooter}
       showFooterChartTab
       visualisationTitle={title}
     >
       {selectedFooterTab === 'chart' && (
-        <PieChart colorField={colorField} data={data} thetaField={thetaField} />
+        <PieChart
+          colorField={colorField}
+          colorFieldTooltipTitle={colorFieldTooltipTitle}
+          data={data}
+          onNewView={onNewView}
+          thetaField={thetaField}
+          thetaFieldTooltipTitle={thetaFieldTooltipTitle}
+        />
       )}
       {selectedFooterTab === 'table' && (
         <Table columns={tableColumns} data={data} />
@@ -125,6 +140,7 @@ CitationCountsByPublisher.propTypes = {
   onFilterClose: PropTypes.func.isRequired,
   onFilterSearchChange: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
+  onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -132,6 +148,7 @@ CitationCountsByPublisher.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  showExpandButton: PropTypes.bool.isRequired,
   showFilterFooter: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({

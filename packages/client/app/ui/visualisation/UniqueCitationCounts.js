@@ -17,6 +17,8 @@ const downloadOptions = [
   },
 ]
 
+const expandPath = '/visualisation/unique-citation-counts'
+
 const UniqueCitationCounts = props => {
   const {
     data,
@@ -25,17 +27,20 @@ const UniqueCitationCounts = props => {
     onExpandClick,
     onFooterTabClick,
     selectedFooterTab,
+    showExpandButton,
     tableColumns,
   } = props
 
   return (
     <Visualisation
       downloadOptions={downloadOptions}
+      expandPath={expandPath}
       isDownloadListOpen={isDownloadListOpen}
       onDownloadOptionClick={onDownloadOptionClick}
       onExpandClick={onExpandClick}
       onFooterTabClick={onFooterTabClick}
       selectedFooterTab={selectedFooterTab}
+      showExpandButton={showExpandButton}
       visualisationTitle={title}
     >
       {selectedFooterTab === 'table' && (
@@ -52,6 +57,7 @@ UniqueCitationCounts.propTypes = {
   onExpandClick: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
+  showExpandButton: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
