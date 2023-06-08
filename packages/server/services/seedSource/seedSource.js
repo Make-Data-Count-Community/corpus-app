@@ -2,7 +2,7 @@ const DataCiteEventData = require('./dataCiteEventData')
 const axios = require('../axiosService')
 
 class SeedSource {
-  static createInstanceDatacite(filter) {
+  static async createInstanceDatacite(filter) {
     return new DataCiteEventData(axios, filter)
   }
 }

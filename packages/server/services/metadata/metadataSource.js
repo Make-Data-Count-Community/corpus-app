@@ -8,6 +8,7 @@ const Crossref = require('./crossref')
 const { model: ActivityLog } = require('../../models/activityLog')
 const { model: Assertion } = require('../../models/assertion')
 const { model: Subject } = require('../../models/subject')
+const Source = require('../../models/source/source')
 
 class MetadataSource {
   constructor(streamApis) {
@@ -68,21 +69,27 @@ class MetadataSource {
     return new MetadataSource(metadataApis)
   }
 
-  static async loadCitationsFromDB(selected) {
+  static async loadCitationsFromDB(selected = null) {
     // eslint-disable-next-line no-console
-    console.log({ selected })
     const subjects = await Subject.query()
+
+    const sources = await Source.query()
 
     const metadataApis = [new DataCite(subjects), new Crossref()]
 
     const metadataSource = new MetadataSource(metadataApis)
 
-    const citationData = await ActivityLog.query()
+    const citationDataQuery = ActivityLog.query()
       .select('id')
       .where({ proccessed: false })
-      .andWhere(builder => {
+
+    if (selected) {
+      citationDataQuery.andWhere(builder => {
         builder.whereBetween('cursorId', [selected.start, selected.end])
       })
+    }
+
+    const citationData = await citationDataQuery
 
     const item = citationData[Math.floor(Math.random() * citationData.length)]
 
@@ -94,13 +101,20 @@ class MetadataSource {
       const data = JSON.parse(res.data)
       // eslint-disable-next-line no-console
       data.forEach(citation => {
-        const assertions = {
-          event: citation,
-          datacite: {},
-          crossref: {},
-        }
+        const { id } = sources.find(
+          s => s.abbreviation === res.action.replace('assertion_incoming_', ''),
+        )
 
-        metadataSource.startStreamCitations(assertions)
+        if (id) {
+          const assertions = {
+            source: id,
+            event: citation,
+            datacite: {},
+            crossref: {},
+          }
+
+          metadataSource.startStreamCitations(assertions)
+        }
       })
 
       metadataSource.startStreamCitations(null)

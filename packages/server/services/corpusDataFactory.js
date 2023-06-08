@@ -4,8 +4,10 @@ const MetadataSource = require('./metadata/metadataSource')
 const CorpusData = require('./corpusData')
 
 class CorpusDataFactory {
-  static dataciteSourceCrossref() {
-    const seedSource = SeedSource.createInstanceDatacite(['source-id=crossref'])
+  static async dataciteSourceCrossref() {
+    const seedSource = await SeedSource.createInstanceDatacite([
+      'source-id=crossref',
+    ])
 
     const metadataSource = MetadataSource.createInstance()
 
@@ -13,8 +15,8 @@ class CorpusDataFactory {
     return corpusData
   }
 
-  static dataciteCrossrefPerDate(year, month) {
-    const seedSource = SeedSource.createInstanceDatacite([
+  static async dataciteCrossrefPerDate(year, month) {
+    const seedSource = await SeedSource.createInstanceDatacite([
       'source-id=datacite-crossref',
       `year-month=${year}-${month}`,
     ])

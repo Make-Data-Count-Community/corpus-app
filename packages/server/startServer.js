@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 const { startServer, db } = require('@coko/server')
 const os = require('os')
+
+const ScheduledTaskService = require('./services/scheduledTaskService')
 const CorpusDataFactory = require('./services/corpusDataFactory')
 const MetadataSource = require('./services/metadata/metadataSource')
 const { model: ActivityLog } = require('./models/activityLog')
@@ -63,7 +65,8 @@ const init = async () => {
 
           console.log(`######### ${year} #### ${month} ######### `)
 
-          const corpusdata = CorpusDataFactory.dataciteCrossrefPerDate(
+          // eslint-disable-next-line no-await-in-loop
+          const corpusdata = await CorpusDataFactory.dataciteCrossrefPerDate(
             year,
             month,
           )
@@ -79,7 +82,7 @@ const init = async () => {
           corpusdata.transformToAssertionAndSave()
         }
       } else {
-        const corpusdata = CorpusDataFactory.dataciteSourceCrossref()
+        const corpusdata = await CorpusDataFactory.dataciteSourceCrossref()
 
         if (process.env.ONLY_READ_DATACITE_EVENT) {
           await corpusdata.seedSource.readSource()
@@ -89,6 +92,12 @@ const init = async () => {
 
         corpusdata.transformToAssertionAndSave()
       }
+    }
+
+    if (process.env.START_MIGRATE_WEEKLY) {
+      await ScheduledTaskService.startMigratingWeekly('0 0 * * 5', {
+        scheduled: true,
+      })
     }
 
     return startServer()

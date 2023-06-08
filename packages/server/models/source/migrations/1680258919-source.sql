@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS sources (
 
   -- own
   title text,
+  abbreviation text,
   doi_count bigint,
   accession_number_count bigint
 );

@@ -16,6 +16,8 @@ const {
   model: AssertionAffiliation,
 } = require('../models/assertionAffiliation')
 
+const { model: Source } = require('../models/source')
+
 const getAssertionsPerYear = async ({ input }) => {
   const searchedAssertions = new SearchService(AssertionLastTenYear, {
     groupBy: 'year',
@@ -154,7 +156,26 @@ const getAssertionsPerPublisher = async ({ input }) => {
   return chartValues
 }
 
-const getAssertionCountsPerSource = () => {}
+const getAssertionCountsPerSource = async () => {
+  const results = await Source.query()
+  const chartValues = []
+  results.forEach((result, key) => {
+    chartValues.push({
+      id: key + 1,
+      xField: result.title,
+      yField: result.doiCount,
+      stackField: 'Doi',
+    })
+    chartValues.push({
+      id: key + 2,
+      xField: result.title,
+      yField: result.accessionNumberCount,
+      stackField: 'AccessionNumber',
+    })
+  })
+
+  return chartValues
+}
 
 module.exports = {
   getAssertionsPerYear,

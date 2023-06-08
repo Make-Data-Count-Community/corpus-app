@@ -18,7 +18,7 @@ class Assertion extends BaseModel {
     const { model: Subject } = require('../subject')
     const { model: Journal } = require('../journal')
     const { model: Funder } = require('../funder')
-
+    const { model: Source } = require('../source')
     return {
       affiliations: {
         relation: Model.ManyToManyRelation,
@@ -54,6 +54,14 @@ class Assertion extends BaseModel {
             to: 'assertions_subjects.subjectId',
           },
           to: 'subjects.id',
+        },
+      },
+      source: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: Source,
+        join: {
+          from: 'assertions.sourceId',
+          to: 'sources.id',
         },
       },
       repository: {
@@ -105,6 +113,10 @@ class Assertion extends BaseModel {
         },
         sourceType: {
           type: ['string', 'null'],
+        },
+        sourceId: {
+          type: 'string',
+          format: 'uuid',
         },
         repositoryId: {
           type: 'string',

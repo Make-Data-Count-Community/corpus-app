@@ -16,6 +16,9 @@ class Source extends BaseModel {
         title: {
           type: ['string', 'null'],
         },
+        abbreviation: {
+          type: ['string', 'null'],
+        },
         doiCount: {
           type: 'number',
         },

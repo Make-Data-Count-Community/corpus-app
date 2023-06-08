@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS assertions (
   repository_id uuid references repositories,
   publisher_id uuid references publishers,
   journal_id uuid references journals,
+  source_id uuid references sources,
 
   -- own
   source_type text,
