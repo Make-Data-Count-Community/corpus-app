@@ -5,7 +5,14 @@ const DashboardPage = () => {
   return (
     <>
       <VisuallyHiddenElement as="h1">Dashboard page</VisuallyHiddenElement>
-      <Dashboard />
+      <Dashboard
+        byPublisherShowExpandButton
+        bySourceShowExpandButton
+        bySubjectShowExpandButton
+        corpusGrowthShowExpandButton
+        overTimeShowExpandButton
+        uniqueCountShowExpandButton
+      />
       <VisuallyHiddenElement
         aria-live="polite"
         as="div"

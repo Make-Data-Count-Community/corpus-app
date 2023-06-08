@@ -4,7 +4,8 @@ import styled from 'styled-components'
 
 import { th, grid } from '@coko/client'
 
-import { Header, Footer } from '../common'
+import { Footer } from '../common'
+
 import {
   CitationCorpusGrowth,
   CitationCountsByPublisher,
@@ -23,7 +24,7 @@ const VisualisationRow = styled.div`
   align-items: stretch;
   display: flex;
   flex-direction: row;
-  /* gap: ${grid(4)}; */
+  gap: ${grid(4)};
   /* justify-content: space-between; */
   /* margin: ${grid(8)}; */
   margin: ${grid(5)} 0;
@@ -36,32 +37,25 @@ const VisualisationRow = styled.div`
   }
 `
 
-// const VisualisationWrapper = styled.div`
-//   display: flex;
-//   padding: ${grid(0)};
-//   width: 100%;
-// `
-
 const Dashboard = props => {
   const {
-    currentPath,
     footerLinks,
-    headerLinks,
 
     corpusGrowthData,
     corpusGrowthIsDownloadListOpen,
     corpusGrowthOnDownloadOptionClick,
-    corpusGrowthOnExpandClick,
     corpusGrowthOnFooterTabClick,
+    corpusGrowthOnNewView,
     corpusGrowthSelectedFooterTab,
+    corpusGrowthShowExpandButton,
     corpusGrowthTableColumns,
 
     uniqueCountData,
     uniqueCountIsDownloadListOpen,
     uniqueCountOnDownloadOptionClick,
-    uniqueCountOnExpandClick,
     uniqueCountOnFooterTabClick,
     uniqueCountSelectedFooterTab,
+    uniqueCountShowExpandButton,
     uniqueCountTableColumns,
 
     bySourceData,
@@ -72,15 +66,16 @@ const Dashboard = props => {
     bySourceOnApplyFilters,
     bySourceOnDownloadOptionClick,
     bySourceOnEmptyListLabel,
-    bySourceOnExpandClick,
     bySourceOnFacetItemClick,
     bySourceOnFacetValueClick,
     bySourceOnFilterClick,
     bySourceOnFilterClose,
     bySourceOnFilterSearchChange,
     bySourceOnFooterTabClick,
+    bySourceOnNewView,
     bySourceSelectedFacetValues,
     bySourceSelectedFooterTab,
+    bySourceShowExpandButton,
     bySourceShowFilterFooter,
     bySourceTableColumns,
 
@@ -92,15 +87,16 @@ const Dashboard = props => {
     byPublisherOnApplyFilters,
     byPublisherOnDownloadOptionClick,
     byPublisherOnEmptyListLabel,
-    byPublisherOnExpandClick,
     byPublisherOnFacetItemClick,
     byPublisherOnFacetValueClick,
     byPublisherOnFilterClick,
     byPublisherOnFilterClose,
     byPublisherOnFilterSearchChange,
     byPublisherOnFooterTabClick,
+    byPublisherOnNewView,
     byPublisherSelectedFacetValues,
     byPublisherSelectedFooterTab,
+    byPublisherShowExpandButton,
     byPublisherShowFilterFooter,
     byPublisherTableColumns,
 
@@ -112,15 +108,16 @@ const Dashboard = props => {
     bySubjectOnApplyFilters,
     bySubjectOnDownloadOptionClick,
     bySubjectOnEmptyListLabel,
-    bySubjectOnExpandClick,
     bySubjectOnFacetItemClick,
     bySubjectOnFacetValueClick,
     bySubjectOnFilterClick,
     bySubjectOnFilterClose,
     bySubjectOnFilterSearchChange,
     bySubjectOnFooterTabClick,
+    bySubjectOnNewView,
     bySubjectSelectedFacetValues,
     bySubjectSelectedFooterTab,
+    bySubjectShowExpandButton,
     bySubjectShowFilterFooter,
     bySubjectTableColumns,
 
@@ -132,24 +129,23 @@ const Dashboard = props => {
     overTimeOnApplyFilters,
     overTimeOnDownloadOptionClick,
     overTimeOnEmptyListLabel,
-    overTimeOnExpandClick,
     overTimeOnFacetItemClick,
     overTimeOnFacetValueClick,
     overTimeOnFilterClick,
     overTimeOnFilterClose,
     overTimeOnFilterSearchChange,
     overTimeOnFooterTabClick,
+    overTimeOnNewView,
     overTimeSelectedFacetValues,
     overTimeSelectedFooterTab,
+    overTimeShowExpandButton,
     overTimeShowFilterFooter,
     overTimeTableColumns,
   } = props
 
   return (
     <DashboardWrapper>
-      <Header currentPath={currentPath} links={headerLinks} />
       <VisualisationRow>
-        {/* <VisualisationWrapper> */}
         <CitationCountsOverTime
           data={overTimeData}
           filterParams={overTimeFilterParams}
@@ -159,15 +155,16 @@ const Dashboard = props => {
           onApplyFilters={overTimeOnApplyFilters}
           onDownloadOptionClick={overTimeOnDownloadOptionClick}
           onEmptyListLabel={overTimeOnEmptyListLabel}
-          onExpandClick={overTimeOnExpandClick}
           onFacetItemClick={overTimeOnFacetItemClick}
           onFacetValueClick={overTimeOnFacetValueClick}
           onFilterClick={overTimeOnFilterClick}
           onFilterClose={overTimeOnFilterClose}
           onFilterSearchChange={overTimeOnFilterSearchChange}
           onFooterTabClick={overTimeOnFooterTabClick}
+          onNewView={overTimeOnNewView}
           selectedFacetValues={overTimeSelectedFacetValues}
           selectedFooterTab={overTimeSelectedFooterTab}
+          showExpandButton={overTimeShowExpandButton}
           showFilterFooter={overTimeShowFilterFooter}
           tableColumns={overTimeTableColumns}
         />
@@ -180,23 +177,22 @@ const Dashboard = props => {
           onApplyFilters={bySubjectOnApplyFilters}
           onDownloadOptionClick={bySubjectOnDownloadOptionClick}
           onEmptyListLabel={bySubjectOnEmptyListLabel}
-          onExpandClick={bySubjectOnExpandClick}
           onFacetItemClick={bySubjectOnFacetItemClick}
           onFacetValueClick={bySubjectOnFacetValueClick}
           onFilterClick={bySubjectOnFilterClick}
           onFilterClose={bySubjectOnFilterClose}
           onFilterSearchChange={bySubjectOnFilterSearchChange}
           onFooterTabClick={bySubjectOnFooterTabClick}
+          onNewView={bySubjectOnNewView}
           selectedFacetValues={bySubjectSelectedFacetValues}
           selectedFooterTab={bySubjectSelectedFooterTab}
+          showExpandButton={bySubjectShowExpandButton}
           showFilterFooter={bySubjectShowFilterFooter}
           tableColumns={bySubjectTableColumns}
         />
-        {/* </VisualisationWrapper> */}
       </VisualisationRow>
 
       <VisualisationRow>
-        {/* <VisualisationWrapper> */}
         <CitationCountsByPublisher
           data={byPublisherData}
           filterParams={byPublisherFilterParams}
@@ -206,15 +202,16 @@ const Dashboard = props => {
           onApplyFilters={byPublisherOnApplyFilters}
           onDownloadOptionClick={byPublisherOnDownloadOptionClick}
           onEmptyListLabel={byPublisherOnEmptyListLabel}
-          onExpandClick={byPublisherOnExpandClick}
           onFacetItemClick={byPublisherOnFacetItemClick}
           onFacetValueClick={byPublisherOnFacetValueClick}
           onFilterClick={byPublisherOnFilterClick}
           onFilterClose={byPublisherOnFilterClose}
           onFilterSearchChange={byPublisherOnFilterSearchChange}
           onFooterTabClick={byPublisherOnFooterTabClick}
+          onNewView={byPublisherOnNewView}
           selectedFacetValues={byPublisherSelectedFacetValues}
           selectedFooterTab={byPublisherSelectedFooterTab}
+          showExpandButton={byPublisherShowExpandButton}
           showFilterFooter={byPublisherShowFilterFooter}
           tableColumns={byPublisherTableColumns}
         />
@@ -227,41 +224,40 @@ const Dashboard = props => {
           onApplyFilters={bySourceOnApplyFilters}
           onDownloadOptionClick={bySourceOnDownloadOptionClick}
           onEmptyListLabel={bySourceOnEmptyListLabel}
-          onExpandClick={bySourceOnExpandClick}
           onFacetItemClick={bySourceOnFacetItemClick}
           onFacetValueClick={bySourceOnFacetValueClick}
           onFilterClick={bySourceOnFilterClick}
           onFilterClose={bySourceOnFilterClose}
           onFilterSearchChange={bySourceOnFilterSearchChange}
           onFooterTabClick={bySourceOnFooterTabClick}
+          onNewView={bySourceOnNewView}
           selectedFacetValues={bySourceSelectedFacetValues}
           selectedFooterTab={bySourceSelectedFooterTab}
+          showExpandButton={bySourceShowExpandButton}
           showFilterFooter={bySourceShowFilterFooter}
           tableColumns={bySourceTableColumns}
         />
-        {/* </VisualisationWrapper> */}
       </VisualisationRow>
       <VisualisationRow>
-        {/* <VisualisationWrapper> */}
         <UniqueCitationCounts
           data={uniqueCountData}
           isDownloadListOpen={uniqueCountIsDownloadListOpen}
           onDownloadOptionClick={uniqueCountOnDownloadOptionClick}
-          onExpandClick={uniqueCountOnExpandClick}
           onFooterTabClick={uniqueCountOnFooterTabClick}
           selectedFooterTab={uniqueCountSelectedFooterTab}
+          showExpandButton={uniqueCountShowExpandButton}
           tableColumns={uniqueCountTableColumns}
         />
         <CitationCorpusGrowth
           data={corpusGrowthData}
           isDownloadListOpen={corpusGrowthIsDownloadListOpen}
           onDownloadOptionClick={corpusGrowthOnDownloadOptionClick}
-          onExpandClick={corpusGrowthOnExpandClick}
           onFooterTabClick={corpusGrowthOnFooterTabClick}
+          onNewView={corpusGrowthOnNewView}
           selectedFooterTab={corpusGrowthSelectedFooterTab}
+          showExpandButton={corpusGrowthShowExpandButton}
           tableColumns={corpusGrowthTableColumns}
         />
-        {/* </VisualisationWrapper> */}
       </VisualisationRow>
       <Footer footerLinks={footerLinks} />
     </DashboardWrapper>
@@ -269,7 +265,6 @@ const Dashboard = props => {
 }
 
 Dashboard.propTypes = {
-  currentPath: PropTypes.string,
   footerLinks: PropTypes.shape({
     homepage: PropTypes.string,
     twitterUrl: PropTypes.string,
@@ -328,13 +323,13 @@ Dashboard.propTypes = {
   overTimeOnApplyFilters: PropTypes.func.isRequired,
   overTimeOnDownloadOptionClick: PropTypes.func.isRequired,
   overTimeOnEmptyListLabel: PropTypes.string.isRequired,
-  overTimeOnExpandClick: PropTypes.func.isRequired,
   overTimeOnFacetItemClick: PropTypes.func.isRequired,
   overTimeOnFacetValueClick: PropTypes.func.isRequired,
   overTimeOnFilterClick: PropTypes.func.isRequired,
   overTimeOnFilterClose: PropTypes.func.isRequired,
   overTimeOnFilterSearchChange: PropTypes.func.isRequired,
   overTimeOnFooterTabClick: PropTypes.func.isRequired,
+  overTimeOnNewView: PropTypes.func.isRequired,
   overTimeSelectedFooterTab: PropTypes.string.isRequired,
   overTimeSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -342,6 +337,7 @@ Dashboard.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  overTimeShowExpandButton: PropTypes.bool.isRequired,
   overTimeShowFilterFooter: PropTypes.bool.isRequired,
   overTimeTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
@@ -375,13 +371,13 @@ Dashboard.propTypes = {
   bySubjectOnApplyFilters: PropTypes.func.isRequired,
   bySubjectOnDownloadOptionClick: PropTypes.func.isRequired,
   bySubjectOnEmptyListLabel: PropTypes.string.isRequired,
-  bySubjectOnExpandClick: PropTypes.func.isRequired,
   bySubjectOnFacetItemClick: PropTypes.func.isRequired,
   bySubjectOnFacetValueClick: PropTypes.func.isRequired,
   bySubjectOnFilterClick: PropTypes.func.isRequired,
   bySubjectOnFilterClose: PropTypes.func.isRequired,
   bySubjectOnFilterSearchChange: PropTypes.func.isRequired,
   bySubjectOnFooterTabClick: PropTypes.func.isRequired,
+  bySubjectOnNewView: PropTypes.func.isRequired,
   bySubjectSelectedFooterTab: PropTypes.string.isRequired,
   bySubjectSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -389,6 +385,7 @@ Dashboard.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  bySubjectShowExpandButton: PropTypes.bool.isRequired,
   bySubjectShowFilterFooter: PropTypes.bool.isRequired,
   bySubjectTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
@@ -422,13 +419,13 @@ Dashboard.propTypes = {
   byPublisherOnApplyFilters: PropTypes.func.isRequired,
   byPublisherOnDownloadOptionClick: PropTypes.func.isRequired,
   byPublisherOnEmptyListLabel: PropTypes.string.isRequired,
-  byPublisherOnExpandClick: PropTypes.func.isRequired,
   byPublisherOnFacetItemClick: PropTypes.func.isRequired,
   byPublisherOnFacetValueClick: PropTypes.func.isRequired,
   byPublisherOnFilterClick: PropTypes.func.isRequired,
   byPublisherOnFilterClose: PropTypes.func.isRequired,
   byPublisherOnFilterSearchChange: PropTypes.func.isRequired,
   byPublisherOnFooterTabClick: PropTypes.func.isRequired,
+  byPublisherOnNewView: PropTypes.func.isRequired,
   byPublisherSelectedFooterTab: PropTypes.string.isRequired,
   byPublisherSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -436,6 +433,7 @@ Dashboard.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  byPublisherShowExpandButton: PropTypes.bool.isRequired,
   byPublisherShowFilterFooter: PropTypes.bool.isRequired,
   byPublisherTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
@@ -469,13 +467,13 @@ Dashboard.propTypes = {
   bySourceOnApplyFilters: PropTypes.func.isRequired,
   bySourceOnDownloadOptionClick: PropTypes.func.isRequired,
   bySourceOnEmptyListLabel: PropTypes.string.isRequired,
-  bySourceOnExpandClick: PropTypes.func.isRequired,
   bySourceOnFacetItemClick: PropTypes.func.isRequired,
   bySourceOnFacetValueClick: PropTypes.func.isRequired,
   bySourceOnFilterClick: PropTypes.func.isRequired,
   bySourceOnFilterClose: PropTypes.func.isRequired,
   bySourceOnFilterSearchChange: PropTypes.func.isRequired,
   bySourceOnFooterTabClick: PropTypes.func.isRequired,
+  bySourceOnNewView: PropTypes.func.isRequired,
   bySourceSelectedFooterTab: PropTypes.string.isRequired,
   bySourceSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -483,6 +481,7 @@ Dashboard.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  bySourceShowExpandButton: PropTypes.bool.isRequired,
   bySourceShowFilterFooter: PropTypes.bool.isRequired,
   bySourceTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
@@ -495,9 +494,9 @@ Dashboard.propTypes = {
   uniqueCountData: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   uniqueCountIsDownloadListOpen: PropTypes.bool.isRequired,
   uniqueCountOnDownloadOptionClick: PropTypes.func.isRequired,
-  uniqueCountOnExpandClick: PropTypes.func.isRequired,
   uniqueCountOnFooterTabClick: PropTypes.func.isRequired,
   uniqueCountSelectedFooterTab: PropTypes.string.isRequired,
+  uniqueCountShowExpandButton: PropTypes.bool.isRequired,
   uniqueCountTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
@@ -509,9 +508,10 @@ Dashboard.propTypes = {
   corpusGrowthData: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   corpusGrowthIsDownloadListOpen: PropTypes.bool.isRequired,
   corpusGrowthOnDownloadOptionClick: PropTypes.func.isRequired,
-  corpusGrowthOnExpandClick: PropTypes.func.isRequired,
   corpusGrowthOnFooterTabClick: PropTypes.func.isRequired,
   corpusGrowthSelectedFooterTab: PropTypes.string.isRequired,
+  corpusGrowthShowExpandButton: PropTypes.bool.isRequired,
+  corpusGrowthOnNewView: PropTypes.func.isRequired,
   corpusGrowthTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
@@ -519,10 +519,6 @@ Dashboard.propTypes = {
       key: PropTypes.string.isRequired,
     }),
   ).isRequired,
-}
-
-Dashboard.defaultProps = {
-  currentPath: '/dashboard',
 }
 
 export default Dashboard

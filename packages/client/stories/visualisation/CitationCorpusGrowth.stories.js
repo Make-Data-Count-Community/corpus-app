@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { CitationCorpusGrowth } from '../../app/ui'
 
@@ -7,21 +7,37 @@ const randomNumber = ceiling => {
 }
 
 const data = [
-  { month: '01/2023', value: randomNumber(100000), type: 'DOI' },
-  { month: '02/2023', value: randomNumber(1000000), type: 'DOI' },
-  { month: '03/2023', value: randomNumber(10000000), type: 'DOI' },
-  { month: '04/2023', value: randomNumber(50000000), type: 'DOI' },
-  { month: '01/2023', value: randomNumber(100000), type: 'Accession ID' },
-  { month: '02/2023', value: randomNumber(1000000), type: 'Accession ID' },
-  { month: '03/2023', value: randomNumber(10000000), type: 'Accession ID' },
-  { month: '04/2023', value: randomNumber(50000000), type: 'Accession ID' },
+  { xField: '01/2023', yField: randomNumber(100000), stackField: 'DOI' },
+  { xField: '02/2023', yField: randomNumber(1000000), stackField: 'DOI' },
+  { xField: '03/2023', yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: '04/2023', yField: randomNumber(50000000), stackField: 'DOI' },
+  {
+    xField: '01/2023',
+    yField: randomNumber(100000),
+    stackField: 'Accession ID',
+  },
+  {
+    xField: '02/2023',
+    yField: randomNumber(1000000),
+    stackField: 'Accession ID',
+  },
+  {
+    xField: '03/2023',
+    yField: randomNumber(10000000),
+    stackField: 'Accession ID',
+  },
+  {
+    xField: '04/2023',
+    yField: randomNumber(50000000),
+    stackField: 'Accession ID',
+  },
 ]
 
 const columns = [
   {
     title: 'Month',
-    dataIndex: 'month',
-    key: 'month',
+    dataIndex: 'xField',
+    key: 'xField',
   },
   {
     title: 'DOI',
@@ -84,6 +100,7 @@ const defaultTab = 'table'
 const Template = args => {
   const [selectedTab, setSelectedTab] = useState(defaultTab)
   const [isDowloadListOpen, setIsDownloadListOpen] = useState(false)
+  const newView = useRef(null)
 
   const handleFooterTabClick = tabTitle => {
     if (tabTitle === 'download') {
@@ -97,18 +114,23 @@ const Template = args => {
 
   const handleDownloadOptionClick = () => {}
 
+  const handleNewView = view => {
+    newView.current = view
+  }
+
   return (
     <CitationCorpusGrowth
       {...args}
       data={
         selectedTab === 'chart'
           ? data
-          : transformData(data, 'month', 'type', 'value')
+          : transformData(data, 'xField', 'stackField', 'yField')
       }
       isDownloadListOpen={isDowloadListOpen}
       onDownloadOptionClick={handleDownloadOptionClick}
       onExpandClick={handleExpandClick}
       onFooterTabClick={handleFooterTabClick}
+      onNewView={handleNewView}
       selectedFooterTab={selectedTab}
       tableColumns={columns}
     />

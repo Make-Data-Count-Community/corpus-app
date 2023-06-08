@@ -2,10 +2,17 @@ import { createClassFromSpec } from 'react-vega'
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { chartBackground, fullColors } from './__helpers__/colors'
+import { chartBackground, publisherColors } from './__helpers__/colors'
 
 const PieChart = props => {
-  const { data, thetaField, colorField } = props
+  const {
+    data,
+    thetaField,
+    colorField,
+    colorFieldTooltipTitle,
+    thetaFieldTooltipTitle,
+    onNewView,
+  } = props
 
   const Chart = createClassFromSpec({
     spec: {
@@ -24,9 +31,22 @@ const PieChart = props => {
           field: colorField,
           type: 'nominal',
           scale: {
-            range: fullColors,
+            range: publisherColors,
           },
         },
+        tooltip: [
+          {
+            field: colorField,
+            type: 'nominal',
+            title: colorFieldTooltipTitle,
+          },
+          {
+            field: thetaField,
+            format: ',',
+            type: 'quantitative',
+            title: thetaFieldTooltipTitle,
+          },
+        ],
       },
       config: {
         background: chartBackground,
@@ -45,13 +65,29 @@ const PieChart = props => {
     },
   })
 
-  return <Chart actions={false} style={{ width: '100%', height: '100%' }} />
+  return (
+    <Chart
+      actions={false}
+      onNewView={onNewView}
+      style={{ width: '100%', height: '100%' }}
+      tooltip={{
+        theme: 'custom',
+      }}
+    />
+  )
 }
 
 PieChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   thetaField: PropTypes.string.isRequired,
   colorField: PropTypes.string.isRequired,
+  colorFieldTooltipTitle: PropTypes.string.isRequired,
+  thetaFieldTooltipTitle: PropTypes.string.isRequired,
+  onNewView: PropTypes.func,
+}
+
+PieChart.defaultProps = {
+  onNewView: () => {},
 }
 
 export default PieChart

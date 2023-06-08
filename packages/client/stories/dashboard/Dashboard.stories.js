@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { lorem } from 'faker'
 import { uuid } from '@coko/client'
 import { json2csv } from 'json-2-csv'
@@ -8,8 +8,11 @@ import { Dashboard } from '../../app/ui'
 const facetNotSelectedLabel = 'Please select a facet'
 const displayListEmptyLabel = 'No matches found'
 
-const downloadFile = (inputData, fileName) => {
-  const url = window.URL.createObjectURL(new Blob([inputData]))
+const downloadFile = (inputData, fileName, type = 'csv') => {
+  const url =
+    type === 'csv'
+      ? window.URL.createObjectURL(new Blob([inputData]))
+      : inputData
 
   const link = document.createElement('a')
   link.href = url
@@ -62,21 +65,37 @@ const transformChartData = (sourceData, transformBy, keyField, valueField) => {
 // #region corpusGrowth
 
 const corpusGrowthData = [
-  { month: '01/2023', value: randomNumber(100000), type: 'DOI' },
-  { month: '02/2023', value: randomNumber(1000000), type: 'DOI' },
-  { month: '03/2023', value: randomNumber(10000000), type: 'DOI' },
-  { month: '04/2023', value: randomNumber(50000000), type: 'DOI' },
-  { month: '01/2023', value: randomNumber(100000), type: 'Accession ID' },
-  { month: '02/2023', value: randomNumber(1000000), type: 'Accession ID' },
-  { month: '03/2023', value: randomNumber(10000000), type: 'Accession ID' },
-  { month: '04/2023', value: randomNumber(50000000), type: 'Accession ID' },
+  { xField: '01/2023', yField: randomNumber(100000), stackField: 'DOI' },
+  { xField: '02/2023', yField: randomNumber(1000000), stackField: 'DOI' },
+  { xField: '03/2023', yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: '04/2023', yField: randomNumber(50000000), stackField: 'DOI' },
+  {
+    xField: '01/2023',
+    yField: randomNumber(100000),
+    stackField: 'Accession ID',
+  },
+  {
+    xField: '02/2023',
+    yField: randomNumber(1000000),
+    stackField: 'Accession ID',
+  },
+  {
+    xField: '03/2023',
+    yField: randomNumber(10000000),
+    stackField: 'Accession ID',
+  },
+  {
+    xField: '04/2023',
+    yField: randomNumber(50000000),
+    stackField: 'Accession ID',
+  },
 ]
 
 const corpusGrowthTableColumns = [
   {
     title: 'Month',
-    dataIndex: 'month',
-    key: 'month',
+    dataIndex: 'xField',
+    key: 'xField',
   },
   {
     title: 'DOI',
@@ -178,26 +197,26 @@ const uniqueCountDefaultTab = 'table'
 // #region overTime
 
 const generateOverTimeData = () => [
-  { year: 2010, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2011, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2012, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2013, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2014, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2015, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2016, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2017, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2018, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2019, value: randomNumber(10000000), type: 'DOI' },
-  { year: 2010, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2011, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2012, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2013, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2014, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2015, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2016, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2017, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2018, value: randomNumber(10000000), type: 'Accession ID' },
-  { year: 2019, value: randomNumber(10000000), type: 'Accession ID' },
+  { xField: 2010, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2011, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2012, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2013, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2014, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2015, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2016, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2017, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2018, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2019, yField: randomNumber(10000000), stackField: 'DOI' },
+  { xField: 2010, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2011, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2012, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2013, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2014, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2015, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2016, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2017, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2018, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  { xField: 2019, yField: randomNumber(10000000), stackField: 'Accession ID' },
 ]
 
 const overTimeData = generateOverTimeData()
@@ -205,8 +224,8 @@ const overTimeData = generateOverTimeData()
 const overTimeTableColumns = [
   {
     title: 'Year',
-    dataIndex: 'year',
-    key: 'year',
+    dataIndex: 'xField',
+    key: 'xField',
   },
   {
     title: 'DOI',
@@ -470,125 +489,125 @@ const overTimeDefaultTab = 'chart'
 const bySubjectParentId = uuid()
 
 const generateBySubjectData = () => [
-  { id: bySubjectParentId, name: '', value: 0, parent: null },
+  { id: bySubjectParentId, xField: '', yField: 0, parent: null },
   {
     id: uuid(),
-    name: 'Subject 0',
-    value: randomNumber(1000),
+    xField: 'Subject 0',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 1',
-    value: randomNumber(1000),
+    xField: 'Subject 1',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 2',
-    value: randomNumber(1000),
+    xField: 'Subject 2',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 3',
-    value: randomNumber(1000),
+    xField: 'Subject 3',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 4',
-    value: randomNumber(1000),
+    xField: 'Subject 4',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 5',
-    value: randomNumber(1000),
+    xField: 'Subject 5',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 6',
-    value: randomNumber(1000),
+    xField: 'Subject 6',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 7',
-    value: randomNumber(1000),
+    xField: 'Subject 7',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 8',
-    value: randomNumber(1000),
+    xField: 'Subject 8',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 9',
-    value: randomNumber(1000),
+    xField: 'Subject 9',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 10',
-    value: randomNumber(1000),
+    xField: 'Subject 10',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 11',
-    value: randomNumber(1000),
+    xField: 'Subject 11',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 12',
-    value: randomNumber(1000),
+    xField: 'Subject 12',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 13',
-    value: randomNumber(1000),
+    xField: 'Subject 13',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 14',
-    value: randomNumber(1000),
+    xField: 'Subject 14',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 15',
-    value: randomNumber(1000),
+    xField: 'Subject 15',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 16',
-    value: randomNumber(1000),
+    xField: 'Subject 16',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 17',
-    value: randomNumber(1000),
+    xField: 'Subject 17',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 18',
-    value: randomNumber(1000),
+    xField: 'Subject 18',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
   {
     id: uuid(),
-    name: 'Subject 19',
-    value: randomNumber(1000),
+    xField: 'Subject 19',
+    yField: randomNumber(1000000),
     parent: bySubjectParentId,
   },
 ]
@@ -598,18 +617,18 @@ const bySubjectData = generateBySubjectData()
 const bySubjectTableColumns = [
   //   {
   //     title: 'Year',
-  //     dataIndex: 'year',
-  //     key: 'year',
+  //     dataIndex: 'xField',
+  //     key: 'xField',
   //   },
   {
     title: 'Subject',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'xField',
+    key: 'xField',
   },
   {
     title: 'Total Citations',
-    dataIndex: 'value',
-    key: 'value',
+    dataIndex: 'yField',
+    key: 'yField',
     render: value =>
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
@@ -852,16 +871,16 @@ const bySubjectDefaultTab = 'chart'
 // #region byPublisher
 
 const generateByPublisherData = () => [
-  { id: uuid(), publisher: 'Publisher 1', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 2', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 3', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 4', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 5', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 6', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 7', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 8', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 9', value: randomNumber(1000) },
-  { id: uuid(), publisher: 'Publisher 10', value: randomNumber(1000) },
+  { id: uuid(), xField: 'Publisher 1', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 2', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 3', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 4', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 5', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 6', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 7', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 8', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 9', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 10', yField: randomNumber(1000000) },
 ]
 
 const byPublisherData = generateByPublisherData()
@@ -869,13 +888,13 @@ const byPublisherData = generateByPublisherData()
 const byPublisherTableColumns = [
   {
     title: 'Publisher',
-    dataIndex: 'publisher',
-    key: 'publisher',
+    dataIndex: 'xField',
+    key: 'xField',
   },
   {
     title: 'Total Citations',
-    dataIndex: 'value',
-    key: 'value',
+    dataIndex: 'yField',
+    key: 'yField',
     render: value =>
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
@@ -1105,16 +1124,24 @@ const byPublisherDefaultTab = 'chart'
 
 const generateBySourceData = () => {
   return [
-    { source: 'CZI', value: randomNumber(10000000), type: 'DOI' },
+    { xField: 'CZI', yField: randomNumber(10000000), stackField: 'DOI' },
     {
-      source: 'DataCite Event Data',
-      value: randomNumber(10000000),
-      type: 'DOI',
+      xField: 'DataCite Event Data',
+      yField: randomNumber(10000000),
+      stackField: 'DOI',
     },
-    { source: 'OpenAIRE', value: randomNumber(10000000), type: 'DOI' },
-    { source: 'CZI', value: randomNumber(10000000), type: 'Accession ID' },
-    { source: 'DataCite Event Data', value: 0, type: 'Accession ID' },
-    { source: 'OpenAIRE', value: randomNumber(10000000), type: 'Accession ID' },
+    { xField: 'OpenAIRE', yField: randomNumber(10000000), stackField: 'DOI' },
+    {
+      xField: 'CZI',
+      yField: randomNumber(10000000),
+      stackField: 'Accession ID',
+    },
+    { xField: 'DataCite Event Data', yField: 0, stackField: 'Accession ID' },
+    {
+      xField: 'OpenAIRE',
+      yField: randomNumber(10000000),
+      stackField: 'Accession ID',
+    },
   ]
 }
 
@@ -1123,8 +1150,8 @@ const bySourceData = generateBySourceData()
 const bySourceTableColumns = [
   {
     title: 'Source',
-    dataIndex: 'source',
-    key: 'source',
+    dataIndex: 'xField',
+    key: 'xField',
   },
   {
     title: 'DOI',
@@ -1386,6 +1413,8 @@ const Template = args => {
   const [uniqueCountIsDowloadListOpen, setUniqueCountIsDownloadListOpen] =
     useState(false)
 
+  const corpusGrowthNewView = useRef(null)
+
   // #region bySourceStates
 
   const [bySourceSelectedTab, setBySourceSelectedTab] =
@@ -1414,6 +1443,8 @@ const Template = args => {
     bySourceEmptyFacetValueListLabel,
     setBySourceEmptyFacetValueListLabel,
   ] = useState(facetNotSelectedLabel)
+
+  const bySourceNewView = useRef(null)
 
   const setBySourceEmptyListLabel = () => {
     const selectedFacet = bySourceFilters.find(f => f.isFacetSelected)
@@ -1458,6 +1489,8 @@ const Template = args => {
     setBySubjectEmptyFacetValueListLabel,
   ] = useState(facetNotSelectedLabel)
 
+  const bySubjectNewView = useRef(null)
+
   const setBySubjectEmptyListLabel = () => {
     const selectedFacet = bySubjectFilters.find(f => f.isFacetSelected)
 
@@ -1498,6 +1531,8 @@ const Template = args => {
     overTimeEmptyFacetValueListLabel,
     setOverTimeEmptyFacetValueListLabel,
   ] = useState(facetNotSelectedLabel)
+
+  const overTimeNewView = useRef(null)
 
   const setOverTimeEmptyListLabel = () => {
     const selectedFacet = overTimeFilters.find(f => f.isFacetSelected)
@@ -1542,6 +1577,8 @@ const Template = args => {
     byPublisherEmptyFacetValueListLabel,
     setByPublisherEmptyFacetValueListLabel,
   ] = useState(facetNotSelectedLabel)
+
+  const byPublisherNewView = useRef(null)
 
   const setByPublisherEmptyListLabel = () => {
     const selectedFacet = byPublisherFilters.find(f => f.isFacetSelected)
@@ -1637,10 +1674,10 @@ const Template = args => {
 
     if (type === 'csv') {
       const csvString = await json2csv(
-        transformChartData(corpusGrowthData, 'month', 'type', 'value'),
+        transformChartData(corpusGrowthData, 'xField', 'stackField', 'yField'),
         {
           keys: [
-            { field: 'month', title: 'Month' },
+            { field: 'xField', title: 'Month' },
             { field: 'DOI', title: 'DOI' },
             { field: 'Accession ID', title: 'Accession ID' },
             { field: 'total', title: 'Total' },
@@ -1649,7 +1686,18 @@ const Template = args => {
       )
 
       downloadFile(csvString, 'Data citations corpus growth.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await corpusGrowthNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Data citations corpus growth.${type}`, type)
     }
+  }
+
+  const handleCorpusGrowthNewView = view => {
+    corpusGrowthNewView.current = view
   }
 
   const handleUniqueCountFooterTabClick = tabTitle => {
@@ -1662,7 +1710,28 @@ const Template = args => {
 
   const handleUniqueCountExpandClick = () => {}
 
-  const handleUniqueCountDownloadOptionClick = () => {}
+  const handleUniqueCountDownloadOptionClick = async type => {
+    setUniqueCountIsDownloadListOpen(false)
+
+    if (type === 'csv') {
+      const csvString = await json2csv(
+        transformUniqueCountData(unqiueCountData),
+        {
+          keys: [
+            { field: 'facet', title: 'Facet' },
+            { field: 'thirdPartyAggr', title: 'Third party aggregator' },
+            { field: 'pidMetadata', title: 'PID Metadata' },
+            { field: 'total', title: 'Total' },
+          ],
+        },
+      )
+
+      downloadFile(
+        csvString,
+        'Counts of unique repositories, journals, subjects, affiliations, funders.csv',
+      )
+    }
+  }
 
   // #region bySourceFilters
 
@@ -1773,13 +1842,13 @@ const Template = args => {
       const csvString = await json2csv(
         transformChartData(
           bySourceVisualisationData,
-          'source',
-          'type',
-          'value',
+          'xField',
+          'stackField',
+          'yField',
         ),
         {
           keys: [
-            { field: 'source', title: 'Source' },
+            { field: 'xField', title: 'Source' },
             { field: 'DOI', title: 'DOI' },
             { field: 'Accession ID', title: 'Accession ID' },
             { field: 'total', title: 'Total Citations' },
@@ -1788,7 +1857,22 @@ const Template = args => {
       )
 
       downloadFile(csvString, 'Citation counts by source of citation.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await bySourceNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(
+        imgString,
+        `Citation counts by source of citation.${type}`,
+        type,
+      )
     }
+  }
+
+  const handleBySourceNewView = view => {
+    bySourceNewView.current = view
   }
 
   // #endregion bySourceFilters
@@ -1913,14 +1997,25 @@ const Template = args => {
         addKeytoData(byPublisherVisualisationData),
         {
           keys: [
-            { field: 'publisher', title: 'Publisher' },
-            { field: 'value', title: 'Total Citations' },
+            { field: 'xField', title: 'Publisher' },
+            { field: 'yField', title: 'Total Citations' },
           ],
         },
       )
 
       downloadFile(csvString, 'Citation counts by publisher.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await byPublisherNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Citation counts by publisher.${type}`, type)
     }
+  }
+
+  const handleByPublisherNewView = view => {
+    byPublisherNewView.current = view
   }
 
   // #endregion byPublisherFilters
@@ -2038,14 +2133,25 @@ const Template = args => {
         addKeytoData(bySubjectVisualisationData),
         {
           keys: [
-            { field: 'name', title: 'Subject' },
-            { field: 'value', title: 'Total Citations' },
+            { field: 'xField', title: 'Subject' },
+            { field: 'yField', title: 'Total Citations' },
           ],
         },
       )
 
       downloadFile(csvString, 'Citation counts by subject.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await bySubjectNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Citation counts by subject.${type}`, type)
     }
+  }
+
+  const handleBySubjectNewView = view => {
+    bySubjectNewView.current = view
   }
 
   // #endregion bySubjectFilters
@@ -2161,7 +2267,7 @@ const Template = args => {
         addKeytoData(overTimeVisualisationData),
         {
           keys: [
-            { field: 'year', title: 'Year' },
+            { field: 'xField', title: 'Year' },
             { field: 'DOI', title: 'DOI' },
             { field: 'Accession ID', title: 'Accession ID' },
             { field: 'total', title: 'Total Citations' },
@@ -2170,7 +2276,18 @@ const Template = args => {
       )
 
       downloadFile(csvString, 'Citation counts over time.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await overTimeNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Citation counts over time.${type}`, type)
     }
+  }
+
+  const handlOverTimeOnNewView = view => {
+    overTimeNewView.current = view
   }
 
   // #endregion overTimeFilters
@@ -2196,8 +2313,10 @@ const Template = args => {
       byPublisherOnFilterClose={handleByPublisherOnClose}
       byPublisherOnFilterSearchChange={handleByPublisherSearchChange}
       byPublisherOnFooterTabClick={handleByPublisherFooterTabClick}
+      byPublisherOnNewView={handleByPublisherNewView}
       byPublisherSelectedFacetValues={byPublisherSelectedFacetValues}
       byPublisherSelectedFooterTab={byPublisherSelectedTab}
+      byPublisherShowExpandButton
       byPublisherShowFilterFooter={byPublisherShowApplyFilter}
       byPublisherTableColumns={byPublisherTableColumns}
       bySourceData={
@@ -2205,9 +2324,9 @@ const Template = args => {
           ? bySourceVisualisationData
           : transformChartData(
               bySourceVisualisationData,
-              'source',
-              'type',
-              'value',
+              'xField',
+              'stackField',
+              'yField',
             )
       }
       bySourceFilterParams={bySourceFilters}
@@ -2224,8 +2343,10 @@ const Template = args => {
       bySourceOnFilterClose={handleBySourceOnClose}
       bySourceOnFilterSearchChange={handleBySourceSearchChange}
       bySourceOnFooterTabClick={handleBySourceFooterTabClick}
+      bySourceOnNewView={handleBySourceNewView}
       bySourceSelectedFacetValues={bySourceSelectedFacetValues}
       bySourceSelectedFooterTab={bySourceSelectedTab}
+      bySourceShowExpandButton
       bySourceShowFilterFooter={bySourceShowApplyFilter}
       bySourceTableColumns={bySourceTableColumns}
       bySubjectData={
@@ -2247,29 +2368,38 @@ const Template = args => {
       bySubjectOnFilterClose={handleBySubjectOnClose}
       bySubjectOnFilterSearchChange={handleBySubjectSearchChange}
       bySubjectOnFooterTabClick={handleBySubjectFooterTabClick}
+      bySubjectOnNewView={handleBySubjectNewView}
       bySubjectSelectedFacetValues={bySubjectSelectedFacetValues}
       bySubjectSelectedFooterTab={bySubjectSelectedTab}
+      bySubjectShowExpandButton
       bySubjectShowFilterFooter={bySubjectShowApplyFilter}
       bySubjectTableColumns={bySubjectTableColumns}
       corpusGrowthData={
         corpusGrowthSelectedTab === 'chart'
           ? corpusGrowthData
-          : transformChartData(corpusGrowthData, 'month', 'type', 'value')
+          : transformChartData(
+              corpusGrowthData,
+              'xField',
+              'stackField',
+              'yField',
+            )
       }
       corpusGrowthIsDownloadListOpen={corpusGrowthIsDowloadListOpen}
       corpusGrowthOnDownloadOptionClick={handleCorpusGrowthDownloadOptionClick}
       corpusGrowthOnExpandClick={handleCorpusGrowthExpandClick}
       corpusGrowthOnFooterTabClick={handleCorpusGrowthFooterTabClick}
+      corpusGrowthOnNewView={handleCorpusGrowthNewView}
       corpusGrowthSelectedFooterTab={corpusGrowthSelectedTab}
+      corpusGrowthShowExpandButton
       corpusGrowthTableColumns={corpusGrowthTableColumns}
       overTimeData={
         overTimeSelectedTab === 'chart'
           ? overTimeVisualisationData
           : transformChartData(
               overTimeVisualisationData,
-              'year',
-              'type',
-              'value',
+              'xField',
+              'stackField',
+              'yField',
             )
       }
       overTimeFilterParams={overTimeFilters}
@@ -2286,8 +2416,10 @@ const Template = args => {
       overTimeOnFilterClose={handleOverTimeOnClose}
       overTimeOnFilterSearchChange={handleOverTimeSearchChange}
       overTimeOnFooterTabClick={handleOverTimeFooterTabClick}
+      overTimeOnNewView={handlOverTimeOnNewView}
       overTimeSelectedFacetValues={overTimeSelectedFacetValues}
       overTimeSelectedFooterTab={overTimeSelectedTab}
+      overTimeShowExpandButton
       overTimeShowFilterFooter={overTimeShowApplyFilter}
       overTimeTableColumns={overTimeTableColumns}
       uniqueCountData={transformUniqueCountData(unqiueCountData)}
@@ -2296,6 +2428,7 @@ const Template = args => {
       uniqueCountOnExpandClick={handleUniqueCountExpandClick}
       uniqueCountOnFooterTabClick={handleUniqueCountFooterTabClick}
       uniqueCountSelectedFooterTab={uniqueCountSelectedTab}
+      uniqueCountShowExpandButton
       uniqueCountTableColumns={uniqueCountColumns}
     />
   )

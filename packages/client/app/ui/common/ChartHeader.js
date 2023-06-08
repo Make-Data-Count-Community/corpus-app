@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 import { grid, th } from '@coko/client'
 import { Popover as AntPopover } from 'antd'
@@ -33,6 +34,7 @@ const ExpandButtonWrapper = styled(ExpandButton)`
 
 const ChartHeader = props => {
   const {
+    expandPath,
     title,
     filterParams,
     isFilterOpen,
@@ -42,9 +44,9 @@ const ChartHeader = props => {
     onFacetItemClick,
     onFacetValueClick,
     onFilterClick,
-    onExpandClick,
     onFilterSearchChange,
     selectedFacetValues,
+    showExpandButton,
     showFilterFooter,
     showFilterButton,
     filterValueOptions,
@@ -79,13 +81,18 @@ const ChartHeader = props => {
           </AntPopover>
         )}
 
-        <ExpandButtonWrapper onClick={onExpandClick} />
+        {showExpandButton && (
+          <Link target="_blank" to={expandPath}>
+            <ExpandButtonWrapper />
+          </Link>
+        )}
       </Actions>
     </Wrapper>
   )
 }
 
 ChartHeader.propTypes = {
+  expandPath: PropTypes.string.isRequired,
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
       isFacetSelected: PropTypes.bool.isRequired,
@@ -106,7 +113,6 @@ ChartHeader.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ),
-  onExpandClick: PropTypes.func.isRequired,
   onEmptyListLabel: PropTypes.string,
   onFacetItemClick: PropTypes.func,
   onFacetValueClick: PropTypes.func,
@@ -119,6 +125,7 @@ ChartHeader.propTypes = {
       value: PropTypes.string.isRequired,
     }),
   ),
+  showExpandButton: PropTypes.bool.isRequired,
   showFilterButton: PropTypes.bool,
   showFilterFooter: PropTypes.bool,
   title: PropTypes.string.isRequired,
