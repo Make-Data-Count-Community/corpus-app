@@ -1,7 +1,7 @@
 const { getSubjects } = require('../../controllers/subject.controllers')
 
-const getSubjectResolver = async () => {
-  return getSubjects()
+const getSubjectResolver = async (_, input) => {
+  return getSubjects(input)
 }
 
 module.exports = {

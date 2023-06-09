@@ -1,7 +1,7 @@
 const { getAffiliations } = require('../../controllers/affiliation.controllers')
 
-const getAffiliationResolver = async () => {
-  return getAffiliations()
+const getAffiliationResolver = async (_, input) => {
+  return getAffiliations(input)
 }
 
 module.exports = {

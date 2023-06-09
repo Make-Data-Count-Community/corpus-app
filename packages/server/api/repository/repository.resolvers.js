@@ -1,7 +1,7 @@
 const { getRepositories } = require('../../controllers/repository.controllers')
 
-const getRepositoryResolver = async () => {
-  return getRepositories()
+const getRepositoryResolver = async (_, input) => {
+  return getRepositories(input)
 }
 
 module.exports = {

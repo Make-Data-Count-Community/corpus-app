@@ -1,7 +1,7 @@
 const { getPublishers } = require('../../controllers/publisher.controllers')
 
-const getPublisherResolver = async () => {
-  return getPublishers()
+const getPublisherResolver = async (_, input) => {
+  return getPublishers(input)
 }
 
 module.exports = {
