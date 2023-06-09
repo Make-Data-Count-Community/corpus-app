@@ -1,7 +1,27 @@
-import React from 'react'
+import React from 'react' // { useEffect }
+import { useQuery } from '@apollo/client' // useLazyQuery,
 import { Dashboard, VisuallyHiddenElement } from '../ui'
 
+import { GET_BY_YEAR } from '../graphql'
+
 const DashboardPage = () => {
+  const { data: byYearData, loading: byYearDataLoading } = useQuery(
+    GET_BY_YEAR,
+    // {
+    //   variables: {
+    //     params: {},
+    //     options: {},
+    //   },
+    // },
+  )
+
+  //   const [byYearQuery, { data: byYearData, loading: byYearDataLoading }] =
+  //     useLazyQuery(GET_BY_YEAR)
+
+  //   useEffect(() => {
+  //     byYearQuery()
+  //   }, [])
+
   return (
     <>
       <VisuallyHiddenElement as="h1">Dashboard page</VisuallyHiddenElement>
@@ -10,6 +30,8 @@ const DashboardPage = () => {
         bySourceShowExpandButton
         bySubjectShowExpandButton
         corpusGrowthShowExpandButton
+        overTimeData={byYearData}
+        overTimeLoading={byYearDataLoading}
         overTimeShowExpandButton
         uniqueCountShowExpandButton
       />

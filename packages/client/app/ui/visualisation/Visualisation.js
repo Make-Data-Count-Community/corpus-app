@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import { grid, th } from '@coko/client'
 
-import { ChartHeader, ChartFooter } from '../common'
+import { ChartHeader, ChartFooter, Spin } from '../common'
 
 const Wrapper = styled.div`
   align-items: flex-end;
@@ -22,7 +22,7 @@ const Wrapper = styled.div`
 const DataWrapper = styled.div`
   /* flex-grow: 3; */
   height: ${grid(84)};
-  overflow: auto;
+  /* overflow: auto; */
   padding: ${grid(2)} ${grid(4)};
   width: 100%;
 `
@@ -38,6 +38,7 @@ const Visualisation = props => {
     filterValueOptions,
     isDownloadListOpen,
     isFilterOpen,
+    loading,
     onApplyFilters,
     onDownloadOptionClick,
     onEmptyListLabel,
@@ -76,10 +77,15 @@ const Visualisation = props => {
         showFilterFooter={showFilterFooter}
         title={visualisationTitle}
       />
-      <DataWrapper>{children}</DataWrapper>
+      <DataWrapper>
+        <Spin renderBackground={false} spinning={loading}>
+          {children}
+        </Spin>
+      </DataWrapper>
       <ChartFooter
         downloadOptions={downloadOptions}
         isDowloadListOpen={isDownloadListOpen}
+        loading={loading}
         onDownloadOptionClick={onDownloadOptionClick}
         onTabClick={onFooterTabClick}
         selectedTab={selectedFooterTab}
@@ -118,6 +124,7 @@ Visualisation.propTypes = {
   ),
   isDownloadListOpen: PropTypes.bool.isRequired,
   isFilterOpen: PropTypes.bool,
+  loading: PropTypes.bool,
   onApplyFilters: PropTypes.func,
   onDownloadOptionClick: PropTypes.func.isRequired,
   onEmptyListLabel: PropTypes.string,
@@ -145,6 +152,7 @@ Visualisation.defaultProps = {
   filterParams: [],
   filterValueOptions: [],
   isFilterOpen: false,
+  loading: false,
   onApplyFilters: () => {},
   onEmptyListLabel: '',
   onFacetItemClick: () => {},
