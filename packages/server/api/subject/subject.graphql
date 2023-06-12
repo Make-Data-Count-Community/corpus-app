@@ -5,5 +5,5 @@ type Subject {
 }
 
 extend type Query {
-  getSubjects: [Subject]
+  getSubjects(input: SearchModelInput): [Subject]
 }

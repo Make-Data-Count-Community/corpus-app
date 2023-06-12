@@ -5,5 +5,5 @@ type Funder {
 }
 
 extend type Query {
-  getFunders: [Funder]
+  getFunders(input: SearchModelInput): [Funder]
 }
