@@ -1,5 +1,5 @@
 const { db } = require('@coko/server')
-const { intersectionBy } = require('lodash')
+const { intersectionBy, get } = require('lodash')
 const SearchService = require('../services/search/searchService')
 
 const {
@@ -21,7 +21,7 @@ const { model: Source } = require('../models/source')
 const getAssertionsPerYear = async ({ input }) => {
   const searchedAssertions = new SearchService(AssertionLastTenYear, {
     groupBy: 'year',
-    filter: input.search.criteria,
+    filter: get(input, 'search.criteria', []),
   })
 
   const results = await searchedAssertions.search(
@@ -65,7 +65,7 @@ const getAssertionsPerSubject = async ({ input }) => {
     join,
     take: 20,
     groupBy: 'subject_id',
-    filter: input.search.criteria,
+    filter: get(input, 'search.criteria', []),
     sort: { field: ['cnt'], direction: 'desc' },
   })
 
@@ -86,17 +86,13 @@ const getAssertionsPerSubject = async ({ input }) => {
 }
 
 const getAssertionsPerPublisher = async ({ input }) => {
-  const hasSubject = input.search.criteria.find(
-    criteria => criteria.field === 'subjectId',
-  )
+  const criteria = get(input, 'search.criteria', [])
 
-  const hasFunder = input.search.criteria.find(
-    criteria => criteria.field === 'funderId',
-  )
+  const hasSubject = criteria.find(crit => crit.field === 'subjectId')
 
-  const hasAffiliation = input.search.criteria.find(
-    criteria => criteria.field === 'affiliationId',
-  )
+  const hasFunder = criteria.find(crit => crit.field === 'funderId')
+
+  const hasAffiliation = criteria.find(crit => crit.field === 'affiliationId')
 
   let assertions = []
 
@@ -129,7 +125,7 @@ const getAssertionsPerPublisher = async ({ input }) => {
   assertions = intersectionBy(...assertions)
 
   if (assertions.length > 0) {
-    input.search.criteria.push({
+    criteria.push({
       field: 'id',
       operator: { in: assertions.map(a => a.assertion_id) },
     })
@@ -137,7 +133,7 @@ const getAssertionsPerPublisher = async ({ input }) => {
 
   const searchedAssertions = new SearchService(Assertion, {
     groupBy: 'publisher_id',
-    filter: input.search.criteria,
+    filter: criteria,
   })
 
   const results = await searchedAssertions.search(
