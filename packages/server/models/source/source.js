@@ -3,11 +3,11 @@ const { BaseModel } = require('@coko/server')
 class Source extends BaseModel {
   constructor(properties) {
     super(properties)
-    this.type = 'subject'
+    this.type = 'source'
   }
 
   static get tableName() {
-    return 'subjects'
+    return 'sources'
   }
 
   static get schema() {

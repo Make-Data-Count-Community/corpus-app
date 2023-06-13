@@ -31,7 +31,9 @@ class DataCiteEventData {
       const result = await getData.next(data)
 
       if (result.done === false) {
-        result.value.data = this.filterOutExistingCitations(result.value.data)
+        result.value.data = await this.filterOutExistingCitations(
+          result.value.data,
+        )
 
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < result.value.data.length; i++) {
@@ -60,7 +62,7 @@ class DataCiteEventData {
       // this.counts += 1
       // eslint-disable-next-line no-console
       logger.info(`Request to datacite eventData Api: ${nextUrl}`)
-      const response = await this.axios.dataciteApi(nextUrl)
+      const response = await this.axios.dataciteApiEvent(nextUrl)
       yield response.data
       // nextUrl = this.counts > 1 ? null : response.data.links.next
       nextUrl = response.data.links.next
@@ -68,9 +70,9 @@ class DataCiteEventData {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  filterOutExistingCitations(data) {
+  async filterOutExistingCitations(data) {
     let result = []
-    db.transaction(async trx => {
+    await db.transaction(async trx => {
       const { id } = await Source.query(trx).findOne({
         abbreviation: 'datacite',
       })
@@ -78,10 +80,11 @@ class DataCiteEventData {
       await db
         .raw(
           `CREATE TEMPORARY TABLE temp_assertions (
-          id uuid
+          id uuid,
           source_id uuid,
           obj_id text not null,
-          subj_id text not null)
+          subj_id text not null
+          ) ON COMMIT DROP;
         `,
         )
         .transacting(trx)
@@ -91,19 +94,19 @@ class DataCiteEventData {
           data.map(d => ({
             id: d.id,
             source_id: id,
-            obj_id: d.attributes.obj_id,
-            subj_id: d.attributes.subj_id,
+            obj_id: d.attributes['obj-id'],
+            subj_id: d.attributes['subj-id'],
           })),
         )
         .transacting(trx)
 
       const notProcessed = await db
         .raw(
-          'select id from temp_assertions b left join assertions a on b.obj_id = a.obj_id and b.subj_id = a.subj_id where a.id is null',
+          'select b.id from temp_assertions b left join assertions a on b.obj_id = a.obj_id and b.subj_id = a.subj_id where a.id is null',
         )
         .transacting(trx)
 
-      result = result.concat(notProcessed.map(np => np.id))
+      result = result.concat(notProcessed.rows.map(np => np.id))
     })
 
     return data.filter(d => result.includes(d.id))

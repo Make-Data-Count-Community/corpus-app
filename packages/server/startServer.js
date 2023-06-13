@@ -95,9 +95,10 @@ const init = async () => {
     }
 
     if (process.env.START_MIGRATE_WEEKLY) {
-      await ScheduledTaskService.startMigratingWeekly('0 0 * * 5', {
-        scheduled: true,
-      })
+      await ScheduledTaskService.testTask()
+      // await ScheduledTaskService.startMigratingWeekly('0 0 * * 5', {
+      //   scheduled: true,
+      // })
     }
 
     return startServer()

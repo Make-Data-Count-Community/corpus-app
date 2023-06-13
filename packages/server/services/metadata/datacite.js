@@ -33,7 +33,7 @@ class Datacite extends Transform {
       doi = chunk.event.attributes['obj-id'].replace('https://doi.org/', '')
     }
 
-    const { data } = await axios.dataciteApi(`${Datacite.URL}${doi}`)
+    const { data } = await axios.dataciteApiDoi(`${Datacite.URL}${doi}`)
 
     if (data && !data.errors) {
       // Get Title
