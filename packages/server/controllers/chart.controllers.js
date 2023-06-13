@@ -18,10 +18,67 @@ const {
 
 const { model: Source } = require('../models/source')
 
+const buildQueryForIntermediateTables = async input => {
+  let criteria = get(input, 'search.criteria', [])
+
+  const hasSubject = criteria.find(crit => crit.field === 'subjectId')
+
+  const hasFunder = criteria.find(crit => crit.field === 'funderId')
+
+  const hasAffiliation = criteria.find(crit => crit.field === 'affiliationId')
+
+  let assertions = []
+
+  if (hasSubject) {
+    const subjects = new SearchService(AssertionSubject, {
+      filter: [hasSubject],
+    })
+
+    assertions.push(await subjects.search('assertion_id'))
+
+    criteria = criteria.filter(crit => crit.field !== 'subjectId')
+  }
+
+  if (hasFunder) {
+    const funders = new SearchService(AssertionFunder, {
+      filter: [hasFunder],
+    })
+
+    assertions.push(await funders.search('assertion_id'))
+
+    criteria = criteria.filter(crit => crit.field !== 'funderId')
+  }
+
+  if (hasAffiliation) {
+    const affiliations = new SearchService(AssertionAffiliation, {
+      filter: [hasAffiliation],
+    })
+
+    assertions.push(await affiliations.search('assertion_id'))
+
+    criteria = criteria.filter(crit => crit.field !== 'affiliationId')
+  }
+
+  assertions.push('assertion_id')
+
+  assertions = intersectionBy(...assertions)
+
+  if (assertions.length > 0) {
+    criteria.push({
+      field: 'id',
+      operator: { in: assertions.map(a => a.assertion_id) },
+    })
+  }
+
+  return criteria
+}
+
 const getAssertionsPerYear = async ({ input }) => {
+  const criteria = await buildQueryForIntermediateTables(input)
+
   const searchedAssertions = new SearchService(AssertionLastTenYear, {
     groupBy: 'year',
-    filter: get(input, 'search.criteria', []),
+    filter: criteria,
   })
 
   const results = await searchedAssertions.search(
@@ -86,50 +143,7 @@ const getAssertionsPerSubject = async ({ input }) => {
 }
 
 const getAssertionsPerPublisher = async ({ input }) => {
-  const criteria = get(input, 'search.criteria', [])
-
-  const hasSubject = criteria.find(crit => crit.field === 'subjectId')
-
-  const hasFunder = criteria.find(crit => crit.field === 'funderId')
-
-  const hasAffiliation = criteria.find(crit => crit.field === 'affiliationId')
-
-  let assertions = []
-
-  if (hasSubject) {
-    const subjects = new SearchService(AssertionSubject, {
-      filter: [hasSubject],
-    })
-
-    assertions.push(await subjects.search('assertion_id'))
-  }
-
-  if (hasFunder) {
-    const funders = new SearchService(AssertionFunder, {
-      filter: [hasFunder],
-    })
-
-    assertions.push(await funders.search('assertion_id'))
-  }
-
-  if (hasAffiliation) {
-    const affiliations = new SearchService(AssertionAffiliation, {
-      filter: [hasAffiliation],
-    })
-
-    assertions.push(await affiliations.search('assertion_id'))
-  }
-
-  assertions.push('assertion_id')
-
-  assertions = intersectionBy(...assertions)
-
-  if (assertions.length > 0) {
-    criteria.push({
-      field: 'id',
-      operator: { in: assertions.map(a => a.assertion_id) },
-    })
-  }
+  const criteria = await buildQueryForIntermediateTables(input)
 
   const searchedAssertions = new SearchService(Assertion, {
     groupBy: 'publisher_id',
