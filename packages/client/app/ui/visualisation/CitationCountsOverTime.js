@@ -12,7 +12,7 @@ import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Citation counts over time'
 const stackField = 'stackField'
-const stackItems = ['DOI', 'Accession ID']
+const stackItems = ['DOI', 'Accession Number']
 const xField = 'xField'
 const yField = 'yField'
 const stackFieldTooltipTitle = 'Value'

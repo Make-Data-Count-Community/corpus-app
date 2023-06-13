@@ -34,7 +34,7 @@ const FacetValueList = props => {
             isItemSelected={!!selectedFacetValues.find(f => f.id === item.id)}
             key={item.id}
             onItemClick={onItemClick}
-            value={item.value}
+            value={item.title}
           />
         )}
       />

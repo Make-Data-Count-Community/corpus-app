@@ -90,16 +90,16 @@ const getAssertionsPerYear = async ({ input }) => {
   const chartValues = []
   results.forEach((result, key) => {
     chartValues.push({
-      id: key + 1,
+      id: key * 2 + 1,
       xField: result.year,
       yField: result.countdoi,
-      stackField: 'Doi',
+      stackField: 'DOI',
     })
     chartValues.push({
-      id: key + 2,
+      id: key * 2 + 2,
       xField: result.year,
       yField: result.accessionumber,
-      stackField: 'AccessionNumber',
+      stackField: 'Accession Number',
     })
   })
 
@@ -133,7 +133,7 @@ const getAssertionsPerSubject = async ({ input }) => {
   const chartValues = []
   results.forEach((result, key) => {
     chartValues.push({
-      id: key + 1,
+      id: key * 2 + 1,
       xField: result.cnt,
       yField: result.subjectId,
     })
@@ -157,7 +157,7 @@ const getAssertionsPerPublisher = async ({ input }) => {
   const chartValues = []
   results.forEach((result, key) => {
     chartValues.push({
-      id: key + 1,
+      id: key * 2 + 1,
       xField: result.cnt,
       yField: result.subjectId,
     })
@@ -171,16 +171,16 @@ const getAssertionCountsPerSource = async () => {
   const chartValues = []
   results.forEach((result, key) => {
     chartValues.push({
-      id: key + 1,
+      id: key * 2 + 1,
       xField: result.title,
       yField: result.doiCount,
-      stackField: 'Doi',
+      stackField: 'DOI',
     })
     chartValues.push({
-      id: key + 2,
+      id: key * 2 + 2,
       xField: result.title,
       yField: result.accessionNumberCount,
-      stackField: 'AccessionNumber',
+      stackField: 'Accession Number',
     })
   })
 

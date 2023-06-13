@@ -13,9 +13,11 @@ export default createGlobalStyle`
     align-items: flex-start;
     background: ${th('colorPrimary')};
     box-shadow: ${grid(0)} ${grid(2)} ${grid(3)} rgba(36 59 84 / 10%);
+    color: ${th('colorTextReverse')};
     display: flex;
     flex-direction: column;
-    gap: ${grid(2)};
-    padding: ${grid(5)};
+    font-family: ${th('fontInterface')};
+    font-weight: 400;
+    padding: ${grid(2)};
   }
 `
