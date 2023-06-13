@@ -251,10 +251,12 @@ const DashboardPage = () => {
     setOverTimeShowApplyFilter(false)
     setOverTimeDisplayFacetValues([])
 
-    const params = overTimeFilters.map(f => ({
-      field: `${f.type}Id`,
-      operator: { in: f.values.map(s => s.id) },
-    }))
+    const params = overTimeFilters
+      .map(f => ({
+        field: `${f.type}Id`,
+        operator: { in: f.values.map(s => s.id) },
+      }))
+      .filter(v => !!v.operator.in.length)
 
     byYearQuery({ variables: { input: { search: { criteria: params } } } })
   }
