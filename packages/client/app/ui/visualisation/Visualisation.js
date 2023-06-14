@@ -64,6 +64,7 @@ const Visualisation = props => {
         filterParams={filterParams}
         filterValueOptions={filterValueOptions}
         isFilterOpen={isFilterOpen}
+        loading={loading}
         onApplyFilters={onApplyFilters}
         onEmptyListLabel={onEmptyListLabel}
         onFacetItemClick={onFacetItemClick}
