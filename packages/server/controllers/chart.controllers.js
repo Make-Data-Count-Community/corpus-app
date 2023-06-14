@@ -1,4 +1,4 @@
-const { db } = require('@coko/server')
+const { db, uuid } = require('@coko/server')
 const { intersectionBy, get } = require('lodash')
 const SearchService = require('../services/search/searchService')
 
@@ -94,13 +94,13 @@ const getAssertionsPerYear = async ({ input }) => {
   const chartValues = []
   results.forEach((result, key) => {
     chartValues.push({
-      id: key * 2 + 1,
+      id: uuid(),
       xField: result.year,
       yField: result.countdoi,
       stackField: 'DOI',
     })
     chartValues.push({
-      id: key * 2 + 2,
+      id: uuid(),
       xField: result.year,
       yField: result.accessionumber,
       stackField: 'Accession Number',
@@ -142,7 +142,7 @@ const getAssertionsPerSubject = async ({ input }) => {
   results.forEach((result, key) => {
     const { title } = subjects.find(subj => subj.id === result.subjectId)
     chartValues.push({
-      id: key * 2 + 1,
+      id: uuid(),
       xField: title,
       yField: result.cnt,
     })
@@ -171,7 +171,7 @@ const getAssertionsPerPublisher = async ({ input }) => {
   results.forEach((result, key) => {
     const { title } = publishers.find(subj => subj.id === result.publisherId)
     chartValues.push({
-      id: key * 2 + 1,
+      id: uuid(),
       xField: title,
       yField: result.cnt,
     })
@@ -185,13 +185,13 @@ const getAssertionCountsPerSource = async () => {
   const chartValues = []
   results.forEach((result, key) => {
     chartValues.push({
-      id: key * 2 + 1,
+      id: uuid(),
       xField: result.title,
       yField: result.doiCount,
       stackField: 'DOI',
     })
     chartValues.push({
-      id: key * 2 + 2,
+      id: uuid(),
       xField: result.title,
       yField: result.accessionNumberCount,
       stackField: 'Accession Number',
