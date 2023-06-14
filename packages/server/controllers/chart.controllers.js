@@ -18,6 +18,10 @@ const {
 
 const { model: Source } = require('../models/source')
 
+const { model: Subject } = require('../models/subject')
+
+const { model: Publisher } = require('../models/publisher')
+
 const buildQueryForIntermediateTables = async input => {
   let criteria = get(input, 'search.criteria', [])
 
@@ -130,12 +134,17 @@ const getAssertionsPerSubject = async ({ input }) => {
     db.raw(`count(*) as cnt, subject_id`),
   )
 
+  const subjectIds = results.map(result => result.subjectId)
+
+  const subjects = await Subject.query().whereIn('id', subjectIds)
+
   const chartValues = []
   results.forEach((result, key) => {
+    const { title } = subjects.find(subj => subj.id === result.subjectId)
     chartValues.push({
       id: key * 2 + 1,
-      xField: result.cnt,
-      yField: result.subjectId,
+      xField: title,
+      yField: result.cnt,
     })
   })
 
@@ -154,12 +163,17 @@ const getAssertionsPerPublisher = async ({ input }) => {
     db.raw(`count(*) as cnt, publisher_id`),
   )
 
+  const publisherIds = results.map(result => result.publisherId)
+
+  const publishers = await Publisher.query().whereIn('id', publisherIds)
+
   const chartValues = []
   results.forEach((result, key) => {
+    const { title } = publishers.find(subj => subj.id === result.publisherId)
     chartValues.push({
       id: key * 2 + 1,
-      xField: result.cnt,
-      yField: result.subjectId,
+      xField: title,
+      yField: result.cnt,
     })
   })
 
