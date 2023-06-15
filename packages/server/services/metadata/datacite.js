@@ -116,6 +116,9 @@ class Datacite extends Transform {
 
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
+        // eslint-disable-next-line no-console
+        console.log(titles[i].name, 'datacite 1')
+
         const exists = await Affiliation.query(trx).findOne({
           title: titles[i].name,
         })
@@ -141,6 +144,9 @@ class Datacite extends Transform {
 
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
+        // eslint-disable-next-line no-console
+        console.log(titles[i].name, 'datacite 2')
+
         const exists = await Funder.query(trx).findOne({
           title: titles[i].name,
         })
@@ -163,6 +169,9 @@ class Datacite extends Transform {
 
     if (chunk.datacite.repository) {
       const title = chunk.datacite.repository
+      // eslint-disable-next-line no-console
+      console.log(title, 'datacite 3')
+
       const exists = await Repository.query(trx).findOne({ title })
       let repository = exists
 

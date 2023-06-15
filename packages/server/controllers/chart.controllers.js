@@ -163,7 +163,7 @@ const getAssertionsPerPublisher = async ({ input }) => {
     take: 20,
     groupBy: 'publisher_id',
     filter: criteria,
-    sort: { field: ['cnt'], direction: 'desc' }
+    sort: { field: ['cnt'], direction: 'desc' },
   })
 
   const results = await searchedAssertions.search(
