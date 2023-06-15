@@ -2,6 +2,9 @@ type Source {
   id: ID
   title: String
   externalId: String
+  doi_count: String
+  doi_accession_number_count: String
+  abbreviation: String
 }
 
 extend type Query {
