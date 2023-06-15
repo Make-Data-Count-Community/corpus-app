@@ -10,7 +10,9 @@ import {
   GET_BY_SOURCE,
   GET_BY_SUBJECT,
   GET_BY_YEAR,
+  //   GET_CORPUS_GROWTH,
   GET_FULL_FACET_OPTIONS,
+  //   GET_UNIQUE_COUNT,
 } from '../graphql'
 
 const facetNotSelectedLabel = 'Please select a facet'
@@ -64,6 +66,13 @@ const transformChartData = (sourceData, transformBy, keyField, valueField) => {
   })
 
   return result
+}
+
+const transformUniqueCountData = sourceData => {
+  return sourceData.map(s => {
+    const total = s.pidMetadata + s.thirdPartyAggr
+    return { ...s, key: s.facet, total }
+  })
 }
 
 const addKeytoData = sourceData => {
@@ -275,8 +284,86 @@ const bySourceFilterParams = [
 
 const bySourceDefaultTab = 'chart'
 
+const corpusGrowthTableColumns = [
+  {
+    title: 'Month',
+    dataIndex: 'xField',
+    key: 'xField',
+  },
+  {
+    title: 'DOI',
+    dataIndex: 'DOI',
+    key: 'doi',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+  {
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
+    key: 'accession',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+  {
+    title: 'Total',
+    dataIndex: 'total',
+    key: 'total',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+]
+
+const corpusGrowthDefaultTab = 'table'
+
+const uniqueCountColumns = [
+  {
+    title: 'Facet',
+    dataIndex: 'facet',
+    key: 'facet',
+  },
+  {
+    title: 'Third party aggregator',
+    dataIndex: 'thirdPartyAggr',
+    key: 'thirdPartyAggr',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+  {
+    title: 'PID Metadata',
+    dataIndex: 'pidMetadata',
+    key: 'pidMetadata',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+  {
+    title: 'Total',
+    dataIndex: 'total',
+    key: 'total',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+]
+
+const uniqueCountDefaultTab = 'table'
+
 const DashboardPage = () => {
   const [fullFacetOptions, setFullFacetOptions] = useState([])
+
+  const [corpusGrowthSelectedTab, setCorpusGrowthSelectedTab] = useState(
+    corpusGrowthDefaultTab,
+  )
+
+  const [corpusGrowthIsDowloadListOpen, setCorpusGrowthIsDownloadListOpen] =
+    useState(false)
+
+  const [uniqueCountSelectedTab, setUniqueCountSelectedTab] = useState(
+    uniqueCountDefaultTab,
+  )
+
+  const [uniqueCountIsDowloadListOpen, setUniqueCountIsDownloadListOpen] =
+    useState(false)
+
+  const corpusGrowthNewView = useRef(null)
 
   // #region overTimeStates
   const [overTimeSelectedTab, setOverTimeSelectedTab] =
@@ -561,6 +648,17 @@ const DashboardPage = () => {
       },
     },
   )
+
+  //   const { data: uniqueCountData, loading: uniqueCountLoading } =
+  //     useQuery(GET_UNIQUE_COUNT)
+
+  //   const { data: corpusGrowthData, loading: corpusGrowthLoading } =
+  //     useQuery(GET_CORPUS_GROWTH)
+
+  const uniqueCountData = []
+  const uniqueCountLoading = false
+  const corpusGrowthData = []
+  const corpusGrowthLoading = false
 
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('overTimeFilters'))
@@ -1336,6 +1434,76 @@ const DashboardPage = () => {
     bySourceNewView.current = view
   }
 
+  const handleCorpusGrowthFooterTabClick = tabTitle => {
+    if (tabTitle === 'download') {
+      setCorpusGrowthIsDownloadListOpen(!corpusGrowthIsDowloadListOpen)
+    } else {
+      setCorpusGrowthSelectedTab(tabTitle)
+    }
+  }
+
+  const handleCorpusGrowthDownloadOptionClick = async type => {
+    setCorpusGrowthIsDownloadListOpen(false)
+
+    if (type === 'csv') {
+      const csvString = await json2csv(
+        transformChartData(corpusGrowthData, 'xField', 'stackField', 'yField'),
+        {
+          keys: [
+            { field: 'xField', title: 'Month' },
+            { field: 'DOI', title: 'DOI' },
+            { field: 'Accession Number', title: 'Accession Number' },
+            { field: 'total', title: 'Total' },
+          ],
+        },
+      )
+
+      downloadFile(csvString, 'Data citations corpus growth.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await corpusGrowthNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Data citations corpus growth.${type}`, type)
+    }
+  }
+
+  const handleCorpusGrowthNewView = view => {
+    corpusGrowthNewView.current = view
+  }
+
+  const handleUniqueCountFooterTabClick = tabTitle => {
+    if (tabTitle === 'download') {
+      setUniqueCountIsDownloadListOpen(!uniqueCountIsDowloadListOpen)
+    } else {
+      setUniqueCountSelectedTab(tabTitle)
+    }
+  }
+
+  const handleUniqueCountDownloadOptionClick = async type => {
+    setUniqueCountIsDownloadListOpen(false)
+
+    if (type === 'csv') {
+      const csvString = await json2csv(
+        transformUniqueCountData(uniqueCountData),
+        {
+          keys: [
+            { field: 'facet', title: 'Facet' },
+            { field: 'thirdPartyAggr', title: 'Third party aggregator' },
+            { field: 'pidMetadata', title: 'PID Metadata' },
+            { field: 'total', title: 'Total' },
+          ],
+        },
+      )
+
+      downloadFile(
+        csvString,
+        'Counts of unique repositories, journals, subjects, affiliations, funders.csv',
+      )
+    }
+  }
+
   // #endregion bySourceFilters
 
   return (
@@ -1422,7 +1590,26 @@ const DashboardPage = () => {
         bySubjectShowExpandButton
         bySubjectShowFilterFooter={bySubjectShowApplyFilter}
         bySubjectTableColumns={bySubjectTableColumns}
+        corpusGrowthData={
+          corpusGrowthSelectedTab === 'chart'
+            ? corpusGrowthData
+            : transformChartData(
+                corpusGrowthData,
+                'xField',
+                'stackField',
+                'yField',
+              )
+        }
+        corpusGrowthIsDownloadListOpen={corpusGrowthIsDowloadListOpen}
+        corpusGrowthLoading={corpusGrowthLoading}
+        corpusGrowthOnDownloadOptionClick={
+          handleCorpusGrowthDownloadOptionClick
+        }
+        corpusGrowthOnFooterTabClick={handleCorpusGrowthFooterTabClick}
+        corpusGrowthOnNewView={handleCorpusGrowthNewView}
+        corpusGrowthSelectedFooterTab={corpusGrowthSelectedTab}
         corpusGrowthShowExpandButton
+        corpusGrowthTableColumns={corpusGrowthTableColumns}
         overTimeData={
           overTimeSelectedTab === 'chart'
             ? overTimeVisualisationData
@@ -1453,7 +1640,14 @@ const DashboardPage = () => {
         overTimeShowExpandButton
         overTimeShowFilterFooter={overTimeShowApplyFilter}
         overTimeTableColumns={overTimeTableColumns}
+        uniqueCountData={transformUniqueCountData(uniqueCountData)}
+        uniqueCountIsDownloadListOpen={uniqueCountIsDowloadListOpen}
+        uniqueCountLoading={uniqueCountLoading}
+        uniqueCountOnDownloadOptionClick={handleUniqueCountDownloadOptionClick}
+        uniqueCountOnFooterTabClick={handleUniqueCountFooterTabClick}
+        uniqueCountSelectedFooterTab={uniqueCountSelectedTab}
         uniqueCountShowExpandButton
+        uniqueCountTableColumns={uniqueCountColumns}
       />
       <VisuallyHiddenElement
         aria-live="polite"
