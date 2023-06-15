@@ -10,7 +10,7 @@ class ScheduledTaskService {
   static async testTask() {
     const startDate = new Date(process.env.START_YEAR, 0, 1)
 
-    const endDate = new Date(new Date().getFullYear(), 11, 31)
+    const endDate = new Date(process.env.END_YEAR, 11, 31)
 
     let corpusdata = null
 
