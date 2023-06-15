@@ -82,7 +82,7 @@ class Datacite extends Transform {
 
   // eslint-disable-next-line class-methods-use-this
   async transformToAssertion(assertionInstance, chunk, trx) {
-    assertionInstance.source_id = chunk.source
+    assertionInstance.sourceId = chunk.source
     assertionInstance.title = chunk.datacite.title
     assertionInstance.sourceType = chunk.event.attributes['source-id']
     assertionInstance.id = assertionInstance.id || uuid()

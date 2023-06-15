@@ -8,49 +8,49 @@ const Assertion = require('../../models/assertion/assertion')
 
 class ScheduledTaskService {
   static async testTask() {
-    const startDate = new Date(process.env.START_YEAR, 0, 1)
+    // const startDate = new Date(process.env.START_YEAR, 0, 1)
 
-    const endDate = new Date(process.env.END_YEAR, 11, 31)
+    // const endDate = new Date(process.env.END_YEAR, 11, 31)
 
-    let corpusdata = null
+    // let corpusdata = null
 
-    // eslint-disable-next-line no-unmodified-loop-condition
-    for (let d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1)) {
-      const year = d.getFullYear()
-      const month = (d.getMonth() + 1).toString().padStart(2, '0')
+    // // eslint-disable-next-line no-unmodified-loop-condition
+    // for (let d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1)) {
+    //   const year = d.getFullYear()
+    //   const month = (d.getMonth() + 1).toString().padStart(2, '0')
 
-      logger.info(`######### ${year} #### ${month} ######### `)
+    //   logger.info(`######### ${year} #### ${month} ######### `)
 
-      // eslint-disable-next-line no-await-in-loop
-      corpusdata = await CorpusDataFactory.dataciteCrossrefPerDate(year, month)
+    //   // eslint-disable-next-line no-await-in-loop
+    //   corpusdata = await CorpusDataFactory.dataciteCrossrefPerDate(year, month)
 
-      // eslint-disable-next-line no-await-in-loop
-      await corpusdata.seedSource.readSource()
-    }
+    //   // eslint-disable-next-line no-await-in-loop
+    //   await corpusdata.seedSource.readSource()
+    // }
 
-    logger.info(`######### Start Reading source : 'crossref' ######### `)
+    // logger.info(`######### Start Reading source : 'crossref' ######### `)
 
-    corpusdata = await CorpusDataFactory.dataciteSourceCrossref()
-    await corpusdata.seedSource.readSource()
+    // corpusdata = await CorpusDataFactory.dataciteSourceCrossref()
+    // await corpusdata.seedSource.readSource()
 
     logger.info(`######### Start Retreving Data from API ######### `)
 
-    // async function myAsyncFunction() {
-    //   await MetadataSource.loadCitationsFromDB()
+    async function myAsyncFunction() {
+      await MetadataSource.loadCitationsFromDB()
 
-    //   const countAssertions = await ActivityLog.query()
-    //     .count({ count: '*' })
-    //     .andWhere(builder => {
-    //       builder.where('proccessed', '=', false)
-    //       builder.andWhere('done', '=', false)
-    //     })
+      const countAssertions = await ActivityLog.query()
+        .count({ count: '*' })
+        .andWhere(builder => {
+          builder.where('proccessed', '=', false)
+          builder.andWhere('done', '=', false)
+        })
 
-    //   if (countAssertions[0].count !== '0') {
-    //     setImmediate(myAsyncFunction)
-    //   }
-    // }
+      if (countAssertions[0].count !== '0') {
+        setImmediate(myAsyncFunction)
+      }
+    }
 
-    // myAsyncFunction()
+    myAsyncFunction()
 
     // await db.schema.refreshMaterializedView('last_10_years_assertions')
 
