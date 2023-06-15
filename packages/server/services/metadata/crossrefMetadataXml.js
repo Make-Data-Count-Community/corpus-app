@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 const { parseString } = require('xml2js')
+const moment = require('moment')
 const XmlBase = require('../xmlBaseModel/xmlBase')
 
 class CrossrefMetadataXml extends XmlBase {
@@ -51,7 +52,7 @@ class CrossrefMetadataXml extends XmlBase {
 
           const checkValidYear = new Date(dt).getFullYear()
 
-          resolve(checkValidYear ? dt : null)
+          resolve(checkValidYear && moment(dt).isvalid() ? dt : null)
         },
       )
     })
