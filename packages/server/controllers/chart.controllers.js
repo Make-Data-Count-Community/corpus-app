@@ -160,8 +160,10 @@ const getAssertionsPerPublisher = async ({ input }) => {
   })
 
   const searchedAssertions = new SearchService(Assertion, {
+    take: 20,
     groupBy: 'publisher_id',
     filter: criteria,
+    sort: { field: ['cnt'], direction: 'desc' }
   })
 
   const results = await searchedAssertions.search(
