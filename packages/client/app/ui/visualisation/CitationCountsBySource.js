@@ -49,6 +49,7 @@ const CitationCountsBySource = props => {
     filterValueOptions,
     isDownloadListOpen,
     isFilterOpen,
+    loading,
     onApplyFilters,
     onDownloadOptionClick,
     onEmptyListLabel,
@@ -75,6 +76,7 @@ const CitationCountsBySource = props => {
       filterValueOptions={filterValueOptions}
       isDownloadListOpen={isDownloadListOpen}
       isFilterOpen={isFilterOpen}
+      loading={loading}
       onApplyFilters={onApplyFilters}
       onDownloadOptionClick={onDownloadOptionClick}
       onEmptyListLabel={onEmptyListLabel}
@@ -134,6 +136,7 @@ CitationCountsBySource.propTypes = {
   ).isRequired,
   isFilterOpen: PropTypes.bool.isRequired,
   isDownloadListOpen: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   onApplyFilters: PropTypes.func.isRequired,
   onDownloadOptionClick: PropTypes.func.isRequired,
   onEmptyListLabel: PropTypes.string.isRequired,

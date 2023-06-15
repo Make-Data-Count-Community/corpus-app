@@ -40,4 +40,33 @@ export const GET_BY_YEAR = gql`
   }
 `
 
-// export const GET_BY_SUBJECT = gql``
+export const GET_BY_SUBJECT = gql`
+  query BySubject($input: SearchModelInput) {
+    getAssertionsPerSubject(input: $input) {
+      id
+      xField
+      yField
+    }
+  }
+`
+
+export const GET_BY_PUBLISHER = gql`
+  query ByPublisher($input: SearchModelInput) {
+    getAssertionsPerPublisher(input: $input) {
+      id
+      xField
+      yField
+    }
+  }
+`
+
+export const GET_BY_SOURCE = gql`
+  query BySource($input: SearchModelInput) {
+    getAssertionCountsPerSource(input: $input) {
+      id
+      xField
+      yField
+      stackField
+    }
+  }
+`

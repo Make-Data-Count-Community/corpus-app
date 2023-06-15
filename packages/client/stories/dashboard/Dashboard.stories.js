@@ -655,11 +655,6 @@ const generateBySubjectData = () => [
 const bySubjectData = generateBySubjectData()
 
 const bySubjectTableColumns = [
-  //   {
-  //     title: 'Year',
-  //     dataIndex: 'xField',
-  //     key: 'xField',
-  //   },
   {
     title: 'Subject',
     dataIndex: 'xField',
@@ -675,31 +670,6 @@ const bySubjectTableColumns = [
 ]
 
 const bySubjectFilterParams = [
-  //   {
-  //     isFacetSelected: false,
-  //     type: 'doi',
-  //     values: [],
-  //   },
-  //   {
-  //     isFacetSelected: false,
-  //     type: 'accession',
-  //     values: [],
-  //   },
-  //   {
-  //     isFacetSelected: false,
-  //     type: 'repository',
-  //     values: [],
-  //   },
-  //   {
-  //     isFacetSelected: false,
-  //     type: 'subject',
-  //     values: [],
-  //   },
-  //   {
-  //     isFacetSelected: false,
-  //     type: 'journal',
-  //     values: [],
-  //   },
   {
     isFacetSelected: false,
     type: 'publisher',

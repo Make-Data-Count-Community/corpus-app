@@ -5,7 +5,13 @@ import { cloneDeep } from 'lodash'
 
 import { Dashboard, VisuallyHiddenElement } from '../ui'
 
-import { GET_BY_YEAR, GET_FULL_FACET_OPTIONS } from '../graphql'
+import {
+  GET_BY_PUBLISHER,
+  GET_BY_SOURCE,
+  GET_BY_SUBJECT,
+  GET_BY_YEAR,
+  GET_FULL_FACET_OPTIONS,
+} from '../graphql'
 
 const facetNotSelectedLabel = 'Please select a facet'
 const displayListEmptyLabel = 'No matches found'
@@ -130,6 +136,145 @@ const overTimeFilterParams = [
 
 const overTimeDefaultTab = 'chart'
 
+const bySubjectTableColumns = [
+  {
+    title: 'Subject',
+    dataIndex: 'xField',
+    key: 'xField',
+  },
+  {
+    title: 'Total Citations',
+    dataIndex: 'yField',
+    key: 'yField',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+]
+
+const bySubjectFilterParams = [
+  {
+    isFacetSelected: false,
+    type: 'publisher',
+    values: [],
+  },
+  {
+    isFacetSelected: false,
+    type: 'affiliation',
+    values: [],
+  },
+  {
+    isFacetSelected: false,
+    type: 'funder',
+    values: [],
+  },
+]
+
+const bySubjectDefaultTab = 'chart'
+
+const byPublisherTableColumns = [
+  {
+    title: 'Publisher',
+    dataIndex: 'xField',
+    key: 'xField',
+  },
+  {
+    title: 'Total Citations',
+    dataIndex: 'yField',
+    key: 'yField',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+]
+
+const byPublisherFilterParams = [
+  {
+    isFacetSelected: false,
+    type: 'repository',
+    values: [],
+  },
+  {
+    isFacetSelected: false,
+    type: 'subject',
+    values: [],
+  },
+  {
+    isFacetSelected: false,
+    type: 'affiliation',
+    values: [],
+  },
+  {
+    isFacetSelected: false,
+    type: 'funder',
+    values: [],
+  },
+]
+
+const byPublisherDefaultTab = 'chart'
+
+const bySourceTableColumns = [
+  {
+    title: 'Source',
+    dataIndex: 'xField',
+    key: 'xField',
+  },
+  {
+    title: 'DOI',
+    dataIndex: 'DOI',
+    key: 'doi',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+  {
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
+    key: 'accession',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+  {
+    title: 'Total Citations',
+    dataIndex: 'total',
+    key: 'total',
+    render: value =>
+      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+  },
+]
+
+const bySourceFilterParams = [
+  {
+    isFacetSelected: false,
+    type: 'repository',
+    values: [],
+  },
+  {
+    isFacetSelected: false,
+    type: 'subject',
+    values: [],
+  },
+  {
+    isFacetSelected: false,
+    type: 'affiliation',
+    values: [],
+  },
+  {
+    isFacetSelected: false,
+    type: 'funder',
+    values: [],
+  },
+  {
+    isFacetSelected: false,
+    type: 'journal',
+    values: [],
+  },
+  {
+    isFacetSelected: false,
+    type: 'publisher',
+    values: [],
+  },
+]
+
+const bySourceDefaultTab = 'chart'
+
 const DashboardPage = () => {
   const [fullFacetOptions, setFullFacetOptions] = useState([])
 
@@ -174,6 +319,141 @@ const DashboardPage = () => {
 
   // #endregion overTimeStates
 
+  // #region bySubjectStates
+  const [bySubjectSelectedTab, setBySubjectSelectedTab] =
+    useState(bySubjectDefaultTab)
+
+  const [bySubjectFilters, setBySubjectFilters] = useState(
+    bySubjectFilterParams,
+  )
+
+  const [bySubjectDisplayFacetValues, setBySubjectDisplayFacetValues] =
+    useState([])
+
+  const [bySubjectSelectedFacetValues, setBySubjectSelectedFacetValues] =
+    useState([])
+
+  const [bySubjectShowApplyFilter, setBySubjectShowApplyFilter] =
+    useState(false)
+
+  const [bySubjectVisualisationData, setBySubjectVisualisationData] = useState(
+    [],
+  )
+
+  const [bySubjectIsFilterOpen, setBySubjectIsFilterOpen] = useState(false)
+
+  const [bySubjectIsDownloadListOpen, setBySubjectIsDownloadListOpen] =
+    useState(false)
+
+  const [
+    bySubjectEmptyFacetValueListLabel,
+    setBySubjectEmptyFacetValueListLabel,
+  ] = useState(facetNotSelectedLabel)
+
+  const bySubjectNewView = useRef(null)
+
+  const setBySubjectEmptyListLabel = () => {
+    const selectedFacet = bySubjectFilters.find(f => f.isFacetSelected)
+
+    setBySubjectEmptyFacetValueListLabel(
+      !!selectedFacet && bySubjectDisplayFacetValues.length === 0
+        ? displayListEmptyLabel
+        : facetNotSelectedLabel,
+    )
+  }
+
+  // #endregion bySubjectStates
+
+  // #region byPublisherStates
+
+  const [byPublisherSelectedTab, setByPublisherSelectedTab] = useState(
+    byPublisherDefaultTab,
+  )
+
+  const [byPublisherFilters, setByPublisherFilters] = useState(
+    byPublisherFilterParams,
+  )
+
+  const [byPublisherDisplayFacetValues, setByPublisherDisplayFacetValues] =
+    useState([])
+
+  const [byPublisherSelectedFacetValues, setByPublisherSelectedFacetValues] =
+    useState([])
+
+  const [byPublisherShowApplyFilter, setByPublisherShowApplyFilter] =
+    useState(false)
+
+  const [byPublisherVisualisationData, setByPublisherVisualisationData] =
+    useState([])
+
+  const [byPublisherIsFilterOpen, setByPublisherIsFilterOpen] = useState(false)
+
+  const [byPublisherIsDownloadListOpen, setByPublisherIsDownloadListOpen] =
+    useState(false)
+
+  const [
+    byPublisherEmptyFacetValueListLabel,
+    setByPublisherEmptyFacetValueListLabel,
+  ] = useState(facetNotSelectedLabel)
+
+  const byPublisherNewView = useRef(null)
+
+  const setByPublisherEmptyListLabel = () => {
+    const selectedFacet = byPublisherFilters.find(f => f.isFacetSelected)
+
+    setByPublisherEmptyFacetValueListLabel(
+      !!selectedFacet && byPublisherDisplayFacetValues.length === 0
+        ? displayListEmptyLabel
+        : facetNotSelectedLabel,
+    )
+  }
+
+  // #endregion byPublisherStates
+
+  // #region bySourceStates
+
+  const [bySourceSelectedTab, setBySourceSelectedTab] =
+    useState(bySourceDefaultTab)
+
+  const [bySourceFilters, setBySourceFilters] = useState(bySourceFilterParams)
+
+  const [bySourceDisplayFacetValues, setBySourceDisplayFacetValues] = useState(
+    [],
+  )
+
+  const [bySourceSelectedFacetValues, setBySourceSelectedFacetValues] =
+    useState([])
+
+  const [bySourceShowApplyFilter, setBySourceShowApplyFilter] = useState(false)
+
+  const [bySourceVisualisationData, setBySourceVisualisationData] = useState([])
+
+  const [bySourceIsFilterOpen, setBySourceIsFilterOpen] = useState(false)
+
+  const [bySourceIsDownloadListOpen, setBySourceIsDownloadListOpen] =
+    useState(false)
+
+  const [
+    bySourceEmptyFacetValueListLabel,
+    setBySourceEmptyFacetValueListLabel,
+  ] = useState(facetNotSelectedLabel)
+
+  const bySourceNewView = useRef(null)
+
+  const setBySourceEmptyListLabel = () => {
+    const selectedFacet = bySourceFilters.find(f => f.isFacetSelected)
+
+    setBySourceEmptyFacetValueListLabel(
+      !!selectedFacet && bySourceDisplayFacetValues.length === 0
+        ? displayListEmptyLabel
+        : facetNotSelectedLabel,
+    )
+  }
+
+  // #endregion bySourceStates
+
+  // #region hooks
+
   const { loading: fullFacetOptionsLoading } = useQuery(
     GET_FULL_FACET_OPTIONS,
     {
@@ -209,9 +489,78 @@ const DashboardPage = () => {
     },
   )
 
-  useEffect(() => {
-    byYearQuery()
-  }, [])
+  const [bySubjectQuery, { loading: bySubjectDataLoading }] = useLazyQuery(
+    GET_BY_SUBJECT,
+    {
+      variables: {
+        input: {
+          search: {
+            criteria: [],
+          },
+        },
+      },
+      onCompleted: data => {
+        const getAssertionsPerSubject = cloneDeep(
+          data.getAssertionsPerSubject,
+        ).map(s => ({
+          ...s,
+          yField: parseInt(s.yField, 10),
+          parent: 0,
+        }))
+
+        const idArray = [
+          {
+            id: 0,
+            xField: '',
+            yField: 0,
+            parent: null,
+          },
+        ]
+
+        setBySubjectVisualisationData(idArray.concat(getAssertionsPerSubject))
+      },
+    },
+  )
+
+  const [byPublisherQuery, { loading: byPublisherDataLoading }] = useLazyQuery(
+    GET_BY_PUBLISHER,
+    {
+      variables: {
+        input: {
+          search: {
+            criteria: [],
+          },
+        },
+      },
+      onCompleted: data => {
+        const getAssertionsPerPublisher = cloneDeep(
+          data.getAssertionsPerPublisher,
+        )
+
+        setByPublisherVisualisationData(getAssertionsPerPublisher)
+      },
+    },
+  )
+
+  const [bySourceQuery, { loading: bySourceDataLoading }] = useLazyQuery(
+    GET_BY_SOURCE,
+    {
+      variables: {
+        input: {
+          search: {
+            criteria: [],
+          },
+        },
+      },
+      onCompleted: data => {
+        const getAssertionCountsPerSource = cloneDeep(
+          data.getAssertionCountsPerSource,
+        )
+
+        setBySourceVisualisationData(getAssertionCountsPerSource)
+      },
+    },
+  )
 
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('overTimeFilters'))
@@ -224,12 +573,115 @@ const DashboardPage = () => {
       localStorage.setItem('overTimeFilters', JSON.stringify(overTimeFilters))
     }
 
+    const overTimeParams = overTimeFilters
+      .map(f => ({
+        field: `${f.type}Id`,
+        operator: { in: f.values.map(s => s.id) },
+      }))
+      .filter(v => !!v.operator.in.length)
+
+    byYearQuery({
+      variables: { input: { search: { criteria: overTimeParams } } },
+    })
+
     return () => {
       localStorage.removeItem('overTimeFilters')
     }
   }, [])
 
   useEffect(setOverTimeEmptyListLabel, [overTimeDisplayFacetValues])
+
+  useEffect(() => {
+    const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
+
+    if (storedFilters) {
+      setBySubjectFilters(
+        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
+      )
+    } else {
+      localStorage.setItem('bySubjectFilters', JSON.stringify(bySubjectFilters))
+    }
+
+    const bySubjectParams = bySubjectFilters
+      .map(f => ({
+        field: `${f.type}Id`,
+        operator: { in: f.values.map(s => s.id) },
+      }))
+      .filter(v => !!v.operator.in.length)
+
+    bySubjectQuery({
+      variables: { input: { search: { criteria: bySubjectParams } } },
+    })
+
+    return () => {
+      localStorage.removeItem('bySubjectFilters')
+    }
+  }, [])
+
+  useEffect(setBySubjectEmptyListLabel, [bySubjectDisplayFacetValues])
+
+  useEffect(() => {
+    const storedFilters = JSON.parse(localStorage.getItem('byPublisherFilters'))
+
+    if (storedFilters) {
+      setByPublisherFilters(
+        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
+      )
+    } else {
+      localStorage.setItem(
+        'byPublisherFilters',
+        JSON.stringify(byPublisherFilters),
+      )
+    }
+
+    const byPublisherParams = byPublisherFilters
+      .map(f => ({
+        field: `${f.type}Id`,
+        operator: { in: f.values.map(s => s.id) },
+      }))
+      .filter(v => !!v.operator.in.length)
+
+    byPublisherQuery({
+      variables: { input: { search: { criteria: byPublisherParams } } },
+    })
+
+    return () => {
+      localStorage.removeItem('byPublisherFilters')
+    }
+  }, [])
+
+  useEffect(setByPublisherEmptyListLabel, [byPublisherDisplayFacetValues])
+
+  useEffect(() => {
+    const storedFilters = JSON.parse(localStorage.getItem('bySourceFilters'))
+
+    if (storedFilters) {
+      setBySourceFilters(
+        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
+      )
+    } else {
+      localStorage.setItem('bySourceFilters', JSON.stringify(bySourceFilters))
+    }
+
+    const bySourceParams = bySourceFilters
+      .map(f => ({
+        field: `${f.type}Id`,
+        operator: { in: f.values.map(s => s.id) },
+      }))
+      .filter(v => !!v.operator.in.length)
+
+    bySourceQuery({
+      variables: { input: { search: { criteria: bySourceParams } } },
+    })
+
+    return () => {
+      localStorage.removeItem('bySourceFilters')
+    }
+  }, [])
+
+  useEffect(setBySourceEmptyListLabel, [bySourceDisplayFacetValues])
+
+  // #endregion hooks
 
   // #region overTimeFilters
 
@@ -258,7 +710,9 @@ const DashboardPage = () => {
       }))
       .filter(v => !!v.operator.in.length)
 
-    byYearQuery({ variables: { input: { search: { criteria: params } } } })
+    byYearQuery({
+      variables: { input: { search: { criteria: params } } },
+    })
   }
 
   const handleOverTimeFacetItemClick = facetType => {
@@ -387,19 +841,587 @@ const DashboardPage = () => {
     }
   }
 
-  const handlOverTimeOnNewView = view => {
+  const handleOverTimeOnNewView = view => {
     overTimeNewView.current = view
   }
 
   // #endregion overTimeFilters
 
+  // #region bySubjectFilters
+
+  const handleBySubjectFooterTabClick = tabTitle => {
+    if (tabTitle === 'download') {
+      setBySubjectIsDownloadListOpen(!bySubjectIsDownloadListOpen)
+    } else {
+      setBySubjectSelectedTab(tabTitle)
+    }
+  }
+
+  const handleBySubjectApplyFilters = () => {
+    setBySubjectIsFilterOpen(false)
+
+    const filters = bySubjectFilters.map(f => ({
+      ...f,
+      isFacetSelected: false,
+    }))
+
+    localStorage.setItem('bySubjectFilters', JSON.stringify(filters))
+
+    setBySubjectShowApplyFilter(false)
+    setBySubjectDisplayFacetValues([])
+
+    const params = bySubjectFilters
+      .map(f => ({
+        field: `${f.type}Id`,
+        operator: { in: f.values.map(s => s.id) },
+      }))
+      .filter(v => !!v.operator.in.length)
+
+    bySubjectQuery({
+      variables: { input: { search: { criteria: params } } },
+    })
+  }
+
+  const handleBySubjectFacetItemClick = facetType => {
+    const facetIndex = bySubjectFilters.findIndex(f => f.type === facetType)
+
+    setBySubjectFilters(
+      bySubjectFilters.map((f, i) => ({
+        ...f,
+        isFacetSelected: i === facetIndex,
+      })),
+    )
+
+    setBySubjectDisplayFacetValues(
+      fullFacetOptions.find(f => f.type === facetType).values,
+    )
+
+    setBySubjectSelectedFacetValues(bySubjectFilters[facetIndex].values)
+  }
+
+  const handleBySubjectFacetValueClick = valueId => {
+    const facet = bySubjectFilters.find(f => f.isFacetSelected)
+
+    if (facet.values.find(s => s.id === valueId)) {
+      facet.values = bySubjectSelectedFacetValues.filter(v => v.id !== valueId)
+    } else {
+      facet.values = [
+        ...facet.values,
+        bySubjectDisplayFacetValues.find(option => option.id === valueId),
+      ]
+    }
+
+    setBySubjectFilters(
+      bySubjectFilters.map(f =>
+        f.type === facet.type ? { ...f, ...{ values: facet.values } } : f,
+      ),
+    )
+
+    setBySubjectSelectedFacetValues(facet.values)
+
+    const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
+    let shouldShowApplyButton = false
+
+    storedFilters.forEach(storedFacet => {
+      const currentFacet = bySubjectFilters.find(
+        f => f.type === storedFacet.type,
+      )
+
+      if (currentFacet.values.length !== storedFacet.values.length) {
+        shouldShowApplyButton = true
+      }
+    })
+
+    setBySubjectShowApplyFilter(shouldShowApplyButton)
+  }
+
+  const handleBySubjectOnClose = () => {
+    setBySubjectIsFilterOpen(false)
+    const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
+
+    if (bySubjectIsFilterOpen) {
+      setBySubjectFilters(storedFilters)
+    }
+
+    setBySubjectDisplayFacetValues([])
+  }
+
+  const handleBySubjectFilterButtonClick = isOpen => {
+    if (isOpen) {
+      const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
+      setBySubjectFilters(storedFilters)
+    }
+
+    setBySubjectDisplayFacetValues([])
+    setBySubjectShowApplyFilter(false)
+    setBySubjectIsFilterOpen(isOpen)
+  }
+
+  const handleBySubjectSearchChange = rawSearchValue => {
+    const searchValue = rawSearchValue.target.value
+    const facetType = bySubjectFilters.find(f => f.isFacetSelected).type
+
+    const targetFacet = fullFacetOptions.find(f => f.type === facetType)
+
+    if (searchValue === '') {
+      setBySubjectDisplayFacetValues(targetFacet.values)
+    } else {
+      setBySubjectDisplayFacetValues(
+        targetFacet.values.filter(v =>
+          v.title.toLowerCase().includes(searchValue.toLowerCase()),
+        ),
+      )
+    }
+  }
+
+  const handleBySubjectDownloadOptionClick = async type => {
+    setBySubjectIsDownloadListOpen(false)
+
+    if (type === 'csv') {
+      const csvString = await json2csv(
+        addKeytoData(bySubjectVisualisationData),
+        {
+          keys: [
+            { field: 'xField', title: 'Subject' },
+            { field: 'yField', title: 'Total Citations' },
+          ],
+        },
+      )
+
+      downloadFile(csvString, 'Citation counts by subject.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await bySubjectNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Citation counts by subject.${type}`, type)
+    }
+  }
+
+  const handleBySubjectOnNewView = view => {
+    bySubjectNewView.current = view
+  }
+
+  // #endregion bySubjectFilters
+
+  // #region byPublisherFilters
+
+  const handleByPublisherFooterTabClick = tabTitle => {
+    if (tabTitle === 'download') {
+      setByPublisherIsDownloadListOpen(!byPublisherIsDownloadListOpen)
+    } else {
+      setByPublisherSelectedTab(tabTitle)
+    }
+  }
+
+  const handleByPublisherApplyFilters = () => {
+    setByPublisherIsFilterOpen(false)
+
+    const filters = byPublisherFilters.map(f => ({
+      ...f,
+      isFacetSelected: false,
+    }))
+
+    localStorage.setItem('byPublisherFilters', JSON.stringify(filters))
+
+    setByPublisherShowApplyFilter(false)
+    setByPublisherDisplayFacetValues([])
+
+    const params = byPublisherFilters
+      .map(f => ({
+        field: `${f.type}Id`,
+        operator: { in: f.values.map(s => s.id) },
+      }))
+      .filter(v => !!v.operator.in.length)
+
+    byPublisherQuery({
+      variables: { input: { search: { criteria: params } } },
+    })
+  }
+
+  const handleByPublisherFacetItemClick = facetType => {
+    const facetIndex = byPublisherFilters.findIndex(f => f.type === facetType)
+
+    setByPublisherFilters(
+      byPublisherFilters.map((f, i) => ({
+        ...f,
+        isFacetSelected: i === facetIndex,
+      })),
+    )
+
+    setByPublisherDisplayFacetValues(
+      fullFacetOptions.find(f => f.type === facetType).values,
+    )
+
+    setByPublisherSelectedFacetValues(byPublisherFilters[facetIndex].values)
+  }
+
+  const handleByPublisherFacetValueClick = valueId => {
+    const facet = byPublisherFilters.find(f => f.isFacetSelected)
+
+    if (facet.values.find(s => s.id === valueId)) {
+      facet.values = byPublisherSelectedFacetValues.filter(
+        v => v.id !== valueId,
+      )
+    } else {
+      facet.values = [
+        ...facet.values,
+        byPublisherDisplayFacetValues.find(option => option.id === valueId),
+      ]
+    }
+
+    setByPublisherFilters(
+      byPublisherFilters.map(f =>
+        f.type === facet.type ? { ...f, ...{ values: facet.values } } : f,
+      ),
+    )
+
+    setByPublisherSelectedFacetValues(facet.values)
+
+    const storedFilters = JSON.parse(localStorage.getItem('byPublisherFilters'))
+    let shouldShowApplyButton = false
+
+    storedFilters.forEach(storedFacet => {
+      const currentFacet = byPublisherFilters.find(
+        f => f.type === storedFacet.type,
+      )
+
+      if (currentFacet.values.length !== storedFacet.values.length) {
+        shouldShowApplyButton = true
+      }
+    })
+
+    setByPublisherShowApplyFilter(shouldShowApplyButton)
+  }
+
+  const handleByPublisherOnClose = () => {
+    setByPublisherIsFilterOpen(false)
+    const storedFilters = JSON.parse(localStorage.getItem('byPublisherFilters'))
+
+    if (byPublisherIsFilterOpen) {
+      setByPublisherFilters(storedFilters)
+    }
+
+    setByPublisherDisplayFacetValues([])
+  }
+
+  const handleByPublisherFilterButtonClick = isOpen => {
+    if (isOpen) {
+      const storedFilters = JSON.parse(
+        localStorage.getItem('byPublisherFilters'),
+      )
+
+      setByPublisherFilters(storedFilters)
+    }
+
+    setByPublisherDisplayFacetValues([])
+    setByPublisherShowApplyFilter(false)
+    setByPublisherIsFilterOpen(isOpen)
+  }
+
+  const handleByPublisherSearchChange = rawSearchValue => {
+    const searchValue = rawSearchValue.target.value
+    const facetType = byPublisherFilters.find(f => f.isFacetSelected).type
+
+    const targetFacet = fullFacetOptions.find(f => f.type === facetType)
+
+    if (searchValue === '') {
+      setByPublisherDisplayFacetValues(targetFacet.values)
+    } else {
+      setByPublisherDisplayFacetValues(
+        targetFacet.values.filter(v =>
+          v.title.toLowerCase().includes(searchValue.toLowerCase()),
+        ),
+      )
+    }
+  }
+
+  const handleByPublisherDownloadOptionClick = async type => {
+    setByPublisherIsDownloadListOpen(false)
+
+    if (type === 'csv') {
+      const csvString = await json2csv(
+        addKeytoData(byPublisherVisualisationData),
+        {
+          keys: [
+            { field: 'xField', title: 'Publisher' },
+            { field: 'yField', title: 'Total Citations' },
+          ],
+        },
+      )
+
+      downloadFile(csvString, 'Citation counts by publisher.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await byPublisherNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(imgString, `Citation counts by publisher.${type}`, type)
+    }
+  }
+
+  const handleByPublisherOnNewView = view => {
+    byPublisherNewView.current = view
+  }
+
+  // #endregion byPublisherFilters
+
+  // #region bySourceFilters
+
+  const handleBySourceFooterTabClick = tabTitle => {
+    if (tabTitle === 'download') {
+      setBySourceIsDownloadListOpen(!bySourceIsDownloadListOpen)
+    } else {
+      setBySourceSelectedTab(tabTitle)
+    }
+  }
+
+  const handleBySourceApplyFilters = () => {
+    setBySourceIsFilterOpen(false)
+
+    const filters = bySourceFilters.map(f => ({
+      ...f,
+      isFacetSelected: false,
+    }))
+
+    localStorage.setItem('bySourceFilters', JSON.stringify(filters))
+
+    setBySourceShowApplyFilter(false)
+    setBySourceDisplayFacetValues([])
+
+    const params = bySourceFilters
+      .map(f => ({
+        field: `${f.type}Id`,
+        operator: { in: f.values.map(s => s.id) },
+      }))
+      .filter(v => !!v.operator.in.length)
+
+    bySourceQuery({
+      variables: { input: { search: { criteria: params } } },
+    })
+  }
+
+  const handleBySourceFacetItemClick = facetType => {
+    const facetIndex = bySourceFilters.findIndex(f => f.type === facetType)
+
+    setBySourceFilters(
+      bySourceFilters.map((f, i) => ({
+        ...f,
+        isFacetSelected: i === facetIndex,
+      })),
+    )
+
+    setBySourceDisplayFacetValues(
+      fullFacetOptions.find(f => f.type === facetType).values,
+    )
+
+    setBySourceSelectedFacetValues(bySourceFilters[facetIndex].values)
+  }
+
+  const handleBySourceFacetValueClick = valueId => {
+    const facet = bySourceFilters.find(f => f.isFacetSelected)
+
+    if (facet.values.find(s => s.id === valueId)) {
+      facet.values = bySourceSelectedFacetValues.filter(v => v.id !== valueId)
+    } else {
+      facet.values = [
+        ...facet.values,
+        bySourceDisplayFacetValues.find(option => option.id === valueId),
+      ]
+    }
+
+    setBySourceFilters(
+      bySourceFilters.map(f =>
+        f.type === facet.type ? { ...f, ...{ values: facet.values } } : f,
+      ),
+    )
+
+    setBySourceSelectedFacetValues(facet.values)
+
+    const storedFilters = JSON.parse(localStorage.getItem('bySourceFilters'))
+    let shouldShowApplyButton = false
+
+    storedFilters.forEach(storedFacet => {
+      const currentFacet = bySourceFilters.find(
+        f => f.type === storedFacet.type,
+      )
+
+      if (currentFacet.values.length !== storedFacet.values.length) {
+        shouldShowApplyButton = true
+      }
+    })
+
+    setBySourceShowApplyFilter(shouldShowApplyButton)
+  }
+
+  const handleBySourceOnClose = () => {
+    setBySourceIsFilterOpen(false)
+    const storedFilters = JSON.parse(localStorage.getItem('bySourceFilters'))
+
+    if (bySourceIsFilterOpen) {
+      setBySourceFilters(storedFilters)
+    }
+
+    setBySourceDisplayFacetValues([])
+  }
+
+  const handleBySourceFilterButtonClick = isOpen => {
+    if (isOpen) {
+      const storedFilters = JSON.parse(localStorage.getItem('bySourceFilters'))
+
+      setBySourceFilters(storedFilters)
+    }
+
+    setBySourceDisplayFacetValues([])
+    setBySourceShowApplyFilter(false)
+    setBySourceIsFilterOpen(isOpen)
+  }
+
+  const handleBySourceSearchChange = rawSearchValue => {
+    const searchValue = rawSearchValue.target.value
+    const facetType = bySourceFilters.find(f => f.isFacetSelected).type
+
+    const targetFacet = fullFacetOptions.find(f => f.type === facetType)
+
+    if (searchValue === '') {
+      setBySourceDisplayFacetValues(targetFacet.values)
+    } else {
+      setBySourceDisplayFacetValues(
+        targetFacet.values.filter(v =>
+          v.title.toLowerCase().includes(searchValue.toLowerCase()),
+        ),
+      )
+    }
+  }
+
+  const handleBySourceDownloadOptionClick = async type => {
+    setBySourceIsDownloadListOpen(false)
+
+    if (type === 'csv') {
+      const csvString = await json2csv(
+        transformChartData(
+          bySourceVisualisationData,
+          'xField',
+          'stackField',
+          'yField',
+        ),
+        {
+          keys: [
+            { field: 'xField', title: 'Source' },
+            { field: 'DOI', title: 'DOI' },
+            { field: 'Accession Number', title: 'Accession Number' },
+            { field: 'total', title: 'Total Citations' },
+          ],
+        },
+      )
+
+      downloadFile(csvString, 'Citation counts by source of citation.csv')
+    } else if (type === 'png' || type === 'svg') {
+      const imgString = await bySourceNewView.current.toImageURL(
+        type,
+        type === 'png' ? 4 : 2,
+      )
+
+      downloadFile(
+        imgString,
+        `Citation counts by source of citation.${type}`,
+        type,
+      )
+    }
+  }
+
+  const handleBySourceOnNewView = view => {
+    bySourceNewView.current = view
+  }
+
+  // #endregion bySourceFilters
+
   return (
     <>
       <VisuallyHiddenElement as="h1">Dashboard page</VisuallyHiddenElement>
       <Dashboard
+        byPublisherData={
+          byPublisherSelectedTab === 'chart'
+            ? byPublisherVisualisationData
+            : addKeytoData(byPublisherVisualisationData)
+        }
+        byPublisherFilterParams={byPublisherFilters}
+        byPublisherFilterValueOptions={byPublisherDisplayFacetValues}
+        byPublisherIsDownloadListOpen={byPublisherIsDownloadListOpen}
+        byPublisherIsFilterOpen={byPublisherIsFilterOpen}
+        byPublisherLoading={byPublisherDataLoading || fullFacetOptionsLoading}
+        byPublisherOnApplyFilters={handleByPublisherApplyFilters}
+        byPublisherOnDownloadOptionClick={handleByPublisherDownloadOptionClick}
+        byPublisherOnEmptyListLabel={byPublisherEmptyFacetValueListLabel}
+        byPublisherOnFacetItemClick={handleByPublisherFacetItemClick}
+        byPublisherOnFacetValueClick={handleByPublisherFacetValueClick}
+        byPublisherOnFilterClick={handleByPublisherFilterButtonClick}
+        byPublisherOnFilterClose={handleByPublisherOnClose}
+        byPublisherOnFilterSearchChange={handleByPublisherSearchChange}
+        byPublisherOnFooterTabClick={handleByPublisherFooterTabClick}
+        byPublisherOnNewView={handleByPublisherOnNewView}
+        byPublisherSelectedFacetValues={byPublisherSelectedFacetValues}
+        byPublisherSelectedFooterTab={byPublisherSelectedTab}
         byPublisherShowExpandButton
+        byPublisherShowFilterFooter={byPublisherShowApplyFilter}
+        byPublisherTableColumns={byPublisherTableColumns}
+        bySourceData={
+          bySourceSelectedTab === 'chart'
+            ? bySourceVisualisationData
+            : transformChartData(
+                bySourceVisualisationData,
+                'xField',
+                'stackField',
+                'yField',
+              )
+        }
+        bySourceFilterParams={bySourceFilters}
+        bySourceFilterValueOptions={bySourceDisplayFacetValues}
+        bySourceIsDownloadListOpen={bySourceIsDownloadListOpen}
+        bySourceIsFilterOpen={bySourceIsFilterOpen}
+        bySourceLoading={bySourceDataLoading || fullFacetOptionsLoading}
+        bySourceOnApplyFilters={handleBySourceApplyFilters}
+        bySourceOnDownloadOptionClick={handleBySourceDownloadOptionClick}
+        bySourceOnEmptyListLabel={bySourceEmptyFacetValueListLabel}
+        bySourceOnFacetItemClick={handleBySourceFacetItemClick}
+        bySourceOnFacetValueClick={handleBySourceFacetValueClick}
+        bySourceOnFilterClick={handleBySourceFilterButtonClick}
+        bySourceOnFilterClose={handleBySourceOnClose}
+        bySourceOnFilterSearchChange={handleBySourceSearchChange}
+        bySourceOnFooterTabClick={handleBySourceFooterTabClick}
+        bySourceOnNewView={handleBySourceOnNewView}
+        bySourceSelectedFacetValues={bySourceSelectedFacetValues}
+        bySourceSelectedFooterTab={bySourceSelectedTab}
         bySourceShowExpandButton
+        bySourceShowFilterFooter={bySourceShowApplyFilter}
+        bySourceTableColumns={bySourceTableColumns}
+        bySubjectData={
+          bySubjectSelectedTab === 'chart'
+            ? bySubjectVisualisationData
+            : addKeytoData(bySubjectVisualisationData)
+        }
+        bySubjectFilterParams={bySubjectFilters}
+        bySubjectFilterValueOptions={bySubjectDisplayFacetValues}
+        bySubjectIsDownloadListOpen={bySubjectIsDownloadListOpen}
+        bySubjectIsFilterOpen={bySubjectIsFilterOpen}
+        bySubjectLoading={bySubjectDataLoading || fullFacetOptionsLoading}
+        bySubjectOnApplyFilters={handleBySubjectApplyFilters}
+        bySubjectOnDownloadOptionClick={handleBySubjectDownloadOptionClick}
+        bySubjectOnEmptyListLabel={bySubjectEmptyFacetValueListLabel}
+        bySubjectOnFacetItemClick={handleBySubjectFacetItemClick}
+        bySubjectOnFacetValueClick={handleBySubjectFacetValueClick}
+        bySubjectOnFilterClick={handleBySubjectFilterButtonClick}
+        bySubjectOnFilterClose={handleBySubjectOnClose}
+        bySubjectOnFilterSearchChange={handleBySubjectSearchChange}
+        bySubjectOnFooterTabClick={handleBySubjectFooterTabClick}
+        bySubjectOnNewView={handleBySubjectOnNewView}
+        bySubjectSelectedFacetValues={bySubjectSelectedFacetValues}
+        bySubjectSelectedFooterTab={bySubjectSelectedTab}
         bySubjectShowExpandButton
+        bySubjectShowFilterFooter={bySubjectShowApplyFilter}
+        bySubjectTableColumns={bySubjectTableColumns}
         corpusGrowthShowExpandButton
         overTimeData={
           overTimeSelectedTab === 'chart'
@@ -425,7 +1447,7 @@ const DashboardPage = () => {
         overTimeOnFilterClose={handleOverTimeOnClose}
         overTimeOnFilterSearchChange={handleOverTimeSearchChange}
         overTimeOnFooterTabClick={handleOverTimeFooterTabClick}
-        overTimeOnNewView={handlOverTimeOnNewView}
+        overTimeOnNewView={handleOverTimeOnNewView}
         overTimeSelectedFacetValues={overTimeSelectedFacetValues}
         overTimeSelectedFooterTab={overTimeSelectedTab}
         overTimeShowExpandButton
