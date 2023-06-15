@@ -38,6 +38,7 @@ const ChartHeader = props => {
     title,
     filterParams,
     isFilterOpen,
+    loading,
     onApplyFilters,
     onFilterClose,
     onEmptyListLabel,
@@ -72,8 +73,8 @@ const ChartHeader = props => {
                 valueOptions={filterValueOptions}
               />
             }
-            onOpenChange={onFilterClick}
-            open={isFilterOpen}
+            onOpenChange={loading ? () => {} : onFilterClick}
+            open={loading ? false : isFilterOpen}
             placement="bottomRight"
             trigger="click"
           >
@@ -106,6 +107,7 @@ ChartHeader.propTypes = {
     }),
   ),
   isFilterOpen: PropTypes.bool,
+  loading: PropTypes.bool,
   onApplyFilters: PropTypes.func,
   filterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
@@ -135,6 +137,7 @@ ChartHeader.defaultProps = {
   filterParams: [],
   filterValueOptions: [],
   isFilterOpen: false,
+  loading: false,
   onApplyFilters: () => {},
   onEmptyListLabel: '',
   onFacetItemClick: () => {},

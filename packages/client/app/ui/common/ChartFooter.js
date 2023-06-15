@@ -28,6 +28,7 @@ const ChartFooter = props => {
   const {
     downloadOptions,
     isDowloadListOpen,
+    loading,
     onDownloadOptionClick,
     onTabClick,
     selectedTab,
@@ -39,6 +40,7 @@ const ChartFooter = props => {
       {showChartTab && (
         <ChartFooterButton
           defaultSymbol={ChartSymbol}
+          loading={loading}
           onClick={() => onTabClick('chart')}
           selected={selectedTab === 'chart'}
           selectedSymbol={ChartSelectedSymbol}
@@ -49,6 +51,7 @@ const ChartFooter = props => {
 
       <ChartFooterButton
         defaultSymbol={ListSymbol}
+        loading={loading}
         onClick={() => onTabClick('table')}
         selected={selectedTab === 'table'}
         selectedSymbol={ListSelectedSymbol}
@@ -62,13 +65,14 @@ const ChartFooter = props => {
             options={downloadOptions}
           />
         }
-        onOpenChange={() => onTabClick('download')}
+        onOpenChange={loading ? () => {} : () => onTabClick('download')}
         open={isDowloadListOpen}
         placement="top"
         trigger="click"
       >
         <ChartFooterButton
           defaultSymbol={DownloadSymbol}
+          loading={loading}
           selected={selectedTab === 'download'}
           selectedSymbol={DownloadSelectedSymbol}
         >
@@ -78,6 +82,7 @@ const ChartFooter = props => {
 
       <ChartFooterButton
         defaultSymbol={ShareSymbol}
+        loading={loading}
         onClick={() => onTabClick('share')}
         selected={selectedTab === 'share'}
         selectedSymbol={ShareSelectedSymbol}
@@ -97,6 +102,7 @@ ChartFooter.propTypes = {
     }),
   ).isRequired,
   isDowloadListOpen: PropTypes.bool,
+  loading: PropTypes.bool,
   onDownloadOptionClick: PropTypes.func.isRequired,
   onTabClick: PropTypes.func.isRequired,
   selectedTab: PropTypes.string.isRequired,
@@ -105,6 +111,7 @@ ChartFooter.propTypes = {
 
 ChartFooter.defaultProps = {
   isDowloadListOpen: false,
+  loading: false,
   showChartTab: false,
 }
 

@@ -1,5 +1,5 @@
-const { db } = require('@coko/server')
-const { intersectionBy } = require('lodash')
+const { db, uuid } = require('@coko/server')
+const { intersectionBy, get } = require('lodash')
 const SearchService = require('../services/search/searchService')
 
 const {
@@ -18,10 +18,71 @@ const {
 
 const { model: Source } = require('../models/source')
 
+const { model: Subject } = require('../models/subject')
+
+const { model: Publisher } = require('../models/publisher')
+
+const buildQueryForIntermediateTables = async input => {
+  let criteria = get(input, 'search.criteria', [])
+
+  const hasSubject = criteria.find(crit => crit.field === 'subjectId')
+
+  const hasFunder = criteria.find(crit => crit.field === 'funderId')
+
+  const hasAffiliation = criteria.find(crit => crit.field === 'affiliationId')
+
+  let assertions = []
+
+  if (hasSubject) {
+    const subjects = new SearchService(AssertionSubject, {
+      filter: [hasSubject],
+    })
+
+    assertions.push(await subjects.search('assertion_id'))
+
+    criteria = criteria.filter(crit => crit.field !== 'subjectId')
+  }
+
+  if (hasFunder) {
+    const funders = new SearchService(AssertionFunder, {
+      filter: [hasFunder],
+    })
+
+    assertions.push(await funders.search('assertion_id'))
+
+    criteria = criteria.filter(crit => crit.field !== 'funderId')
+  }
+
+  if (hasAffiliation) {
+    const affiliations = new SearchService(AssertionAffiliation, {
+      filter: [hasAffiliation],
+    })
+
+    assertions.push(await affiliations.search('assertion_id'))
+
+    criteria = criteria.filter(crit => crit.field !== 'affiliationId')
+  }
+
+  assertions.push('assertion_id')
+
+  assertions = intersectionBy(...assertions)
+
+  if (assertions.length > 0) {
+    criteria.push({
+      field: 'id',
+      operator: { in: assertions.map(a => a.assertion_id) },
+    })
+  }
+
+  return criteria
+}
+
 const getAssertionsPerYear = async ({ input }) => {
+  const criteria = await buildQueryForIntermediateTables(input)
+
   const searchedAssertions = new SearchService(AssertionLastTenYear, {
     groupBy: 'year',
-    filter: input.search.criteria,
+    filter: criteria,
   })
 
   const results = await searchedAssertions.search(
@@ -33,16 +94,16 @@ const getAssertionsPerYear = async ({ input }) => {
   const chartValues = []
   results.forEach((result, key) => {
     chartValues.push({
-      id: key + 1,
+      id: uuid(),
       xField: result.year,
       yField: result.countdoi,
-      stackField: 'Doi',
+      stackField: 'DOI',
     })
     chartValues.push({
-      id: key + 2,
+      id: uuid(),
       xField: result.year,
       yField: result.accessionumber,
-      stackField: 'AccessionNumber',
+      stackField: 'Accession Number',
     })
   })
 
@@ -65,7 +126,7 @@ const getAssertionsPerSubject = async ({ input }) => {
     join,
     take: 20,
     groupBy: 'subject_id',
-    filter: input.search.criteria,
+    filter: get(input, 'search.criteria', []),
     sort: { field: ['cnt'], direction: 'desc' },
   })
 
@@ -73,12 +134,17 @@ const getAssertionsPerSubject = async ({ input }) => {
     db.raw(`count(*) as cnt, subject_id`),
   )
 
+  const subjectIds = results.map(result => result.subjectId)
+
+  const subjects = await Subject.query().whereIn('id', subjectIds)
+
   const chartValues = []
   results.forEach((result, key) => {
+    const { title } = subjects.find(subj => subj.id === result.subjectId)
     chartValues.push({
-      id: key + 1,
-      xField: result.cnt,
-      yField: result.subjectId,
+      id: uuid(),
+      xField: title,
+      yField: result.cnt,
     })
   })
 
@@ -86,70 +152,35 @@ const getAssertionsPerSubject = async ({ input }) => {
 }
 
 const getAssertionsPerPublisher = async ({ input }) => {
-  const hasSubject = input.search.criteria.find(
-    criteria => criteria.field === 'subjectId',
-  )
+  const criteria = await buildQueryForIntermediateTables(input)
 
-  const hasFunder = input.search.criteria.find(
-    criteria => criteria.field === 'funderId',
-  )
-
-  const hasAffiliation = input.search.criteria.find(
-    criteria => criteria.field === 'affiliationId',
-  )
-
-  let assertions = []
-
-  if (hasSubject) {
-    const subjects = new SearchService(AssertionSubject, {
-      filter: [hasSubject],
-    })
-
-    assertions.push(await subjects.search('assertion_id'))
-  }
-
-  if (hasFunder) {
-    const funders = new SearchService(AssertionFunder, {
-      filter: [hasFunder],
-    })
-
-    assertions.push(await funders.search('assertion_id'))
-  }
-
-  if (hasAffiliation) {
-    const affiliations = new SearchService(AssertionAffiliation, {
-      filter: [hasAffiliation],
-    })
-
-    assertions.push(await affiliations.search('assertion_id'))
-  }
-
-  assertions.push('assertion_id')
-
-  assertions = intersectionBy(...assertions)
-
-  if (assertions.length > 0) {
-    input.search.criteria.push({
-      field: 'id',
-      operator: { in: assertions.map(a => a.assertion_id) },
-    })
-  }
+  criteria.push({
+    field: 'publisherId',
+    operator: { noteq: null },
+  })
 
   const searchedAssertions = new SearchService(Assertion, {
+    take: 20,
     groupBy: 'publisher_id',
-    filter: input.search.criteria,
+    filter: criteria,
+    sort: { field: ['cnt'], direction: 'desc' }
   })
 
   const results = await searchedAssertions.search(
     db.raw(`count(*) as cnt, publisher_id`),
   )
 
+  const publisherIds = results.map(result => result.publisherId)
+
+  const publishers = await Publisher.query().whereIn('id', publisherIds)
+
   const chartValues = []
   results.forEach((result, key) => {
+    const { title } = publishers.find(subj => subj.id === result.publisherId)
     chartValues.push({
-      id: key + 1,
-      xField: result.cnt,
-      yField: result.subjectId,
+      id: uuid(),
+      xField: title,
+      yField: result.cnt,
     })
   })
 
@@ -161,16 +192,16 @@ const getAssertionCountsPerSource = async () => {
   const chartValues = []
   results.forEach((result, key) => {
     chartValues.push({
-      id: key + 1,
+      id: uuid(),
       xField: result.title,
       yField: result.doiCount,
-      stackField: 'Doi',
+      stackField: 'DOI',
     })
     chartValues.push({
-      id: key + 2,
+      id: uuid(),
       xField: result.title,
       yField: result.accessionNumberCount,
-      stackField: 'AccessionNumber',
+      stackField: 'Accession Number',
     })
   })
 

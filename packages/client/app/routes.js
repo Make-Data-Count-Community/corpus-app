@@ -127,7 +127,7 @@ const routes = (
     <StyledPage fadeInPages={false} padPages={false}>
       <StyledMain id="main-content" tabIndex="-1">
         <Switch>
-          <Route exact path="/dashboard" render={Dashboard} />
+          <Route component={Dashboard} exact path="/dashboard" />
           <Route
             component={CitationCountsOverTime}
             exact

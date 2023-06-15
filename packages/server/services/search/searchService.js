@@ -1,5 +1,6 @@
 const isEmpty = require('lodash/isEmpty')
 const isFunction = require('lodash/isFunction')
+const has = require('lodash/has')
 
 const parseJsonField = (criterion, operator) => {
   const pieces = criterion.field.split('.')
@@ -14,6 +15,7 @@ const parseJsonField = (criterion, operator) => {
 
 class SearchService {
   constructor(Model, options = {}) {
+    this.debug = options.debug || false
     this.skip = options.skip || 0
     this.take = options.take || -1
     this.filter = this.parseOptionsToFilter(options.filter || [])
@@ -94,7 +96,7 @@ class SearchService {
       }
     }
 
-    if (criterion.operator.noteq) {
+    if (has(criterion, 'operator.noteq')) {
       return {
         whereNot: [criterion.field, criterion.operator.noteq],
       }
@@ -207,7 +209,7 @@ class SearchService {
 
     this.select(select).groupby().rawHaving().offset().limit().order()
 
-    return this.query
+    return this.debug ? this.query.debug : this.query
   }
 }
 

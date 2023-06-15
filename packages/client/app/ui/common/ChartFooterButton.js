@@ -42,10 +42,17 @@ const ButtonSymbol = styled.div`
 `
 
 const FooterButton = props => {
-  const { children, defaultSymbol, onClick, selected, selectedSymbol } = props
+  const {
+    children,
+    defaultSymbol,
+    loading,
+    onClick,
+    selected,
+    selectedSymbol,
+  } = props
 
   return (
-    <StyledButton onClick={onClick} selected={selected}>
+    <StyledButton disabled={loading} onClick={onClick} selected={selected}>
       <ButtonSymbol
         defaultSymbol={defaultSymbol}
         selected={selected}
@@ -59,11 +66,13 @@ const FooterButton = props => {
 FooterButton.propTypes = {
   defaultSymbol: PropTypes.string.isRequired,
   onClick: PropTypes.func,
+  loading: PropTypes.bool,
   selected: PropTypes.bool,
   selectedSymbol: PropTypes.string.isRequired,
 }
 
 FooterButton.defaultProps = {
+  loading: false,
   onClick: () => {},
   selected: false,
 }

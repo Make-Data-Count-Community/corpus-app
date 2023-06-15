@@ -1,6 +1,7 @@
 export { default as VisuallyHiddenElement } from './VisuallyHiddenElement'
 
 export { default as Header } from './Header'
+export { default as Spin } from './Spin'
 export { default as LineChart } from './LineChart'
 export { default as PieChart } from './PieChart'
 export { default as BarChart } from './BarChart'

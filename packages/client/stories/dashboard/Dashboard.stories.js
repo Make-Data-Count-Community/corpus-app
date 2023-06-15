@@ -72,22 +72,22 @@ const corpusGrowthData = [
   {
     xField: '01/2023',
     yField: randomNumber(100000),
-    stackField: 'Accession ID',
+    stackField: 'Accession Number',
   },
   {
     xField: '02/2023',
     yField: randomNumber(1000000),
-    stackField: 'Accession ID',
+    stackField: 'Accession Number',
   },
   {
     xField: '03/2023',
     yField: randomNumber(10000000),
-    stackField: 'Accession ID',
+    stackField: 'Accession Number',
   },
   {
     xField: '04/2023',
     yField: randomNumber(50000000),
-    stackField: 'Accession ID',
+    stackField: 'Accession Number',
   },
 ]
 
@@ -105,8 +105,8 @@ const corpusGrowthTableColumns = [
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
   {
-    title: 'Accession ID',
-    dataIndex: 'Accession ID',
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
     key: 'accession',
     render: value =>
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
@@ -207,16 +207,56 @@ const generateOverTimeData = () => [
   { xField: 2017, yField: randomNumber(10000000), stackField: 'DOI' },
   { xField: 2018, yField: randomNumber(10000000), stackField: 'DOI' },
   { xField: 2019, yField: randomNumber(10000000), stackField: 'DOI' },
-  { xField: 2010, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2011, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2012, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2013, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2014, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2015, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2016, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2017, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2018, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2019, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  {
+    xField: 2010,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2011,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2012,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2013,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2014,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2015,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2016,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2017,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2018,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2019,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
 ]
 
 const overTimeData = generateOverTimeData()
@@ -235,8 +275,8 @@ const overTimeTableColumns = [
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
   {
-    title: 'Accession ID',
-    dataIndex: 'Accession ID',
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
     key: 'accession',
     render: value =>
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
@@ -615,11 +655,6 @@ const generateBySubjectData = () => [
 const bySubjectData = generateBySubjectData()
 
 const bySubjectTableColumns = [
-  //   {
-  //     title: 'Year',
-  //     dataIndex: 'xField',
-  //     key: 'xField',
-  //   },
   {
     title: 'Subject',
     dataIndex: 'xField',
@@ -635,31 +670,6 @@ const bySubjectTableColumns = [
 ]
 
 const bySubjectFilterParams = [
-  //   {
-  //     isFacetSelected: false,
-  //     type: 'doi',
-  //     values: [],
-  //   },
-  //   {
-  //     isFacetSelected: false,
-  //     type: 'accession',
-  //     values: [],
-  //   },
-  //   {
-  //     isFacetSelected: false,
-  //     type: 'repository',
-  //     values: [],
-  //   },
-  //   {
-  //     isFacetSelected: false,
-  //     type: 'subject',
-  //     values: [],
-  //   },
-  //   {
-  //     isFacetSelected: false,
-  //     type: 'journal',
-  //     values: [],
-  //   },
   {
     isFacetSelected: false,
     type: 'publisher',
@@ -1134,13 +1144,17 @@ const generateBySourceData = () => {
     {
       xField: 'CZI',
       yField: randomNumber(10000000),
-      stackField: 'Accession ID',
+      stackField: 'Accession Number',
     },
-    { xField: 'DataCite Event Data', yField: 0, stackField: 'Accession ID' },
+    {
+      xField: 'DataCite Event Data',
+      yField: 0,
+      stackField: 'Accession Number',
+    },
     {
       xField: 'OpenAIRE',
       yField: randomNumber(10000000),
-      stackField: 'Accession ID',
+      stackField: 'Accession Number',
     },
   ]
 }
@@ -1161,8 +1175,8 @@ const bySourceTableColumns = [
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
   {
-    title: 'Accession ID',
-    dataIndex: 'Accession ID',
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
     key: 'accession',
     render: value =>
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
@@ -1522,6 +1536,8 @@ const Template = args => {
   const [overTimeVisualisationData, setOverTimeVisualisationData] =
     useState(overTimeData)
 
+  const [overTimeLoading, setOverTimeLoading] = useState(true)
+
   const [overTimeIsFilterOpen, setOverTimeIsFilterOpen] = useState(false)
 
   const [overTimeIsDownloadListOpen, setOverTimeIsDownloadListOpen] =
@@ -1652,6 +1668,10 @@ const Template = args => {
       localStorage.setItem('overTimeFilters', JSON.stringify(overTimeFilters))
     }
 
+    setTimeout(() => {
+      setOverTimeLoading(false)
+    }, randomNumber(5000))
+
     return () => {
       localStorage.removeItem('overTimeFilters')
     }
@@ -1679,7 +1699,7 @@ const Template = args => {
           keys: [
             { field: 'xField', title: 'Month' },
             { field: 'DOI', title: 'DOI' },
-            { field: 'Accession ID', title: 'Accession ID' },
+            { field: 'Accession Number', title: 'Accession Number' },
             { field: 'total', title: 'Total' },
           ],
         },
@@ -1850,7 +1870,7 @@ const Template = args => {
           keys: [
             { field: 'xField', title: 'Source' },
             { field: 'DOI', title: 'DOI' },
-            { field: 'Accession ID', title: 'Accession ID' },
+            { field: 'Accession Number', title: 'Accession Number' },
             { field: 'total', title: 'Total Citations' },
           ],
         },
@@ -2232,8 +2252,6 @@ const Template = args => {
     setOverTimeIsFilterOpen(false)
   }
 
-  const handleOverTimeExpandClick = () => {}
-
   const handleOverTimeFilterButtonClick = isOpen => {
     if (isOpen) {
       setOverTimeFilters(JSON.parse(localStorage.getItem('overTimeFilters')))
@@ -2264,12 +2282,19 @@ const Template = args => {
 
     if (type === 'csv') {
       const csvString = await json2csv(
-        addKeytoData(overTimeVisualisationData),
+        addKeytoData(
+          transformChartData(
+            overTimeVisualisationData,
+            'xField',
+            'stackField',
+            'yField',
+          ),
+        ),
         {
           keys: [
             { field: 'xField', title: 'Year' },
             { field: 'DOI', title: 'DOI' },
-            { field: 'Accession ID', title: 'Accession ID' },
+            { field: 'Accession Number', title: 'Accession Number' },
             { field: 'total', title: 'Total Citations' },
           ],
         },
@@ -2406,10 +2431,10 @@ const Template = args => {
       overTimeFilterValueOptions={overTimeDisplayFacetValues}
       overTimeIsDownloadListOpen={overTimeIsDownloadListOpen}
       overTimeIsFilterOpen={overTimeIsFilterOpen}
+      overTimeLoading={overTimeLoading}
       overTimeOnApplyFilters={handleOverTimeApplyFilters}
       overTimeOnDownloadOptionClick={handleOverTimeDownloadOptionClick}
       overTimeOnEmptyListLabel={overTimeEmptyFacetValueListLabel}
-      overTimeOnExpandClick={handleOverTimeExpandClick}
       overTimeOnFacetItemClick={handleOverTimeFacetItemClick}
       overTimeOnFacetValueClick={handleOverTimeFacetValueClick}
       overTimeOnFilterClick={handleOverTimeFilterButtonClick}

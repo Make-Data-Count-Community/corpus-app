@@ -43,6 +43,7 @@ const Dashboard = props => {
 
     corpusGrowthData,
     corpusGrowthIsDownloadListOpen,
+    corpusGrowthLoading,
     corpusGrowthOnDownloadOptionClick,
     corpusGrowthOnFooterTabClick,
     corpusGrowthOnNewView,
@@ -52,6 +53,7 @@ const Dashboard = props => {
 
     uniqueCountData,
     uniqueCountIsDownloadListOpen,
+    uniqueCountLoading,
     uniqueCountOnDownloadOptionClick,
     uniqueCountOnFooterTabClick,
     uniqueCountSelectedFooterTab,
@@ -63,6 +65,7 @@ const Dashboard = props => {
     bySourceFilterValueOptions,
     bySourceIsDownloadListOpen,
     bySourceIsFilterOpen,
+    bySourceLoading,
     bySourceOnApplyFilters,
     bySourceOnDownloadOptionClick,
     bySourceOnEmptyListLabel,
@@ -84,6 +87,7 @@ const Dashboard = props => {
     byPublisherFilterValueOptions,
     byPublisherIsDownloadListOpen,
     byPublisherIsFilterOpen,
+    byPublisherLoading,
     byPublisherOnApplyFilters,
     byPublisherOnDownloadOptionClick,
     byPublisherOnEmptyListLabel,
@@ -105,6 +109,7 @@ const Dashboard = props => {
     bySubjectFilterValueOptions,
     bySubjectIsDownloadListOpen,
     bySubjectIsFilterOpen,
+    bySubjectLoading,
     bySubjectOnApplyFilters,
     bySubjectOnDownloadOptionClick,
     bySubjectOnEmptyListLabel,
@@ -126,6 +131,7 @@ const Dashboard = props => {
     overTimeFilterValueOptions,
     overTimeIsDownloadListOpen,
     overTimeIsFilterOpen,
+    overTimeLoading,
     overTimeOnApplyFilters,
     overTimeOnDownloadOptionClick,
     overTimeOnEmptyListLabel,
@@ -152,6 +158,7 @@ const Dashboard = props => {
           filterValueOptions={overTimeFilterValueOptions}
           isDownloadListOpen={overTimeIsDownloadListOpen}
           isFilterOpen={overTimeIsFilterOpen}
+          loading={overTimeLoading}
           onApplyFilters={overTimeOnApplyFilters}
           onDownloadOptionClick={overTimeOnDownloadOptionClick}
           onEmptyListLabel={overTimeOnEmptyListLabel}
@@ -174,6 +181,7 @@ const Dashboard = props => {
           filterValueOptions={bySubjectFilterValueOptions}
           isDownloadListOpen={bySubjectIsDownloadListOpen}
           isFilterOpen={bySubjectIsFilterOpen}
+          loading={bySubjectLoading}
           onApplyFilters={bySubjectOnApplyFilters}
           onDownloadOptionClick={bySubjectOnDownloadOptionClick}
           onEmptyListLabel={bySubjectOnEmptyListLabel}
@@ -199,6 +207,7 @@ const Dashboard = props => {
           filterValueOptions={byPublisherFilterValueOptions}
           isDownloadListOpen={byPublisherIsDownloadListOpen}
           isFilterOpen={byPublisherIsFilterOpen}
+          loading={byPublisherLoading}
           onApplyFilters={byPublisherOnApplyFilters}
           onDownloadOptionClick={byPublisherOnDownloadOptionClick}
           onEmptyListLabel={byPublisherOnEmptyListLabel}
@@ -221,6 +230,7 @@ const Dashboard = props => {
           filterValueOptions={bySourceFilterValueOptions}
           isDownloadListOpen={bySourceIsDownloadListOpen}
           isFilterOpen={bySourceIsFilterOpen}
+          loading={bySourceLoading}
           onApplyFilters={bySourceOnApplyFilters}
           onDownloadOptionClick={bySourceOnDownloadOptionClick}
           onEmptyListLabel={bySourceOnEmptyListLabel}
@@ -242,6 +252,7 @@ const Dashboard = props => {
         <UniqueCitationCounts
           data={uniqueCountData}
           isDownloadListOpen={uniqueCountIsDownloadListOpen}
+          loading={uniqueCountLoading}
           onDownloadOptionClick={uniqueCountOnDownloadOptionClick}
           onFooterTabClick={uniqueCountOnFooterTabClick}
           selectedFooterTab={uniqueCountSelectedFooterTab}
@@ -251,6 +262,7 @@ const Dashboard = props => {
         <CitationCorpusGrowth
           data={corpusGrowthData}
           isDownloadListOpen={corpusGrowthIsDownloadListOpen}
+          loading={corpusGrowthLoading}
           onDownloadOptionClick={corpusGrowthOnDownloadOptionClick}
           onFooterTabClick={corpusGrowthOnFooterTabClick}
           onNewView={corpusGrowthOnNewView}
@@ -320,6 +332,7 @@ Dashboard.propTypes = {
   ).isRequired,
   overTimeIsFilterOpen: PropTypes.bool.isRequired,
   overTimeIsDownloadListOpen: PropTypes.bool.isRequired,
+  overTimeLoading: PropTypes.bool.isRequired,
   overTimeOnApplyFilters: PropTypes.func.isRequired,
   overTimeOnDownloadOptionClick: PropTypes.func.isRequired,
   overTimeOnEmptyListLabel: PropTypes.string.isRequired,
@@ -368,6 +381,7 @@ Dashboard.propTypes = {
   ).isRequired,
   bySubjectIsFilterOpen: PropTypes.bool.isRequired,
   bySubjectIsDownloadListOpen: PropTypes.bool.isRequired,
+  bySubjectLoading: PropTypes.bool.isRequired,
   bySubjectOnApplyFilters: PropTypes.func.isRequired,
   bySubjectOnDownloadOptionClick: PropTypes.func.isRequired,
   bySubjectOnEmptyListLabel: PropTypes.string.isRequired,
@@ -416,6 +430,7 @@ Dashboard.propTypes = {
   ).isRequired,
   byPublisherIsFilterOpen: PropTypes.bool.isRequired,
   byPublisherIsDownloadListOpen: PropTypes.bool.isRequired,
+  byPublisherLoading: PropTypes.bool.isRequired,
   byPublisherOnApplyFilters: PropTypes.func.isRequired,
   byPublisherOnDownloadOptionClick: PropTypes.func.isRequired,
   byPublisherOnEmptyListLabel: PropTypes.string.isRequired,
@@ -464,6 +479,7 @@ Dashboard.propTypes = {
   ).isRequired,
   bySourceIsDownloadListOpen: PropTypes.bool.isRequired,
   bySourceIsFilterOpen: PropTypes.bool.isRequired,
+  bySourceLoading: PropTypes.bool.isRequired,
   bySourceOnApplyFilters: PropTypes.func.isRequired,
   bySourceOnDownloadOptionClick: PropTypes.func.isRequired,
   bySourceOnEmptyListLabel: PropTypes.string.isRequired,
@@ -493,6 +509,7 @@ Dashboard.propTypes = {
 
   uniqueCountData: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   uniqueCountIsDownloadListOpen: PropTypes.bool.isRequired,
+  uniqueCountLoading: PropTypes.bool.isRequired,
   uniqueCountOnDownloadOptionClick: PropTypes.func.isRequired,
   uniqueCountOnFooterTabClick: PropTypes.func.isRequired,
   uniqueCountSelectedFooterTab: PropTypes.string.isRequired,
@@ -507,6 +524,7 @@ Dashboard.propTypes = {
 
   corpusGrowthData: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   corpusGrowthIsDownloadListOpen: PropTypes.bool.isRequired,
+  corpusGrowthLoading: PropTypes.bool.isRequired,
   corpusGrowthOnDownloadOptionClick: PropTypes.func.isRequired,
   corpusGrowthOnFooterTabClick: PropTypes.func.isRequired,
   corpusGrowthSelectedFooterTab: PropTypes.string.isRequired,
