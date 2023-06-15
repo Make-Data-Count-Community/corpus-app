@@ -154,6 +154,11 @@ const getAssertionsPerSubject = async ({ input }) => {
 const getAssertionsPerPublisher = async ({ input }) => {
   const criteria = await buildQueryForIntermediateTables(input)
 
+  criteria.push({
+    field: 'publisherId',
+    operator: { noteq: null },
+  })
+
   const searchedAssertions = new SearchService(Assertion, {
     groupBy: 'publisher_id',
     filter: criteria,
