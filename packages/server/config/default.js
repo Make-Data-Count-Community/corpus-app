@@ -59,7 +59,12 @@ module.exports = {
     protocol: 'http',
     host: 'localhost',
     uploads: 'uploads',
-    pool: { min: 0, max: 10, idleTimeoutMillis: 1000 },
+    pool: {
+      min: 0,
+      max: 10,
+      idleTimeoutMillis: 1000,
+      propagateCreateError: false,
+    },
     useFileStorage: false,
   },
   teams: {

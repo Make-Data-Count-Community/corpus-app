@@ -2,7 +2,20 @@
 const request = require('./axios')
 
 module.exports = {
-  dataciteApi: (url, headers = {}) => {
+  dataciteApiEvent: (url, headers = {}) => {
+    const response = request({
+      url,
+      baseURL: 'https://api.datacite.org',
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers,
+      },
+    })
+
+    return response
+  },
+  dataciteApiDoi: (url, headers = {}) => {
     url = `${url}?affiliation=true`
 
     const response = request({

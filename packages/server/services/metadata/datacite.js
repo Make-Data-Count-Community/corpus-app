@@ -33,7 +33,7 @@ class Datacite extends Transform {
       doi = chunk.event.attributes['obj-id'].replace('https://doi.org/', '')
     }
 
-    const { data } = await axios.dataciteApi(`${Datacite.URL}${doi}`)
+    const { data } = await axios.dataciteApiDoi(`${Datacite.URL}${doi}`)
 
     if (data && !data.errors) {
       // Get Title
@@ -82,7 +82,7 @@ class Datacite extends Transform {
 
   // eslint-disable-next-line class-methods-use-this
   async transformToAssertion(assertionInstance, chunk, trx) {
-    assertionInstance.source_id = chunk.source
+    assertionInstance.sourceId = chunk.source
     assertionInstance.title = chunk.datacite.title
     assertionInstance.sourceType = chunk.event.attributes['source-id']
     assertionInstance.id = assertionInstance.id || uuid()
