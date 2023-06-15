@@ -56,7 +56,7 @@ services:
         'js,graphql',
       ]
     ports:
-      - 3000
+      - 3000:3000
     environment:
       - NODE_ENV=development
       - POSTGRES_HOST=${POSTGRES_HOST}

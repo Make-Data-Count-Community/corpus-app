@@ -5,5 +5,5 @@ type Journal {
 }
 
 extend type Query {
-  getJournals: [Journal]
+  getJournals(input: SearchModelInput): [Journal]
 }

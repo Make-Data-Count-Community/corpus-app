@@ -5,5 +5,5 @@ type Publisher {
 }
 
 extend type Query {
-  getPublishers: [Publisher]
+  getPublishers(input: SearchModelInput): [Publisher]
 }

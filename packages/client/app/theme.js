@@ -25,6 +25,7 @@ const theme = {
   colorTextPlaceholder: '#DCE0E4',
 
   colorIconsFooter: '#E7E7E7',
+  colorSelectedFacet: 'rgba(0, 177, 226, 0.2)',
 
   colorDoi: '#46BCAB',
   colorSubject: '#F07C73',

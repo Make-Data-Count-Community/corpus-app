@@ -5,5 +5,5 @@ type Affilation {
 }
 
 extend type Query {
-  getAffiliations: [Affilation]
+  getAffiliations(input: SearchModelInput): [Affilation]
 }

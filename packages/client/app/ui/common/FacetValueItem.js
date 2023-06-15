@@ -19,6 +19,13 @@ const ItemWrapper = styled.div`
   ${({ selected }) => selected && `background: rgba(0, 177, 226, 0.2);`}
   padding: ${grid(2)} ${grid(5)};
   width: 100%;
+
+  &:hover {
+    ${({ selected, theme }) =>
+      `background: ${
+        selected ? theme.colorSelectedFacet : theme.colorChartBackground
+      };`}
+  }
 `
 
 const FacetValueItem = props => {

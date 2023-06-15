@@ -29,6 +29,13 @@ const ItemWrapper = styled.div`
   ${({ selected }) => selected && `background: rgba(0, 177, 226, 0.2);`}
   padding: ${grid(3)} ${grid(6)};
   width: 100%;
+
+  &:hover {
+    ${({ selected, theme }) =>
+      `background: ${
+        selected ? theme.colorSelectedFacet : theme.colorChartBackground
+      };`}
+  }
 `
 
 const ItemHeader = styled.div`
@@ -53,7 +60,7 @@ const FilterFacetItem = props => {
       </ItemHeader>
       {!!selectedValues.length && (
         <SelectedValuesWrapper>
-          {selectedValues.map(s => s.value).join(', ')}
+          {selectedValues.map(s => s.title).join(', ')}
         </SelectedValuesWrapper>
       )}
     </ItemWrapper>

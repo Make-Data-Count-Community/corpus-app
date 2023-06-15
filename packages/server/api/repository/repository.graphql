@@ -5,5 +5,5 @@ type Repository {
 }
 
 extend type Query {
-  getRepositories: [Repository]
+  getRepositories(input: SearchModelInput): [Repository]
 }
