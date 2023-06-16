@@ -145,8 +145,6 @@ class MetadataSource {
             assertionsArray.map(assert => Assertion.query(trx).insert(assert)),
           )
 
-          // eslint-disable-next-line no-console
-          console.log(item.id, 'found to update the done proccess')
           await ActivityLog.query(trx).findById(item.id).patch({ done: true })
         })
       } catch (e) {

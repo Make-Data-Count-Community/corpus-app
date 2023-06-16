@@ -35,41 +35,45 @@ class ScheduledTaskService {
 
     // logger.info(`######### Start Retreving Data from API ######### `)
 
-    async function myAsyncFunction() {
-      await MetadataSource.loadCitationsFromDB()
+    // async function myAsyncFunction() {
+    //   await MetadataSource.loadCitationsFromDB()
 
-      const countAssertions = await ActivityLog.query()
-        .count({ count: '*' })
-        .andWhere(builder => {
-          builder.where('proccessed', '=', false)
-          builder.andWhere('done', '=', false)
-        })
+    //   const countAssertions = await ActivityLog.query()
+    //     .count({ count: '*' })
+    //     .andWhere(builder => {
+    //       builder.where('proccessed', '=', false)
+    //       builder.andWhere('done', '=', false)
+    //     })
 
-      if (countAssertions[0].count !== '0') {
-        setImmediate(myAsyncFunction)
-      }
-    }
+    //   if (countAssertions[0].count !== '0') {
+    //     setImmediate(myAsyncFunction)
+    //   }
+    // }
 
-    myAsyncFunction()
+    // myAsyncFunction()
 
-    // await db.schema.refreshMaterializedView('last_10_years_assertions')
+    await db.schema.refreshMaterializedView('last_10_years_assertions')
+    await db.schema.refreshMaterializedView('count_growth_per_day')
 
-    // const sourceAssertions = await Assertion.query()
-    //   .select(
-    //     db.raw(
-    //       'count(doi) as doicnt, count(accession_number) as doiaccessionnumer, source_id',
-    //     ),
-    //   )
-    //   .groupBy('source_id')
+    const sourceAssertions = await Assertion.query()
+      .select(
+        db.raw(
+          'count(doi) as doicnt, count(accession_number) as doiaccessionnumer, source_id',
+        ),
+      )
+      .groupBy('source_id')
 
-    // await Promise.all(
-    //   sourceAssertions.map(assertion =>
-    //     Source.query().findOne({ id: assertion.source_id }).patch({
-    //       doiCount: assertion.doicnt,
-    //       accessionNumberCount: assertion.doiaccessionnumer,
-    //     }),
-    //   ),
-    // )
+    await Promise.all(
+      sourceAssertions.map(assertion =>
+        Source.query().findOne({ id: assertion.source_id }).patch({
+          doiCount: assertion.doicnt,
+          accessionNumberCount: assertion.doiaccessionnumer,
+        }),
+      ),
+    )
+
+    // eslint-disable-next-line no-console
+    console.log('Done')
   }
 
   static async startMigratingWeekly(crontab, options) {
