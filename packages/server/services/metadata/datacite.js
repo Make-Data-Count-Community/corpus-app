@@ -114,6 +114,9 @@ class Datacite extends Transform {
     if (chunk.datacite.affiliations) {
       const titles = chunk.datacite.affiliations
 
+      // eslint-disable-next-line no-console
+      console.log({ affiliationTitles: titles })
+
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
         // eslint-disable-next-line no-console
