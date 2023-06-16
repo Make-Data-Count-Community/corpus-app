@@ -54,11 +54,6 @@ class Datacite extends Transform {
       chunk.datacite.repository = get(data, 'data.attributes.publisher', null)
 
       // Get Affiliations
-      // eslint-disable-next-line no-console
-      console.log(
-        get(data, 'data.attributes.creators', []),
-        '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',
-      )
       chunk.datacite.affiliations = uniqBy(
         flatten(
           get(data, 'data.attributes.creators', [])
@@ -68,7 +63,7 @@ class Datacite extends Transform {
                   name: aff.name,
                   identifier: aff.affiliationIdentifier,
                 }))
-                .filter(af => af.name || af.identifier),
+                .filter(af => af.name),
             )
             .filter(aff => aff.length),
         ),
@@ -77,10 +72,12 @@ class Datacite extends Transform {
 
       // Get funders
       chunk.datacite.funders = flatten(
-        get(data, 'data.attributes.fundingReferences', []).map(funder => ({
-          name: funder.funderName,
-          identifier: funder.funderIdentifier,
-        })),
+        get(data, 'data.attributes.fundingReferences', [])
+          .map(funder => ({
+            name: funder.funderName,
+            identifier: funder.funderIdentifier,
+          }))
+          .filter(fu => fu.name),
       )
     }
 
@@ -121,14 +118,8 @@ class Datacite extends Transform {
     if (chunk.datacite.affiliations) {
       const titles = chunk.datacite.affiliations
 
-      // eslint-disable-next-line no-console
-      console.log({ affiliationTitles: titles })
-
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
-        // eslint-disable-next-line no-console
-        console.log(titles[i].name, 'datacite 1')
-
         const exists = await Affiliation.query(trx).findOne({
           title: titles[i].name,
         })
@@ -154,9 +145,6 @@ class Datacite extends Transform {
 
       // eslint-disable-next-line no-plusplus
       for (let i = 0; i < titles.length; i++) {
-        // eslint-disable-next-line no-console
-        console.log(titles[i].name, 'datacite 2')
-
         const exists = await Funder.query(trx).findOne({
           title: titles[i].name,
         })
@@ -179,8 +167,6 @@ class Datacite extends Transform {
 
     if (chunk.datacite.repository) {
       const title = chunk.datacite.repository
-      // eslint-disable-next-line no-console
-      console.log(title, 'datacite 3')
 
       const exists = await Repository.query(trx).findOne({ title })
       let repository = exists

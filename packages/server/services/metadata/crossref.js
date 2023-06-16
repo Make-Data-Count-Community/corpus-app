@@ -51,9 +51,6 @@ class Crossref extends Transform {
 
     if (chunk.crossref.publisher) {
       const title = chunk.crossref.publisher
-      // eslint-disable-next-line no-console
-      console.log(title, 'crossref 1')
-
       const exists = await Publisher.query(trx).findOne({ title })
       let publisher = exists
 
@@ -66,8 +63,6 @@ class Crossref extends Transform {
 
     if (chunk.crossref.journal) {
       const title = chunk.crossref.journal
-      // eslint-disable-next-line no-console
-      console.log(title, 'crossref 2')
 
       const exists = await Journal.query(trx).findOne({ title })
       let journal = exists
