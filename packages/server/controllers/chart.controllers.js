@@ -208,9 +208,34 @@ const getAssertionCountsPerSource = async () => {
   return chartValues
 }
 
+const getCorpusGrowth = async () => {
+  const results = await db.raw(
+    "select  date_trunc('week', created) AS weekly, sum(count_doi) as sum_doi, sum(count_accession_number) as sum_accession_number from count_growth_per_day cgpd group by weekly",
+  )
+
+  const chartValues = []
+  results.rows.forEach((result, key) => {
+    chartValues.push({
+      id: uuid(),
+      xField: result.weekly,
+      yField: result.sum_doi,
+      stackField: 'doi',
+    })
+    chartValues.push({
+      id: uuid(),
+      xField: result.weekly,
+      yField: result.sum_accession_number,
+      stackField: 'accession',
+    })
+  })
+
+  return chartValues
+}
+
 module.exports = {
   getAssertionsPerYear,
   getAssertionsPerSubject,
   getAssertionsPerPublisher,
   getAssertionCountsPerSource,
+  getCorpusGrowth,
 }

@@ -10,7 +10,7 @@ import {
   GET_BY_SOURCE,
   GET_BY_SUBJECT,
   GET_BY_YEAR,
-  //   GET_CORPUS_GROWTH,
+  GET_CORPUS_GROWTH,
   GET_FULL_FACET_OPTIONS,
   //   GET_UNIQUE_COUNT,
 } from '../graphql'
@@ -313,7 +313,7 @@ const corpusGrowthTableColumns = [
   },
 ]
 
-const corpusGrowthDefaultTab = 'table'
+const corpusGrowthDefaultTab = 'chart'
 
 const uniqueCountColumns = [
   {
@@ -652,14 +652,11 @@ const DashboardPage = () => {
   //   const { data: uniqueCountData, loading: uniqueCountLoading } =
   //     useQuery(GET_UNIQUE_COUNT)
 
-  //   const { data: corpusGrowthData, loading: corpusGrowthLoading } =
-  //     useQuery(GET_CORPUS_GROWTH)
+  const { data: corpusGrowthData, loading: corpusGrowthLoading } =
+    useQuery(GET_CORPUS_GROWTH)
 
   const uniqueCountData = []
   const uniqueCountLoading = false
-  const corpusGrowthData = []
-  const corpusGrowthLoading = false
-
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('overTimeFilters'))
 

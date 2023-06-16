@@ -11,4 +11,5 @@ extend type Query {
   getAssertionsPerSubject(input: SearchModelInput): [Chart]
   getAssertionsPerPublisher(input: SearchModelInput): [Chart]
   getAssertionCountsPerSource(input: SearchModelInput): [Chart]
+  getCorpusGrowth(input: SearchModelInput): [Chart]
 }

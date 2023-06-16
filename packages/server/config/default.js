@@ -63,7 +63,6 @@ module.exports = {
       min: 0,
       max: 10,
       idleTimeoutMillis: 1000,
-      propagateCreateError: false,
     },
     useFileStorage: false,
   },

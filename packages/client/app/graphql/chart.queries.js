@@ -80,13 +80,13 @@ export const GET_BY_SOURCE = gql`
 //   }
 // }`
 
-// export const GET_CORPUS_GROWTH = gql`
-//   query CorpusGrowth($input: SearchModelInput) {
-//     getCorpusGrowth(input: $input) {
-//       id
-//       xField
-//       yField
-//       stackField
-//     }
-//   }
-// `
+export const GET_CORPUS_GROWTH = gql`
+  query CorpusGrowth($input: SearchModelInput) {
+    getCorpusGrowth(input: $input) {
+      id
+      xField
+      yField
+      stackField
+    }
+  }
+`
