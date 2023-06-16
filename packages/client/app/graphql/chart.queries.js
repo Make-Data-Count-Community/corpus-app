@@ -70,3 +70,23 @@ export const GET_BY_SOURCE = gql`
     }
   }
 `
+
+// export const GET_UNIQUE_COUNT = gql`
+// query BySource($input: SearchModelInput) {
+//   getAssertionUniqueCounts(input: $input) {
+// 	facet
+// 	thirdPartyAggr
+// 	pidMetadata
+//   }
+// }`
+
+// export const GET_CORPUS_GROWTH = gql`
+//   query CorpusGrowth($input: SearchModelInput) {
+//     getCorpusGrowth(input: $input) {
+//       id
+//       xField
+//       yField
+//       stackField
+//     }
+//   }
+// `
