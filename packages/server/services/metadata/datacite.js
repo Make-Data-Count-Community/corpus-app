@@ -68,7 +68,8 @@ class Datacite extends Transform {
                 identifier: aff.affiliationIdentifier,
               })),
             )
-            .filter(aff => aff.length),
+            .filter(aff => aff.length)
+            .filter(af => af !== undefined),
         ),
         'name',
       )
