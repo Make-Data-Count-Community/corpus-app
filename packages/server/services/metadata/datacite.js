@@ -55,7 +55,7 @@ class Datacite extends Transform {
 
       // Get Affiliations
       // eslint-disable-next-line no-console
-      console.log(data.attributes.creators)
+      console.log(get(data, 'data.attributes.creators', []))
       chunk.datacite.affiliations = uniqBy(
         flatten(
           get(data, 'data.attributes.creators', [])
