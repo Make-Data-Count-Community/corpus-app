@@ -122,11 +122,13 @@ const getAssertionsPerSubject = async ({ input }) => {
     },
   ]
 
+  const criteria = get(input, 'search.criteria', [])
+
   const searchedAssertions = new SearchService(AssertionSubject, {
     join,
     take: 20,
     groupBy: 'subject_id',
-    filter: get(input, 'search.criteria', []),
+    filter: criteria,
     sort: { field: ['cnt'], direction: 'desc' },
   })
 

@@ -652,8 +652,9 @@ const DashboardPage = () => {
   //   const { data: uniqueCountData, loading: uniqueCountLoading } =
   //     useQuery(GET_UNIQUE_COUNT)
 
-  const { data: corpusGrowthData, loading: corpusGrowthLoading } =
-    useQuery(GET_CORPUS_GROWTH)
+  const { data, loading: corpusGrowthLoading } = useQuery(GET_CORPUS_GROWTH)
+
+  const corpusGrowthData = data?.getCorpusGrowth || []
 
   const uniqueCountData = []
   const uniqueCountLoading = false
