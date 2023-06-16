@@ -66,7 +66,7 @@ class ScheduledTaskService {
     await Promise.all(
       sourceAssertions.map(assertion =>
         Source.query()
-          .findOne({ id: assertion.source_id })
+          .findOne({ id: assertion.sourceId })
           .patch({
             doiCount: assertion.doicnt ? parseInt(assertion.doicnt, 10) : 0,
             accessionNumberCount: assertion.doiaccessionnumer
