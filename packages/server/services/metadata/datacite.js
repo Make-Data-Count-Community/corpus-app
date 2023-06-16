@@ -63,16 +63,12 @@ class Datacite extends Transform {
         flatten(
           get(data, 'data.attributes.creators', [])
             .map(creator =>
-              creator.affiliation.map(aff => {
-                if (aff.name && aff.affiliationIdentifier) {
-                  return {
-                    name: aff.name,
-                    identifier: aff.affiliationIdentifier,
-                  }
-                }
-
-                return {}
-              }),
+              creator.affiliation
+                .map(aff => ({
+                  name: aff.name,
+                  identifier: aff.affiliationIdentifier,
+                }))
+                .filter(af => af.name || af.identifier),
             )
             .filter(aff => aff.length),
         ),
