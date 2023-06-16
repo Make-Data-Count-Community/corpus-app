@@ -52,8 +52,8 @@ class ScheduledTaskService {
 
     // myAsyncFunction()
 
-    await db.schema.refreshMaterializedView('last_10_years_assertions')
-    await db.schema.refreshMaterializedView('count_growth_per_day')
+    await db.raw('REFRESH MATERIALIZED VIEW last_10_years_assertions')
+    await db.raw('REFRESH MATERIALIZED VIEW count_growth_per_day')
 
     const sourceAssertions = await Assertion.query()
       .select(
