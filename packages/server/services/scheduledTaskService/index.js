@@ -68,8 +68,10 @@ class ScheduledTaskService {
         Source.query()
           .findOne({ id: assertion.source_id })
           .patch({
-            doiCount: parseInt(assertion.doicnt, 10),
-            accessionNumberCount: parseInt(assertion.doiaccessionnumer, 10),
+            doiCount: assertion.doicnt ? parseInt(assertion.doicnt, 10) : 0,
+            accessionNumberCount: assertion.doiaccessionnumer
+              ? parseInt(assertion.doiaccessionnumer, 10)
+              : 0,
           }),
       ),
     )
