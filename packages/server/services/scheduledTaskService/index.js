@@ -12,7 +12,7 @@ class ScheduledTaskService {
 
     // const endDate = new Date(process.env.END_YEAR, 11, 31)
 
-    let corpusdata = null
+    // const corpusdata = null
 
     // // eslint-disable-next-line no-unmodified-loop-condition
     // for (let d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1)) {
@@ -30,27 +30,27 @@ class ScheduledTaskService {
 
     // logger.info(`######### Start Reading source : 'crossref' ######### `)
 
-    corpusdata = await CorpusDataFactory.dataciteSourceCrossref()
-    await corpusdata.seedSource.readSource()
+    // corpusdata = await CorpusDataFactory.dataciteSourceCrossref()
+    // await corpusdata.seedSource.readSource()
 
     // logger.info(`######### Start Retreving Data from API ######### `)
 
-    // async function myAsyncFunction() {
-    //   await MetadataSource.loadCitationsFromDB()
+    async function myAsyncFunction() {
+      await MetadataSource.loadCitationsFromDB()
 
-    //   const countAssertions = await ActivityLog.query()
-    //     .count({ count: '*' })
-    //     .andWhere(builder => {
-    //       builder.where('proccessed', '=', false)
-    //       builder.andWhere('done', '=', false)
-    //     })
+      const countAssertions = await ActivityLog.query()
+        .count({ count: '*' })
+        .andWhere(builder => {
+          builder.where('proccessed', '=', false)
+          builder.andWhere('done', '=', false)
+        })
 
-    //   if (countAssertions[0].count !== '0') {
-    //     setImmediate(myAsyncFunction)
-    //   }
-    // }
+      if (countAssertions[0].count !== '0') {
+        setImmediate(myAsyncFunction)
+      }
+    }
 
-    // myAsyncFunction()
+    myAsyncFunction()
 
     // await db.schema.refreshMaterializedView('last_10_years_assertions')
 
