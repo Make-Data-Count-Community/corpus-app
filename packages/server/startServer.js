@@ -2,7 +2,7 @@
 const { startServer, db } = require('@coko/server')
 const os = require('os')
 
-const ScheduledTaskService = require('./services/scheduledTaskService')
+// const ScheduledTaskService = require('./services/scheduledTaskService')
 const CorpusDataFactory = require('./services/corpusDataFactory')
 const MetadataSource = require('./services/metadata/metadataSource')
 const { model: ActivityLog } = require('./models/activityLog')
@@ -95,7 +95,6 @@ const init = async () => {
     }
 
     if (process.env.START_MIGRATE_WEEKLY) {
-      await ScheduledTaskService.testTask()
       // await ScheduledTaskService.startMigratingWeekly('0 0 * * 5', {
       //   scheduled: true,
       // })
