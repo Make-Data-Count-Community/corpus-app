@@ -166,20 +166,26 @@ const CitationCountsBySubjectPage = () => {
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
 
+    const parsedFilters =
+      storedFilters?.map(f => ({
+        ...f,
+        isFacetSelected: false,
+      })) || []
+
     if (storedFilters) {
-      setBySubjectFilters(
-        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
-      )
+      setBySubjectFilters(parsedFilters)
     } else {
       localStorage.setItem('bySubjectFilters', JSON.stringify(bySubjectFilters))
     }
 
-    const bySubjectParams = bySubjectFilters
-      .map(f => ({
-        field: `${f.type}Id`,
-        operator: { in: f.values.map(s => s.id) },
-      }))
-      .filter(v => !!v.operator.in.length)
+    const bySubjectParams = storedFilters
+      ? parsedFilters
+          .map(f => ({
+            field: `${f.type}Id`,
+            operator: { in: f.values.map(s => s.id) },
+          }))
+          .filter(v => !!v.operator.in.length)
+      : []
 
     bySubjectQuery({
       variables: { input: { search: { criteria: bySubjectParams } } },

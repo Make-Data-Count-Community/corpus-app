@@ -64,7 +64,7 @@ const Layout = props => {
     const title = regexPaths.find(p => p.path.test(path))
 
     if (title) {
-      document.title = `${title?.name} - App Template`
+      document.title = `${title?.name} - Data Citation Corpus`
     }
 
     const unlisten = history.listen(val => {
@@ -74,7 +74,7 @@ const Layout = props => {
       if (pathTitle) {
         document.getElementById('page-announcement').innerHTML = pathTitle?.name
 
-        document.title = `${pathTitle?.name} - App Template`
+        document.title = `${pathTitle?.name} - Data Citation Corpus`
       }
     })
 

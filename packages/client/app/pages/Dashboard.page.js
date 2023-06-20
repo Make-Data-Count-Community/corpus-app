@@ -378,14 +378,14 @@ const DashboardPage = () => {
   const [corpusGrowthIsDowloadListOpen, setCorpusGrowthIsDownloadListOpen] =
     useState(false)
 
+  const corpusGrowthNewView = useRef(null)
+
   const [uniqueCountSelectedTab, setUniqueCountSelectedTab] = useState(
     uniqueCountDefaultTab,
   )
 
   const [uniqueCountIsDowloadListOpen, setUniqueCountIsDownloadListOpen] =
     useState(false)
-
-  const corpusGrowthNewView = useRef(null)
 
   // #region overTimeStates
   const [overTimeSelectedTab, setOverTimeSelectedTab] =
@@ -689,23 +689,30 @@ const DashboardPage = () => {
 
   const uniqueCountData = []
   const uniqueCountLoading = false
+
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('overTimeFilters'))
 
+    const parsedFilters =
+      storedFilters?.map(f => ({
+        ...f,
+        isFacetSelected: false,
+      })) || []
+
     if (storedFilters) {
-      setOverTimeFilters(
-        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
-      )
+      setOverTimeFilters(parsedFilters)
     } else {
       localStorage.setItem('overTimeFilters', JSON.stringify(overTimeFilters))
     }
 
-    const overTimeParams = overTimeFilters
-      .map(f => ({
-        field: `${f.type}Id`,
-        operator: { in: f.values.map(s => s.id) },
-      }))
-      .filter(v => !!v.operator.in.length)
+    const overTimeParams = storedFilters
+      ? parsedFilters
+          .map(f => ({
+            field: `${f.type}Id`,
+            operator: { in: f.values.map(s => s.id) },
+          }))
+          .filter(v => !!v.operator.in.length)
+      : []
 
     byYearQuery({
       variables: { input: { search: { criteria: overTimeParams } } },
@@ -721,20 +728,26 @@ const DashboardPage = () => {
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
 
+    const parsedFilters =
+      storedFilters?.map(f => ({
+        ...f,
+        isFacetSelected: false,
+      })) || []
+
     if (storedFilters) {
-      setBySubjectFilters(
-        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
-      )
+      setBySubjectFilters(parsedFilters)
     } else {
       localStorage.setItem('bySubjectFilters', JSON.stringify(bySubjectFilters))
     }
 
-    const bySubjectParams = bySubjectFilters
-      .map(f => ({
-        field: `${f.type}Id`,
-        operator: { in: f.values.map(s => s.id) },
-      }))
-      .filter(v => !!v.operator.in.length)
+    const bySubjectParams = storedFilters
+      ? parsedFilters
+          .map(f => ({
+            field: `${f.type}Id`,
+            operator: { in: f.values.map(s => s.id) },
+          }))
+          .filter(v => !!v.operator.in.length)
+      : []
 
     bySubjectQuery({
       variables: { input: { search: { criteria: bySubjectParams } } },
@@ -750,10 +763,14 @@ const DashboardPage = () => {
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('byPublisherFilters'))
 
+    const parsedFilters =
+      storedFilters?.map(f => ({
+        ...f,
+        isFacetSelected: false,
+      })) || []
+
     if (storedFilters) {
-      setByPublisherFilters(
-        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
-      )
+      setByPublisherFilters(parsedFilters)
     } else {
       localStorage.setItem(
         'byPublisherFilters',
@@ -761,12 +778,14 @@ const DashboardPage = () => {
       )
     }
 
-    const byPublisherParams = byPublisherFilters
-      .map(f => ({
-        field: `${f.type}Id`,
-        operator: { in: f.values.map(s => s.id) },
-      }))
-      .filter(v => !!v.operator.in.length)
+    const byPublisherParams = storedFilters
+      ? parsedFilters
+          .map(f => ({
+            field: `${f.type}Id`,
+            operator: { in: f.values.map(s => s.id) },
+          }))
+          .filter(v => !!v.operator.in.length)
+      : []
 
     byPublisherQuery({
       variables: { input: { search: { criteria: byPublisherParams } } },
@@ -782,20 +801,26 @@ const DashboardPage = () => {
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('bySourceFilters'))
 
+    const parsedFilters =
+      storedFilters?.map(f => ({
+        ...f,
+        isFacetSelected: false,
+      })) || []
+
     if (storedFilters) {
-      setBySourceFilters(
-        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
-      )
+      setBySourceFilters(parsedFilters)
     } else {
       localStorage.setItem('bySourceFilters', JSON.stringify(bySourceFilters))
     }
 
-    const bySourceParams = bySourceFilters
-      .map(f => ({
-        field: `${f.type}Id`,
-        operator: { in: f.values.map(s => s.id) },
-      }))
-      .filter(v => !!v.operator.in.length)
+    const bySourceParams = storedFilters
+      ? parsedFilters
+          .map(f => ({
+            field: `${f.type}Id`,
+            operator: { in: f.values.map(s => s.id) },
+          }))
+          .filter(v => !!v.operator.in.length)
+      : []
 
     bySourceQuery({
       variables: { input: { search: { criteria: bySourceParams } } },
@@ -1462,6 +1487,8 @@ const DashboardPage = () => {
   const handleBySourceOnNewView = view => {
     bySourceNewView.current = view
   }
+
+  // #endregion bySourceFilters
 
   const handleCorpusGrowthFooterTabClick = tabTitle => {
     if (tabTitle === 'download') {

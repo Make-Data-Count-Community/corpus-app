@@ -23,6 +23,7 @@ const UniqueCitationCounts = props => {
   const {
     data,
     isDownloadListOpen,
+    loading,
     onDownloadOptionClick,
     onExpandClick,
     onFooterTabClick,
@@ -36,6 +37,7 @@ const UniqueCitationCounts = props => {
       downloadOptions={downloadOptions}
       expandPath={expandPath}
       isDownloadListOpen={isDownloadListOpen}
+      loading={loading}
       onDownloadOptionClick={onDownloadOptionClick}
       onExpandClick={onExpandClick}
       onFooterTabClick={onFooterTabClick}
@@ -53,6 +55,7 @@ const UniqueCitationCounts = props => {
 UniqueCitationCounts.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   isDownloadListOpen: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   onDownloadOptionClick: PropTypes.func.isRequired,
   onExpandClick: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
