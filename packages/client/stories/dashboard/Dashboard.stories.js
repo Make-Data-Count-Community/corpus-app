@@ -8,6 +8,36 @@ import { Dashboard } from '../../app/ui'
 const facetNotSelectedLabel = 'Please select a facet'
 const displayListEmptyLabel = 'No matches found'
 
+const footerLinks = {
+  homepage: '/',
+  termsOfUse: 'https://datacite.org/terms.html',
+  privacyPolicy: 'https://datacite.org/privacy.html',
+  twitterUrl: 'https://twitter.com/datacite',
+  githubUrl: 'https://github.com/datacite/datacite',
+  youtubeUrl: 'https://www.youtube.com/channel/UCVsSDZhIN_WbnD_v5o9eB_A',
+  linkedinUrl: 'https://www.linkedin.com/company/datacite',
+  contactUs: 'mailto:support@datacite.org',
+  blog: 'https://blog.datacite.org/',
+  team: 'https://datacite.org/team.html',
+  whatWeDo: 'https://datacite.org/value.html',
+  governance: 'https://datacite.org/governance.html',
+  jobOpportunities: 'https://datacite.org/jobopportunities.html',
+  steeringGroups: 'https://datacite.org/steering.html',
+  createDois: 'https://doi.datacite.org/',
+  discoverMetadata: 'https://commons.datacite.org/',
+  integrateApis: 'https://datacite.org/integratorapis.html',
+  partnerServices: 'https://datacite.org/partnerservices.html',
+  metadataSchema: 'https://schema.datacite.org/',
+  support: 'https://support.datacite.org/',
+  feeModel: 'https://datacite.org/feemodel.html',
+  members: 'https://datacite.org/members.html',
+  partners: 'https://datacite.org/partners.html',
+  serviceProviders: 'https://datacite.org/service-providers.html',
+  roadmap: 'https://datacite.org/roadmap.html',
+  fairWorkflows: 'https://datacite.org/fair-workflows.html',
+  imprint: 'https://datacite.org/imprint.html',
+}
+
 const downloadFile = (inputData, fileName, type = 'csv') => {
   const url =
     type === 'csv'
@@ -2413,6 +2443,7 @@ const Template = args => {
       corpusGrowthSelectedFooterTab={corpusGrowthSelectedTab}
       corpusGrowthShowExpandButton
       corpusGrowthTableColumns={corpusGrowthTableColumns}
+      footerLinks={footerLinks}
       overTimeData={
         overTimeSelectedTab === 'chart'
           ? overTimeVisualisationData

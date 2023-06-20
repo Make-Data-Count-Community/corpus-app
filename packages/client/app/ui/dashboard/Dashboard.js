@@ -271,7 +271,7 @@ const Dashboard = props => {
           tableColumns={corpusGrowthTableColumns}
         />
       </VisualisationRow>
-      <Footer footerLinks={footerLinks} />
+      <Footer links={footerLinks} />
     </DashboardWrapper>
   )
 }
