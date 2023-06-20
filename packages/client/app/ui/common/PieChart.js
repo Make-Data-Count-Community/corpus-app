@@ -10,6 +10,7 @@ const PieChart = props => {
     thetaField,
     colorField,
     colorFieldTooltipTitle,
+    legendTitle,
     thetaFieldTooltipTitle,
     onNewView,
   } = props
@@ -33,6 +34,7 @@ const PieChart = props => {
           scale: {
             range: publisherColors,
           },
+          title: legendTitle,
         },
         tooltip: [
           {
@@ -51,7 +53,7 @@ const PieChart = props => {
       config: {
         background: chartBackground,
         legend: {
-          title: null,
+          titleFont: 'Barlow',
           labelFont: 'Barlow',
           labelFontWeight: 500,
           labelFontSize: '12',
@@ -82,6 +84,7 @@ PieChart.propTypes = {
   thetaField: PropTypes.string.isRequired,
   colorField: PropTypes.string.isRequired,
   colorFieldTooltipTitle: PropTypes.string.isRequired,
+  legendTitle: PropTypes.string.isRequired,
   thetaFieldTooltipTitle: PropTypes.string.isRequired,
   onNewView: PropTypes.func,
 }
