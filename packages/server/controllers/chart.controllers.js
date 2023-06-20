@@ -70,7 +70,7 @@ const buildQueryForIntermediateTables = async input => {
   if (assertions.length > 0) {
     criteria.push({
       field: 'id',
-      operator: { in: assertions.map(a => a.assertion_id) },
+      operator: { in: assertions.map(a => a.assertionId) },
     })
   }
 
@@ -210,6 +210,8 @@ const getAssertionCountsPerSource = async () => {
   return chartValues
 }
 
+const getAssertionUniqueCounts = async () => {}
+
 const getCorpusGrowth = async () => {
   const results = await db.raw(
     "select  date_trunc('week', created) AS weekly, sum(count_doi) as sum_doi, sum(count_accession_number) as sum_accession_number from count_growth_per_day cgpd group by weekly",
@@ -239,5 +241,6 @@ module.exports = {
   getAssertionsPerSubject,
   getAssertionsPerPublisher,
   getAssertionCountsPerSource,
+  getAssertionUniqueCounts,
   getCorpusGrowth,
 }

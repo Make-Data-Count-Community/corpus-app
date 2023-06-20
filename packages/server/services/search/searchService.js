@@ -209,7 +209,7 @@ class SearchService {
 
     this.select(select).groupby().rawHaving().offset().limit().order()
 
-    return this.debug ? this.query.debug : this.query
+    return this.debug ? this.query.debug() : this.query
   }
 }
 
