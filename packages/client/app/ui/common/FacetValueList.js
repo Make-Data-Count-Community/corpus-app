@@ -45,15 +45,15 @@ const FacetValueList = props => {
 FacetValueList.propTypes = {
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ),
   onItemClick: PropTypes.func,
   valueOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ),
   onEmptyListLabel: PropTypes.string,

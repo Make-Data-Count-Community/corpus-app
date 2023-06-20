@@ -96,9 +96,9 @@ const ChartFooter = props => {
 ChartFooter.propTypes = {
   downloadOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      type: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      symbol: PropTypes.string.isRequired,
+      type: PropTypes.string,
+      label: PropTypes.string,
+      symbol: PropTypes.string,
     }),
   ).isRequired,
   isDowloadListOpen: PropTypes.bool,

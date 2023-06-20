@@ -52,7 +52,6 @@ const CitationCountsByPublisher = props => {
     onApplyFilters,
     onDownloadOptionClick,
     onEmptyListLabel,
-    onExpandClick,
     onFacetItemClick,
     onFacetValueClick,
     onFilterClick,
@@ -79,7 +78,6 @@ const CitationCountsByPublisher = props => {
       onApplyFilters={onApplyFilters}
       onDownloadOptionClick={onDownloadOptionClick}
       onEmptyListLabel={onEmptyListLabel}
-      onExpandClick={onExpandClick}
       onFacetItemClick={onFacetItemClick}
       onFacetValueClick={onFacetValueClick}
       onFilterClick={onFilterClick}
@@ -116,20 +114,20 @@ CitationCountsByPublisher.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
-      isFacetSelected: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
+      isFacetSelected: PropTypes.bool,
+      type: PropTypes.string,
       values: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
+          id: PropTypes.string,
+          value: PropTypes.string,
         }),
-      ).isRequired,
+      ),
     }),
   ).isRequired,
   filterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ).isRequired,
   isFilterOpen: PropTypes.bool.isRequired,
@@ -138,7 +136,6 @@ CitationCountsByPublisher.propTypes = {
   onApplyFilters: PropTypes.func.isRequired,
   onDownloadOptionClick: PropTypes.func.isRequired,
   onEmptyListLabel: PropTypes.string.isRequired,
-  onExpandClick: PropTypes.func.isRequired,
   onFacetItemClick: PropTypes.func.isRequired,
   onFacetValueClick: PropTypes.func.isRequired,
   onFilterClick: PropTypes.func.isRequired,
@@ -149,17 +146,17 @@ CitationCountsByPublisher.propTypes = {
   selectedFooterTab: PropTypes.string.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ).isRequired,
   showExpandButton: PropTypes.bool.isRequired,
   showFilterFooter: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      dataIndex: PropTypes.string,
+      key: PropTypes.string,
     }),
   ).isRequired,
 }

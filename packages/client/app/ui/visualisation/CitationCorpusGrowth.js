@@ -48,7 +48,6 @@ const CitationCorpusGrowth = props => {
     isDownloadListOpen,
     loading,
     onDownloadOptionClick,
-    onExpandClick,
     onFooterTabClick,
     onNewView,
     selectedFooterTab,
@@ -63,7 +62,6 @@ const CitationCorpusGrowth = props => {
       isDownloadListOpen={isDownloadListOpen}
       loading={loading}
       onDownloadOptionClick={onDownloadOptionClick}
-      onExpandClick={onExpandClick}
       onFooterTabClick={onFooterTabClick}
       selectedFooterTab={selectedFooterTab}
       showExpandButton={showExpandButton}
@@ -94,16 +92,15 @@ CitationCorpusGrowth.propTypes = {
   isDownloadListOpen: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   onDownloadOptionClick: PropTypes.func.isRequired,
-  onExpandClick: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
   onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
   showExpandButton: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      dataIndex: PropTypes.string,
+      key: PropTypes.string,
     }),
   ).isRequired,
 }

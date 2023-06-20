@@ -73,8 +73,8 @@ FilterFacetItem.propTypes = {
   isFacetSelected: PropTypes.bool,
   selectedValues: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ),
   type: PropTypes.string.isRequired,

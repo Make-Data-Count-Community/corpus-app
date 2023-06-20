@@ -107,8 +107,6 @@ const Template = args => {
     }
   }
 
-  const handleExpandClick = () => {}
-
   const handleDownloadOptionClick = () => {}
 
   const handleNewView = view => {
@@ -125,7 +123,6 @@ const Template = args => {
       }
       isDownloadListOpen={isDowloadListOpen}
       onDownloadOptionClick={handleDownloadOptionClick}
-      onExpandClick={handleExpandClick}
       onFooterTabClick={handleFooterTabClick}
       onNewView={handleNewView}
       selectedFooterTab={selectedTab}

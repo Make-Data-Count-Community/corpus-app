@@ -34,9 +34,9 @@ const Table = props => {
 Table.propTypes = {
   columns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      dataIndex: PropTypes.string,
+      key: PropTypes.string,
     }),
   ).isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,

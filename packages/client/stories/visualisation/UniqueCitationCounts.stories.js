@@ -81,8 +81,6 @@ const Template = args => {
     }
   }
 
-  const handleExpandClick = () => {}
-
   const handleDownloadOptionClick = () => {}
 
   return (
@@ -91,7 +89,6 @@ const Template = args => {
       data={transformData(data)}
       isDownloadListOpen={isDowloadListOpen}
       onDownloadOptionClick={handleDownloadOptionClick}
-      onExpandClick={handleExpandClick}
       onFooterTabClick={handleFooterTabClick}
       selectedFooterTab={selectedTab}
       tableColumns={columns}

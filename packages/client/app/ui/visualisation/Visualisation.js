@@ -99,28 +99,28 @@ const Visualisation = props => {
 Visualisation.propTypes = {
   downloadOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      type: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      symbol: PropTypes.string.isRequired,
+      type: PropTypes.string,
+      label: PropTypes.string,
+      symbol: PropTypes.string,
     }),
   ).isRequired,
   expandPath: PropTypes.string.isRequired,
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
-      isFacetSelected: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
+      isFacetSelected: PropTypes.bool,
+      type: PropTypes.string,
       values: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
+          id: PropTypes.string,
+          value: PropTypes.string,
         }),
-      ).isRequired,
+      ),
     }),
   ),
   filterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ),
   isDownloadListOpen: PropTypes.bool.isRequired,
@@ -137,8 +137,8 @@ Visualisation.propTypes = {
   onFooterTabClick: PropTypes.func.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ),
   selectedFooterTab: PropTypes.string.isRequired,
