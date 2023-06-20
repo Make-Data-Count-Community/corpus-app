@@ -14,12 +14,16 @@ const data = [
     stackField: 'DOI',
   },
   { xField: 'OpenAIRE', yField: randomNumber(10000000), stackField: 'DOI' },
-  { xField: 'CZI', yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 'DataCite Event Data', yField: 0, stackField: 'Accession ID' },
+  {
+    xField: 'CZI',
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  { xField: 'DataCite Event Data', yField: 0, stackField: 'Accession Number' },
   {
     xField: 'OpenAIRE',
     yField: randomNumber(10000000),
-    stackField: 'Accession ID',
+    stackField: 'Accession Number',
   },
 ]
 
@@ -37,8 +41,8 @@ const columns = [
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
   {
-    title: 'Accession ID',
-    dataIndex: 'Accession ID',
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
     key: 'accession',
     render: value =>
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,

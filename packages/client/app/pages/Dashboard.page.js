@@ -95,8 +95,8 @@ const overTimeTableColumns = [
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
   {
-    title: 'Accession ID',
-    dataIndex: 'Accession ID',
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
     key: 'accession',
     render: value =>
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,

@@ -17,16 +17,56 @@ const data = [
   { xField: 2017, yField: randomNumber(10000000), stackField: 'DOI' },
   { xField: 2018, yField: randomNumber(10000000), stackField: 'DOI' },
   { xField: 2019, yField: randomNumber(10000000), stackField: 'DOI' },
-  { xField: 2010, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2011, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2012, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2013, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2014, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2015, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2016, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2017, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2018, yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 2019, yField: randomNumber(10000000), stackField: 'Accession ID' },
+  {
+    xField: 2010,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2011,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2012,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2013,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2014,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2015,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2016,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2017,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2018,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  {
+    xField: 2019,
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
 ]
 
 const columns = [
@@ -43,8 +83,8 @@ const columns = [
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
   },
   {
-    title: 'Accession ID',
-    dataIndex: 'Accession ID',
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
     key: 'accession',
     render: value =>
       value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,

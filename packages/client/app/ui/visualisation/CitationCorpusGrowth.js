@@ -11,7 +11,7 @@ import CsvSymbol from '../../../static/symbol-csv-file.svg'
 
 const title = 'Data citations corpus growth'
 const stackField = 'stackField'
-const stackItems = ['DOI', 'Accession ID']
+const stackItems = ['DOI', 'Accession Number']
 const xField = 'xField'
 const yField = 'yField'
 

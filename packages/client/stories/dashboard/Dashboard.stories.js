@@ -891,6 +891,16 @@ const generateByPublisherData = () => [
   { id: uuid(), xField: 'Publisher 8', yField: randomNumber(1000000) },
   { id: uuid(), xField: 'Publisher 9', yField: randomNumber(1000000) },
   { id: uuid(), xField: 'Publisher 10', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 11', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 12', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 13', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 14', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 15', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 16', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 17', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 18', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 19', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 20', yField: randomNumber(1000000) },
 ]
 
 const byPublisherData = generateByPublisherData()

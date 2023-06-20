@@ -12,6 +12,7 @@ import SvgSymbol from '../../../static/symbol-svg-file.svg'
 const title = 'Citation counts by subject'
 const colorField = 'xField'
 const valueField = 'yField'
+const legendTitle = 'Top 20'
 
 const downloadOptions = [
   {
@@ -95,6 +96,7 @@ const CitationCountsBySubject = props => {
         <TreeMap
           colorField={colorField}
           data={data}
+          legendTitle={legendTitle}
           onNewView={onNewView}
           valueField={valueField}
         />
