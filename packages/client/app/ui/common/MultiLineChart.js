@@ -31,8 +31,9 @@ const MultiLineChart = props => {
       encoding: {
         x: {
           field: xField,
-          type: 'nominal',
+          type: 'ordinal',
           axis: { labelAngle: xLabelAngle },
+          timeUnit: 'yearmonthdate',
           title: null,
         },
         y: {

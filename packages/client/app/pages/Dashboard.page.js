@@ -308,9 +308,13 @@ const bySourceDefaultTab = 'chart'
 
 const corpusGrowthTableColumns = [
   {
-    title: 'Month',
+    title: 'Date of Ingest',
     dataIndex: 'xField',
     key: 'xField',
+    render: value => {
+      const parsedValue = Date.parse(value)
+      return new Date(parsedValue).toLocaleDateString('en-US')
+    },
   },
   {
     title: 'DOI',
@@ -364,6 +368,8 @@ const uniqueCountDefaultTab = 'table'
 
 const DashboardPage = () => {
   const [fullFacetOptions, setFullFacetOptions] = useState([])
+
+  const [corpusGrowthData, setCorpusGrowthData] = useState([])
 
   const [corpusGrowthSelectedTab, setCorpusGrowthSelectedTab] = useState(
     corpusGrowthDefaultTab,
@@ -668,9 +674,18 @@ const DashboardPage = () => {
   //   const { data: uniqueCountData, loading: uniqueCountLoading } =
   //     useQuery(GET_UNIQUE_COUNT)
 
-  const { data, loading: corpusGrowthLoading } = useQuery(GET_CORPUS_GROWTH)
+  const { loading: corpusGrowthLoading } = useQuery(GET_CORPUS_GROWTH, {
+    onCompleted: data => {
+      const getCorpusGrowthRaw = cloneDeep(data.getCorpusGrowth)
 
-  const corpusGrowthData = data?.getCorpusGrowth || []
+      const getCorpusGrowthEdited = getCorpusGrowthRaw.map(g => ({
+        ...g,
+        xField: new Date(parseInt(g.xField, 10)),
+      }))
+
+      setCorpusGrowthData(getCorpusGrowthEdited)
+    },
+  })
 
   const uniqueCountData = []
   const uniqueCountLoading = false
@@ -1460,11 +1475,19 @@ const DashboardPage = () => {
     setCorpusGrowthIsDownloadListOpen(false)
 
     if (type === 'csv') {
+      const parsedData = corpusGrowthData.map(c => {
+        const parsedValue = Date.parse(c.xField)
+        return {
+          ...c,
+          xField: new Date(parsedValue).toLocaleDateString('en-US'),
+        }
+      })
+
       const csvString = await json2csv(
-        transformChartData(corpusGrowthData, 'xField', 'stackField', 'yField'),
+        transformChartData(parsedData, 'xField', 'stackField', 'yField'),
         {
           keys: [
-            { field: 'xField', title: 'Month' },
+            { field: 'xField', title: 'Date of Ingest' },
             { field: 'DOI', title: 'DOI' },
             { field: 'Accession Number', title: 'Accession Number' },
             { field: 'total', title: 'Total' },

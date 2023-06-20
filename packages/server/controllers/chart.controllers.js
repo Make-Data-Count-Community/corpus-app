@@ -223,13 +223,13 @@ const getCorpusGrowth = async () => {
       id: uuid(),
       xField: result.weekly,
       yField: result.sum_doi,
-      stackField: 'doi',
+      stackField: 'DOI',
     })
     chartValues.push({
       id: uuid(),
       xField: result.weekly,
       yField: result.sum_accession_number,
-      stackField: 'accession',
+      stackField: 'Accession Number',
     })
   })
 
