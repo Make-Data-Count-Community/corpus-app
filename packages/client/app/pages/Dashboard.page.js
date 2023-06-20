@@ -111,6 +111,12 @@ const addKeytoData = sourceData => {
   })
 }
 
+const compareArrays = (a, b) => {
+  return (
+    a.length === b.length && a.every((element, index) => element === b[index])
+  )
+}
+
 const overTimeTableColumns = [
   {
     title: 'Year',
@@ -912,7 +918,7 @@ const DashboardPage = () => {
         f => f.type === storedFacet.type,
       )
 
-      if (currentFacet.values.length !== storedFacet.values.length) {
+      if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
     })
@@ -1079,7 +1085,7 @@ const DashboardPage = () => {
         f => f.type === storedFacet.type,
       )
 
-      if (currentFacet.values.length !== storedFacet.values.length) {
+      if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
     })
@@ -1239,9 +1245,22 @@ const DashboardPage = () => {
         f => f.type === storedFacet.type,
       )
 
-      if (currentFacet.values.length !== storedFacet.values.length) {
+      //   storedFacet.values.map(c => {
+      //     console.log('c', c)
+      //     console.log('stored.v', currentFacet.values)
+
+      //     if (!currentFacet.values.find(s => s.id === c.id)) {
+      //       shouldShowApplyButton = true
+      //     }
+      //   })
+
+      if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
+
+      //   if (storedFacet.values.length !== storedFacet.values.length) {
+      //     shouldShowApplyButton = true
+      //   }
     })
 
     setByPublisherShowApplyFilter(shouldShowApplyButton)
@@ -1400,7 +1419,7 @@ const DashboardPage = () => {
         f => f.type === storedFacet.type,
       )
 
-      if (currentFacet.values.length !== storedFacet.values.length) {
+      if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
     })

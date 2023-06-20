@@ -33,6 +33,12 @@ const addKeytoData = sourceData => {
   })
 }
 
+const compareArrays = (a, b) => {
+  return (
+    a.length === b.length && a.every((element, index) => element === b[index])
+  )
+}
+
 const bySubjectTableColumns = [
   {
     title: 'Subject',
@@ -276,7 +282,7 @@ const CitationCountsBySubjectPage = () => {
         f => f.type === storedFacet.type,
       )
 
-      if (currentFacet.values.length !== storedFacet.values.length) {
+      if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
     })
