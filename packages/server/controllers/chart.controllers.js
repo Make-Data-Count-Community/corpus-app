@@ -210,7 +210,27 @@ const getAssertionCountsPerSource = async () => {
   return chartValues
 }
 
-const getAssertionUniqueCounts = async () => {}
+const getAssertionUniqueCounts = async () => {
+  const results = await db.raw(
+    'SELECT count, source_id, facet, title, abbreviation FROM public.facet_unique_counts inner join sources s on source_id = s.id',
+  )
+
+  const datacite = results.rows.filter(res => res.abbreviation === 'datacite')
+
+  const chartValues = []
+  datacite.forEach((result, key) => {
+    chartValues.push({
+      id: uuid(),
+      facet: result.facet.charAt(0).toUpperCase() + result.facet.slice(1),
+      key: result.facet,
+      pidMetadata: parseInt(result.count, 10),
+      thirdPartyAggr: 0,
+      total: parseInt(result.count, 10),
+    })
+  })
+
+  return chartValues
+}
 
 const getCorpusGrowth = async () => {
   const results = await db.raw(

@@ -6,11 +6,20 @@ type Chart {
   parent: ID
 }
 
+type FacetUniqueCounts {
+  id: ID
+  facet: String
+  key: String
+  pidMetadata: Int
+  thirdPartyAggr: Int
+  total: Int
+}
+
 extend type Query {
   getAssertionsPerYear(input: SearchModelInput): [Chart]
   getAssertionsPerSubject(input: SearchModelInput): [Chart]
   getAssertionsPerPublisher(input: SearchModelInput): [Chart]
   getAssertionCountsPerSource(input: SearchModelInput): [Chart]
   getCorpusGrowth(input: SearchModelInput): [Chart]
-  getAssertionUniqueCounts(input: SearchModelInput): [Chart]
+  getAssertionUniqueCounts(input: SearchModelInput): [FacetUniqueCounts]
 }
