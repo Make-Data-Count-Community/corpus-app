@@ -12,7 +12,7 @@ const LineChart = props => {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       description: 'Line Chart',
       width: 'container',
-      height: 300,
+      height: 330,
       autosize: { type: 'fit', contains: 'padding' },
       mark: { type: 'line', tooltip: true },
       data: {

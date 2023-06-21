@@ -25,12 +25,10 @@ const VisualisationRow = styled.div`
   display: flex;
   flex-direction: row;
   gap: ${grid(4)};
-  /* justify-content: space-between; */
-  /* margin: ${grid(8)}; */
-  margin: ${grid(5)} 0;
+  margin: ${grid(4)};
+  max-width: 100%;
   overflow: hidden;
   padding: ${grid(0)};
-  width: 100%;
 
   @media screen and (max-width: ${th('mediaQueries.medium')}) {
     flex-direction: column;

@@ -650,7 +650,10 @@ const DashboardPage = () => {
       onCompleted: data => {
         const getAssertionsPerPublisher = cloneDeep(
           data.getAssertionsPerPublisher,
-        )
+        ).map(s => ({
+          ...s,
+          yField: parseInt(s.yField, 10),
+        }))
 
         setByPublisherVisualisationData(getAssertionsPerPublisher)
       },

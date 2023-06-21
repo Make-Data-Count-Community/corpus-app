@@ -11,23 +11,18 @@ const Wrapper = styled.div`
   background: ${th('colorChartBackground')};
   display: flex;
   flex-direction: column;
-  /* flex-grow: 1; */
-  height: 100%;
   justify-content: flex-end;
-  /* margin: ${grid(2)}; */
+  min-height: 100%;
   padding: ${grid(1)};
   width: 100%;
 `
 
 const DataWrapper = styled.div`
-  /* flex-grow: 3; */
-  height: ${grid(84)};
-  /* overflow: auto; */
+  height: ${grid(90)};
+  overflow: auto;
   padding: ${grid(2)} ${grid(4)};
   width: 100%;
 `
-
-// const BodyWrapper = styled.div``
 
 const Visualisation = props => {
   const {
