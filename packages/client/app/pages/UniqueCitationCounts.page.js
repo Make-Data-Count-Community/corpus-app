@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-// import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { json2csv } from 'json-2-csv'
-// import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash'
 
 import { UniqueCitationCounts, VisuallyHiddenElement } from '../ui'
 
-// import { GET_UNIQUE_COUNT } from '../graphql'
+import { GET_UNIQUE_COUNT } from '../graphql'
 
 const downloadFile = (inputData, fileName, type = 'csv') => {
   const url =
@@ -22,13 +22,6 @@ const downloadFile = (inputData, fileName, type = 'csv') => {
   link.click()
 
   link.parentNode.removeChild(link)
-}
-
-const transformUniqueCountData = sourceData => {
-  return sourceData.map(s => {
-    const total = s.pidMetadata + s.thirdPartyAggr
-    return { ...s, key: s.facet, total }
-  })
 }
 
 const uniqueCountColumns = [
@@ -60,6 +53,8 @@ const uniqueCountColumns = [
 const uniqueCountDefaultTab = 'table'
 
 const UniqueCitationCountsPage = () => {
+  const [uniqueCountData, setUniqueCountData] = useState([])
+
   const [uniqueCountSelectedTab, setUniqueCountSelectedTab] = useState(
     uniqueCountDefaultTab,
   )
@@ -67,11 +62,13 @@ const UniqueCitationCountsPage = () => {
   const [uniqueCountIsDowloadListOpen, setUniqueCountIsDownloadListOpen] =
     useState(false)
 
-  const uniqueCountData = []
-  const uniqueCountLoading = false
+  const { loading: uniqueCountLoading } = useQuery(GET_UNIQUE_COUNT, {
+    onCompleted: data => {
+      const getUniqueCounts = cloneDeep(data.getAssertionUniqueCounts)
 
-  //   const { data: uniqueCountData, loading: uniqueCountLoading } =
-  //     useQuery(GET_UNIQUE_COUNT)
+      setUniqueCountData(getUniqueCounts)
+    },
+  })
 
   const handleUniqueCountFooterTabClick = tabTitle => {
     if (tabTitle === 'download') {
@@ -85,17 +82,14 @@ const UniqueCitationCountsPage = () => {
     setUniqueCountIsDownloadListOpen(false)
 
     if (type === 'csv') {
-      const csvString = await json2csv(
-        transformUniqueCountData(uniqueCountData),
-        {
-          keys: [
-            { field: 'facet', title: 'Facet' },
-            { field: 'thirdPartyAggr', title: 'Third party aggregator' },
-            { field: 'pidMetadata', title: 'PID Metadata' },
-            { field: 'total', title: 'Total' },
-          ],
-        },
-      )
+      const csvString = await json2csv(uniqueCountData, {
+        keys: [
+          { field: 'facet', title: 'Facet' },
+          { field: 'thirdPartyAggr', title: 'Third party aggregator' },
+          { field: 'pidMetadata', title: 'PID Metadata' },
+          { field: 'total', title: 'Total' },
+        ],
+      })
 
       downloadFile(
         csvString,
@@ -111,7 +105,7 @@ const UniqueCitationCountsPage = () => {
         page
       </VisuallyHiddenElement>
       <UniqueCitationCounts
-        data={transformUniqueCountData(uniqueCountData)}
+        data={uniqueCountData}
         isDownloadListOpen={uniqueCountIsDowloadListOpen}
         loading={uniqueCountLoading}
         onDownloadOptionClick={handleUniqueCountDownloadOptionClick}

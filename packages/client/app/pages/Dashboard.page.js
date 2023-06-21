@@ -12,7 +12,7 @@ import {
   GET_BY_YEAR,
   GET_CORPUS_GROWTH,
   GET_FULL_FACET_OPTIONS,
-  //   GET_UNIQUE_COUNT,
+  GET_UNIQUE_COUNT,
 } from '../graphql'
 
 const facetNotSelectedLabel = 'Please select a facet'
@@ -96,13 +96,6 @@ const transformChartData = (sourceData, transformBy, keyField, valueField) => {
   })
 
   return result
-}
-
-const transformUniqueCountData = sourceData => {
-  return sourceData.map(s => {
-    const total = s.pidMetadata + s.thirdPartyAggr
-    return { ...s, key: s.facet, total }
-  })
 }
 
 const addKeytoData = sourceData => {
@@ -385,6 +378,8 @@ const DashboardPage = () => {
     useState(false)
 
   const corpusGrowthNewView = useRef(null)
+
+  const [uniqueCountData, setUniqueCountData] = useState([])
 
   const [uniqueCountSelectedTab, setUniqueCountSelectedTab] = useState(
     uniqueCountDefaultTab,
@@ -680,8 +675,13 @@ const DashboardPage = () => {
     },
   )
 
-  //   const { data: uniqueCountData, loading: uniqueCountLoading } =
-  //     useQuery(GET_UNIQUE_COUNT)
+  const { loading: uniqueCountLoading } = useQuery(GET_UNIQUE_COUNT, {
+    onCompleted: data => {
+      const getUniqueCounts = cloneDeep(data.getAssertionUniqueCounts)
+
+      setUniqueCountData(getUniqueCounts)
+    },
+  })
 
   const { loading: corpusGrowthLoading } = useQuery(GET_CORPUS_GROWTH, {
     onCompleted: data => {
@@ -695,9 +695,6 @@ const DashboardPage = () => {
       setCorpusGrowthData(getCorpusGrowthEdited)
     },
   })
-
-  const uniqueCountData = []
-  const uniqueCountLoading = false
 
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('overTimeFilters'))
@@ -1571,17 +1568,14 @@ const DashboardPage = () => {
     setUniqueCountIsDownloadListOpen(false)
 
     if (type === 'csv') {
-      const csvString = await json2csv(
-        transformUniqueCountData(uniqueCountData),
-        {
-          keys: [
-            { field: 'facet', title: 'Facet' },
-            { field: 'thirdPartyAggr', title: 'Third party aggregator' },
-            { field: 'pidMetadata', title: 'PID Metadata' },
-            { field: 'total', title: 'Total' },
-          ],
-        },
-      )
+      const csvString = await json2csv(uniqueCountData, {
+        keys: [
+          { field: 'facet', title: 'Facet' },
+          { field: 'thirdPartyAggr', title: 'Third party aggregator' },
+          { field: 'pidMetadata', title: 'PID Metadata' },
+          { field: 'total', title: 'Total' },
+        ],
+      })
 
       downloadFile(
         csvString,
@@ -1727,7 +1721,7 @@ const DashboardPage = () => {
         overTimeShowExpandButton
         overTimeShowFilterFooter={overTimeShowApplyFilter}
         overTimeTableColumns={overTimeTableColumns}
-        uniqueCountData={transformUniqueCountData(uniqueCountData)}
+        uniqueCountData={uniqueCountData}
         uniqueCountIsDownloadListOpen={uniqueCountIsDowloadListOpen}
         uniqueCountLoading={uniqueCountLoading}
         uniqueCountOnDownloadOptionClick={handleUniqueCountDownloadOptionClick}
