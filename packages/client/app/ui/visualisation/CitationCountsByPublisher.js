@@ -14,7 +14,6 @@ const colorField = 'xField'
 const thetaField = 'yField'
 const colorFieldTooltipTitle = 'Publisher'
 const thetaFieldTooltipTitle = 'Citations'
-const legendTitle = 'Top 20'
 
 const downloadOptions = [
   {
@@ -97,7 +96,7 @@ const CitationCountsByPublisher = props => {
           colorField={colorField}
           colorFieldTooltipTitle={colorFieldTooltipTitle}
           data={data}
-          legendTitle={legendTitle}
+          legendTitle={`Top ${data.length}`}
           onNewView={onNewView}
           thetaField={thetaField}
           thetaFieldTooltipTitle={thetaFieldTooltipTitle}
