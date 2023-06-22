@@ -96,14 +96,14 @@ ChartHeader.propTypes = {
   expandPath: PropTypes.string.isRequired,
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
-      isFacetSelected: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
+      isFacetSelected: PropTypes.bool,
+      type: PropTypes.string,
       values: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
+          id: PropTypes.string,
+          value: PropTypes.string,
         }),
-      ).isRequired,
+      ),
     }),
   ),
   isFilterOpen: PropTypes.bool,
@@ -111,8 +111,8 @@ ChartHeader.propTypes = {
   onApplyFilters: PropTypes.func,
   filterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ),
   onEmptyListLabel: PropTypes.string,
@@ -123,8 +123,8 @@ ChartHeader.propTypes = {
   onFilterSearchChange: PropTypes.func,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ),
   showExpandButton: PropTypes.bool.isRequired,

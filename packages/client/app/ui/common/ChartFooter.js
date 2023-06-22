@@ -14,8 +14,8 @@ import DownloadSymbol from '../../../static/symbol-download.svg'
 import DownloadSelectedSymbol from '../../../static/symbol-download-selected.svg'
 import ListSymbol from '../../../static/symbol-list.svg'
 import ListSelectedSymbol from '../../../static/symbol-list-selected.svg'
-import ShareSymbol from '../../../static/symbol-share.svg'
-import ShareSelectedSymbol from '../../../static/symbol-share-selected.svg'
+// import ShareSymbol from '../../../static/symbol-share.svg'
+// import ShareSelectedSymbol from '../../../static/symbol-share-selected.svg'
 
 const ChartFooterWrapper = styled.div`
   display: flex;
@@ -80,7 +80,7 @@ const ChartFooter = props => {
         </ChartFooterButton>
       </AntPopover>
 
-      <ChartFooterButton
+      {/* <ChartFooterButton
         defaultSymbol={ShareSymbol}
         loading={loading}
         onClick={() => onTabClick('share')}
@@ -88,7 +88,7 @@ const ChartFooter = props => {
         selectedSymbol={ShareSelectedSymbol}
       >
         Share
-      </ChartFooterButton>
+      </ChartFooterButton> */}
     </ChartFooterWrapper>
   )
 }
@@ -96,9 +96,9 @@ const ChartFooter = props => {
 ChartFooter.propTypes = {
   downloadOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      type: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      symbol: PropTypes.string.isRequired,
+      type: PropTypes.string,
+      label: PropTypes.string,
+      symbol: PropTypes.string,
     }),
   ).isRequired,
   isDowloadListOpen: PropTypes.bool,

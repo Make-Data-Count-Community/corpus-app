@@ -43,9 +43,9 @@ const DownloadOptionList = props => {
 DownloadOptionList.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
-      type: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      symbol: PropTypes.string.isRequired,
+      type: PropTypes.string,
+      label: PropTypes.string,
+      symbol: PropTypes.string,
     }),
   ).isRequired,
   onOptionClick: PropTypes.func.isRequired,

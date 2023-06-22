@@ -14,12 +14,16 @@ const data = [
     stackField: 'DOI',
   },
   { xField: 'OpenAIRE', yField: randomNumber(10000000), stackField: 'DOI' },
-  { xField: 'CZI', yField: randomNumber(10000000), stackField: 'Accession ID' },
-  { xField: 'DataCite Event Data', yField: 0, stackField: 'Accession ID' },
+  {
+    xField: 'CZI',
+    yField: randomNumber(10000000),
+    stackField: 'Accession Number',
+  },
+  { xField: 'DataCite Event Data', yField: 0, stackField: 'Accession Number' },
   {
     xField: 'OpenAIRE',
     yField: randomNumber(10000000),
-    stackField: 'Accession ID',
+    stackField: 'Accession Number',
   },
 ]
 
@@ -33,22 +37,19 @@ const columns = [
     title: 'DOI',
     dataIndex: 'DOI',
     key: 'doi',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
-    title: 'Accession ID',
-    dataIndex: 'Accession ID',
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
     key: 'accession',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total Citations',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -196,8 +197,6 @@ const Template = args => {
     setIsFilterOpen(false)
   }
 
-  const handleExpandClick = () => {}
-
   const handleFilterButtonClick = isOpen => {
     setIsFilterOpen(isOpen)
   }
@@ -236,7 +235,6 @@ const Template = args => {
       onApplyFilters={handleApplyFilters}
       onDownloadOptionClick={handleDownloadOptionClick}
       onEmptyListLabel={emptyFacetValueListLabel}
-      onExpandClick={handleExpandClick}
       onFacetItemClick={handleFacetItemClick}
       onFacetValueClick={handleFacetValueClick}
       onFilterClick={handleFilterButtonClick}

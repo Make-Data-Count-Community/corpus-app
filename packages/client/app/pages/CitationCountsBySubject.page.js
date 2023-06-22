@@ -33,6 +33,12 @@ const addKeytoData = sourceData => {
   })
 }
 
+const compareArrays = (a, b) => {
+  return (
+    a.length === b.length && a.every((element, index) => element === b[index])
+  )
+}
+
 const bySubjectTableColumns = [
   {
     title: 'Subject',
@@ -43,8 +49,7 @@ const bySubjectTableColumns = [
     title: 'Total Citations',
     dataIndex: 'yField',
     key: 'yField',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -167,20 +172,26 @@ const CitationCountsBySubjectPage = () => {
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
 
+    const parsedFilters =
+      storedFilters?.map(f => ({
+        ...f,
+        isFacetSelected: false,
+      })) || []
+
     if (storedFilters) {
-      setBySubjectFilters(
-        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
-      )
+      setBySubjectFilters(parsedFilters)
     } else {
       localStorage.setItem('bySubjectFilters', JSON.stringify(bySubjectFilters))
     }
 
-    const bySubjectParams = bySubjectFilters
-      .map(f => ({
-        field: `${f.type}Id`,
-        operator: { in: f.values.map(s => s.id) },
-      }))
-      .filter(v => !!v.operator.in.length)
+    const bySubjectParams = storedFilters
+      ? parsedFilters
+          .map(f => ({
+            field: `${f.type}Id`,
+            operator: { in: f.values.map(s => s.id) },
+          }))
+          .filter(v => !!v.operator.in.length)
+      : []
 
     bySubjectQuery({
       variables: { input: { search: { criteria: bySubjectParams } } },
@@ -271,7 +282,7 @@ const CitationCountsBySubjectPage = () => {
         f => f.type === storedFacet.type,
       )
 
-      if (currentFacet.values.length !== storedFacet.values.length) {
+      if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
     })

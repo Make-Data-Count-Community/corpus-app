@@ -14,22 +14,22 @@ const data = [
   {
     xField: '01/2023',
     yField: randomNumber(100000),
-    stackField: 'Accession ID',
+    stackField: 'Accession Number',
   },
   {
     xField: '02/2023',
     yField: randomNumber(1000000),
-    stackField: 'Accession ID',
+    stackField: 'Accession Number',
   },
   {
     xField: '03/2023',
     yField: randomNumber(10000000),
-    stackField: 'Accession ID',
+    stackField: 'Accession Number',
   },
   {
     xField: '04/2023',
     yField: randomNumber(50000000),
-    stackField: 'Accession ID',
+    stackField: 'Accession Number',
   },
 ]
 
@@ -43,22 +43,19 @@ const columns = [
     title: 'DOI',
     dataIndex: 'DOI',
     key: 'doi',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
-    title: 'Accession ID',
-    dataIndex: 'Accession ID',
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
     key: 'accession',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -110,8 +107,6 @@ const Template = args => {
     }
   }
 
-  const handleExpandClick = () => {}
-
   const handleDownloadOptionClick = () => {}
 
   const handleNewView = view => {
@@ -128,7 +123,6 @@ const Template = args => {
       }
       isDownloadListOpen={isDowloadListOpen}
       onDownloadOptionClick={handleDownloadOptionClick}
-      onExpandClick={handleExpandClick}
       onFooterTabClick={handleFooterTabClick}
       onNewView={handleNewView}
       selectedFooterTab={selectedTab}

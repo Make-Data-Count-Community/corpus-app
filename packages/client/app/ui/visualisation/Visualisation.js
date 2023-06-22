@@ -11,23 +11,18 @@ const Wrapper = styled.div`
   background: ${th('colorChartBackground')};
   display: flex;
   flex-direction: column;
-  /* flex-grow: 1; */
-  height: 100%;
   justify-content: flex-end;
-  /* margin: ${grid(2)}; */
+  min-height: 100%;
   padding: ${grid(1)};
   width: 100%;
 `
 
 const DataWrapper = styled.div`
-  /* flex-grow: 3; */
-  height: ${grid(84)};
-  /* overflow: auto; */
+  height: ${grid(90)};
+  overflow: auto;
   padding: ${grid(2)} ${grid(4)};
   width: 100%;
 `
-
-// const BodyWrapper = styled.div``
 
 const Visualisation = props => {
   const {
@@ -99,28 +94,28 @@ const Visualisation = props => {
 Visualisation.propTypes = {
   downloadOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      type: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      symbol: PropTypes.string.isRequired,
+      type: PropTypes.string,
+      label: PropTypes.string,
+      symbol: PropTypes.string,
     }),
   ).isRequired,
   expandPath: PropTypes.string.isRequired,
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
-      isFacetSelected: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
+      isFacetSelected: PropTypes.bool,
+      type: PropTypes.string,
       values: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
+          id: PropTypes.string,
+          value: PropTypes.string,
         }),
-      ).isRequired,
+      ),
     }),
   ),
   filterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ),
   isDownloadListOpen: PropTypes.bool.isRequired,
@@ -137,8 +132,8 @@ Visualisation.propTypes = {
   onFooterTabClick: PropTypes.func.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ),
   selectedFooterTab: PropTypes.string.isRequired,

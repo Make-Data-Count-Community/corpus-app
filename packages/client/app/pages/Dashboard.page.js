@@ -12,11 +12,41 @@ import {
   GET_BY_YEAR,
   GET_CORPUS_GROWTH,
   GET_FULL_FACET_OPTIONS,
-  //   GET_UNIQUE_COUNT,
+  GET_UNIQUE_COUNT,
 } from '../graphql'
 
 const facetNotSelectedLabel = 'Please select a facet'
 const displayListEmptyLabel = 'No matches found'
+
+const footerLinks = {
+  homepage: '/',
+  termsOfUse: 'https://datacite.org/terms.html',
+  privacyPolicy: 'https://datacite.org/privacy.html',
+  twitterUrl: 'https://twitter.com/datacite',
+  githubUrl: 'https://github.com/datacite/datacite',
+  youtubeUrl: 'https://www.youtube.com/channel/UCVsSDZhIN_WbnD_v5o9eB_A',
+  linkedinUrl: 'https://www.linkedin.com/company/datacite',
+  contactUs: 'mailto:support@datacite.org',
+  blog: 'https://blog.datacite.org/',
+  team: 'https://datacite.org/team.html',
+  whatWeDo: 'https://datacite.org/value.html',
+  governance: 'https://datacite.org/governance.html',
+  jobOpportunities: 'https://datacite.org/jobopportunities.html',
+  steeringGroups: 'https://datacite.org/steering.html',
+  createDois: 'https://doi.datacite.org/',
+  discoverMetadata: 'https://commons.datacite.org/',
+  integrateApis: 'https://datacite.org/integratorapis.html',
+  partnerServices: 'https://datacite.org/partnerservices.html',
+  metadataSchema: 'https://schema.datacite.org/',
+  support: 'https://support.datacite.org/',
+  feeModel: 'https://datacite.org/feemodel.html',
+  members: 'https://datacite.org/members.html',
+  partners: 'https://datacite.org/partners.html',
+  serviceProviders: 'https://datacite.org/service-providers.html',
+  roadmap: 'https://datacite.org/roadmap.html',
+  fairWorkflows: 'https://datacite.org/fair-workflows.html',
+  imprint: 'https://datacite.org/imprint.html',
+}
 
 const downloadFile = (inputData, fileName, type = 'csv') => {
   const url =
@@ -68,17 +98,16 @@ const transformChartData = (sourceData, transformBy, keyField, valueField) => {
   return result
 }
 
-const transformUniqueCountData = sourceData => {
-  return sourceData.map(s => {
-    const total = s.pidMetadata + s.thirdPartyAggr
-    return { ...s, key: s.facet, total }
-  })
-}
-
 const addKeytoData = sourceData => {
   return sourceData.map(s => {
     return { ...s, key: s.id }
   })
+}
+
+const compareArrays = (a, b) => {
+  return (
+    a.length === b.length && a.every((element, index) => element === b[index])
+  )
 }
 
 const overTimeTableColumns = [
@@ -91,22 +120,19 @@ const overTimeTableColumns = [
     title: 'DOI',
     dataIndex: 'DOI',
     key: 'doi',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
-    title: 'Accession ID',
-    dataIndex: 'Accession ID',
+    title: 'Accession Number',
+    dataIndex: 'Accession Number',
     key: 'accession',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total Citations',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -155,8 +181,7 @@ const bySubjectTableColumns = [
     title: 'Total Citations',
     dataIndex: 'yField',
     key: 'yField',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -190,8 +215,7 @@ const byPublisherTableColumns = [
     title: 'Total Citations',
     dataIndex: 'yField',
     key: 'yField',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -230,22 +254,19 @@ const bySourceTableColumns = [
     title: 'DOI',
     dataIndex: 'DOI',
     key: 'doi',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Accession Number',
     dataIndex: 'Accession Number',
     key: 'accession',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total Citations',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -286,30 +307,31 @@ const bySourceDefaultTab = 'chart'
 
 const corpusGrowthTableColumns = [
   {
-    title: 'Month',
+    title: 'Date of Ingest',
     dataIndex: 'xField',
     key: 'xField',
+    render: value => {
+      const parsedValue = Date.parse(value)
+      return new Date(parsedValue).toLocaleDateString('en-US')
+    },
   },
   {
     title: 'DOI',
     dataIndex: 'DOI',
     key: 'doi',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Accession Number',
     dataIndex: 'Accession Number',
     key: 'accession',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -325,22 +347,19 @@ const uniqueCountColumns = [
     title: 'Third party aggregator',
     dataIndex: 'thirdPartyAggr',
     key: 'thirdPartyAggr',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'PID Metadata',
     dataIndex: 'pidMetadata',
     key: 'pidMetadata',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -349,6 +368,8 @@ const uniqueCountDefaultTab = 'table'
 const DashboardPage = () => {
   const [fullFacetOptions, setFullFacetOptions] = useState([])
 
+  const [corpusGrowthData, setCorpusGrowthData] = useState([])
+
   const [corpusGrowthSelectedTab, setCorpusGrowthSelectedTab] = useState(
     corpusGrowthDefaultTab,
   )
@@ -356,14 +377,16 @@ const DashboardPage = () => {
   const [corpusGrowthIsDowloadListOpen, setCorpusGrowthIsDownloadListOpen] =
     useState(false)
 
+  const corpusGrowthNewView = useRef(null)
+
+  const [uniqueCountData, setUniqueCountData] = useState([])
+
   const [uniqueCountSelectedTab, setUniqueCountSelectedTab] = useState(
     uniqueCountDefaultTab,
   )
 
   const [uniqueCountIsDowloadListOpen, setUniqueCountIsDownloadListOpen] =
     useState(false)
-
-  const corpusGrowthNewView = useRef(null)
 
   // #region overTimeStates
   const [overTimeSelectedTab, setOverTimeSelectedTab] =
@@ -622,7 +645,10 @@ const DashboardPage = () => {
       onCompleted: data => {
         const getAssertionsPerPublisher = cloneDeep(
           data.getAssertionsPerPublisher,
-        )
+        ).map(s => ({
+          ...s,
+          yField: parseInt(s.yField, 10),
+        }))
 
         setByPublisherVisualisationData(getAssertionsPerPublisher)
       },
@@ -649,32 +675,50 @@ const DashboardPage = () => {
     },
   )
 
-  //   const { data: uniqueCountData, loading: uniqueCountLoading } =
-  //     useQuery(GET_UNIQUE_COUNT)
+  const { loading: uniqueCountLoading } = useQuery(GET_UNIQUE_COUNT, {
+    onCompleted: data => {
+      const getUniqueCounts = cloneDeep(data.getAssertionUniqueCounts)
 
-  const { data, loading: corpusGrowthLoading } = useQuery(GET_CORPUS_GROWTH)
+      setUniqueCountData(getUniqueCounts)
+    },
+  })
 
-  const corpusGrowthData = data?.getCorpusGrowth || []
+  const { loading: corpusGrowthLoading } = useQuery(GET_CORPUS_GROWTH, {
+    onCompleted: data => {
+      const getCorpusGrowthRaw = cloneDeep(data.getCorpusGrowth)
 
-  const uniqueCountData = []
-  const uniqueCountLoading = false
+      const getCorpusGrowthEdited = getCorpusGrowthRaw.map(g => ({
+        ...g,
+        xField: new Date(parseInt(g.xField, 10)),
+      }))
+
+      setCorpusGrowthData(getCorpusGrowthEdited)
+    },
+  })
+
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('overTimeFilters'))
 
+    const parsedFilters =
+      storedFilters?.map(f => ({
+        ...f,
+        isFacetSelected: false,
+      })) || []
+
     if (storedFilters) {
-      setOverTimeFilters(
-        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
-      )
+      setOverTimeFilters(parsedFilters)
     } else {
       localStorage.setItem('overTimeFilters', JSON.stringify(overTimeFilters))
     }
 
-    const overTimeParams = overTimeFilters
-      .map(f => ({
-        field: `${f.type}Id`,
-        operator: { in: f.values.map(s => s.id) },
-      }))
-      .filter(v => !!v.operator.in.length)
+    const overTimeParams = storedFilters
+      ? parsedFilters
+          .map(f => ({
+            field: `${f.type}Id`,
+            operator: { in: f.values.map(s => s.id) },
+          }))
+          .filter(v => !!v.operator.in.length)
+      : []
 
     byYearQuery({
       variables: { input: { search: { criteria: overTimeParams } } },
@@ -690,20 +734,26 @@ const DashboardPage = () => {
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
 
+    const parsedFilters =
+      storedFilters?.map(f => ({
+        ...f,
+        isFacetSelected: false,
+      })) || []
+
     if (storedFilters) {
-      setBySubjectFilters(
-        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
-      )
+      setBySubjectFilters(parsedFilters)
     } else {
       localStorage.setItem('bySubjectFilters', JSON.stringify(bySubjectFilters))
     }
 
-    const bySubjectParams = bySubjectFilters
-      .map(f => ({
-        field: `${f.type}Id`,
-        operator: { in: f.values.map(s => s.id) },
-      }))
-      .filter(v => !!v.operator.in.length)
+    const bySubjectParams = storedFilters
+      ? parsedFilters
+          .map(f => ({
+            field: `${f.type}Id`,
+            operator: { in: f.values.map(s => s.id) },
+          }))
+          .filter(v => !!v.operator.in.length)
+      : []
 
     bySubjectQuery({
       variables: { input: { search: { criteria: bySubjectParams } } },
@@ -719,10 +769,14 @@ const DashboardPage = () => {
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('byPublisherFilters'))
 
+    const parsedFilters =
+      storedFilters?.map(f => ({
+        ...f,
+        isFacetSelected: false,
+      })) || []
+
     if (storedFilters) {
-      setByPublisherFilters(
-        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
-      )
+      setByPublisherFilters(parsedFilters)
     } else {
       localStorage.setItem(
         'byPublisherFilters',
@@ -730,12 +784,14 @@ const DashboardPage = () => {
       )
     }
 
-    const byPublisherParams = byPublisherFilters
-      .map(f => ({
-        field: `${f.type}Id`,
-        operator: { in: f.values.map(s => s.id) },
-      }))
-      .filter(v => !!v.operator.in.length)
+    const byPublisherParams = storedFilters
+      ? parsedFilters
+          .map(f => ({
+            field: `${f.type}Id`,
+            operator: { in: f.values.map(s => s.id) },
+          }))
+          .filter(v => !!v.operator.in.length)
+      : []
 
     byPublisherQuery({
       variables: { input: { search: { criteria: byPublisherParams } } },
@@ -751,20 +807,26 @@ const DashboardPage = () => {
   useEffect(() => {
     const storedFilters = JSON.parse(localStorage.getItem('bySourceFilters'))
 
+    const parsedFilters =
+      storedFilters?.map(f => ({
+        ...f,
+        isFacetSelected: false,
+      })) || []
+
     if (storedFilters) {
-      setBySourceFilters(
-        storedFilters.map(f => ({ ...f, isFacetSelected: false })),
-      )
+      setBySourceFilters(parsedFilters)
     } else {
       localStorage.setItem('bySourceFilters', JSON.stringify(bySourceFilters))
     }
 
-    const bySourceParams = bySourceFilters
-      .map(f => ({
-        field: `${f.type}Id`,
-        operator: { in: f.values.map(s => s.id) },
-      }))
-      .filter(v => !!v.operator.in.length)
+    const bySourceParams = storedFilters
+      ? parsedFilters
+          .map(f => ({
+            field: `${f.type}Id`,
+            operator: { in: f.values.map(s => s.id) },
+          }))
+          .filter(v => !!v.operator.in.length)
+      : []
 
     bySourceQuery({
       variables: { input: { search: { criteria: bySourceParams } } },
@@ -856,7 +918,7 @@ const DashboardPage = () => {
         f => f.type === storedFacet.type,
       )
 
-      if (currentFacet.values.length !== storedFacet.values.length) {
+      if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
     })
@@ -1023,7 +1085,7 @@ const DashboardPage = () => {
         f => f.type === storedFacet.type,
       )
 
-      if (currentFacet.values.length !== storedFacet.values.length) {
+      if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
     })
@@ -1183,9 +1245,22 @@ const DashboardPage = () => {
         f => f.type === storedFacet.type,
       )
 
-      if (currentFacet.values.length !== storedFacet.values.length) {
+      //   storedFacet.values.map(c => {
+      //     console.log('c', c)
+      //     console.log('stored.v', currentFacet.values)
+
+      //     if (!currentFacet.values.find(s => s.id === c.id)) {
+      //       shouldShowApplyButton = true
+      //     }
+      //   })
+
+      if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
+
+      //   if (storedFacet.values.length !== storedFacet.values.length) {
+      //     shouldShowApplyButton = true
+      //   }
     })
 
     setByPublisherShowApplyFilter(shouldShowApplyButton)
@@ -1344,7 +1419,7 @@ const DashboardPage = () => {
         f => f.type === storedFacet.type,
       )
 
-      if (currentFacet.values.length !== storedFacet.values.length) {
+      if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
     })
@@ -1432,6 +1507,8 @@ const DashboardPage = () => {
     bySourceNewView.current = view
   }
 
+  // #endregion bySourceFilters
+
   const handleCorpusGrowthFooterTabClick = tabTitle => {
     if (tabTitle === 'download') {
       setCorpusGrowthIsDownloadListOpen(!corpusGrowthIsDowloadListOpen)
@@ -1444,11 +1521,19 @@ const DashboardPage = () => {
     setCorpusGrowthIsDownloadListOpen(false)
 
     if (type === 'csv') {
+      const parsedData = corpusGrowthData.map(c => {
+        const parsedValue = Date.parse(c.xField)
+        return {
+          ...c,
+          xField: new Date(parsedValue).toLocaleDateString('en-US'),
+        }
+      })
+
       const csvString = await json2csv(
-        transformChartData(corpusGrowthData, 'xField', 'stackField', 'yField'),
+        transformChartData(parsedData, 'xField', 'stackField', 'yField'),
         {
           keys: [
-            { field: 'xField', title: 'Month' },
+            { field: 'xField', title: 'Date of Ingest' },
             { field: 'DOI', title: 'DOI' },
             { field: 'Accession Number', title: 'Accession Number' },
             { field: 'total', title: 'Total' },
@@ -1483,17 +1568,14 @@ const DashboardPage = () => {
     setUniqueCountIsDownloadListOpen(false)
 
     if (type === 'csv') {
-      const csvString = await json2csv(
-        transformUniqueCountData(uniqueCountData),
-        {
-          keys: [
-            { field: 'facet', title: 'Facet' },
-            { field: 'thirdPartyAggr', title: 'Third party aggregator' },
-            { field: 'pidMetadata', title: 'PID Metadata' },
-            { field: 'total', title: 'Total' },
-          ],
-        },
-      )
+      const csvString = await json2csv(uniqueCountData, {
+        keys: [
+          { field: 'facet', title: 'Facet' },
+          { field: 'thirdPartyAggr', title: 'Third party aggregator' },
+          { field: 'pidMetadata', title: 'PID Metadata' },
+          { field: 'total', title: 'Total' },
+        ],
+      })
 
       downloadFile(
         csvString,
@@ -1608,6 +1690,7 @@ const DashboardPage = () => {
         corpusGrowthSelectedFooterTab={corpusGrowthSelectedTab}
         corpusGrowthShowExpandButton
         corpusGrowthTableColumns={corpusGrowthTableColumns}
+        footerLinks={footerLinks}
         overTimeData={
           overTimeSelectedTab === 'chart'
             ? overTimeVisualisationData
@@ -1638,7 +1721,7 @@ const DashboardPage = () => {
         overTimeShowExpandButton
         overTimeShowFilterFooter={overTimeShowApplyFilter}
         overTimeTableColumns={overTimeTableColumns}
-        uniqueCountData={transformUniqueCountData(uniqueCountData)}
+        uniqueCountData={uniqueCountData}
         uniqueCountIsDownloadListOpen={uniqueCountIsDowloadListOpen}
         uniqueCountLoading={uniqueCountLoading}
         uniqueCountOnDownloadOptionClick={handleUniqueCountDownloadOptionClick}

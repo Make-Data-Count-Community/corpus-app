@@ -61,14 +61,14 @@ const FilterFacetList = props => {
 FilterFacetList.propTypes = {
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
-      isFacetSelected: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
+      isFacetSelected: PropTypes.bool,
+      type: PropTypes.string,
       values: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
+          id: PropTypes.string,
+          value: PropTypes.string,
         }),
-      ).isRequired,
+      ),
     }),
   ),
   onItemClick: PropTypes.func,

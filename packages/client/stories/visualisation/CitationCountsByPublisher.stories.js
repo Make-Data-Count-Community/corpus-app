@@ -31,8 +31,7 @@ const columns = [
     title: 'Total Citations',
     dataIndex: 'yField',
     key: 'yField',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -365,8 +364,6 @@ const Template = args => {
     setIsFilterOpen(false)
   }
 
-  const handleExpandClick = () => {}
-
   const handleFilterButtonClick = isOpen => {
     setIsFilterOpen(isOpen)
   }
@@ -401,7 +398,6 @@ const Template = args => {
       onApplyFilters={handleApplyFilters}
       onDownloadOptionClick={handleDownloadOptionClick}
       onEmptyListLabel={emptyFacetValueListLabel}
-      onExpandClick={handleExpandClick}
       onFacetItemClick={handleFacetItemClick}
       onFacetValueClick={handleFacetValueClick}
       onFilterClick={handleFilterButtonClick}

@@ -8,6 +8,36 @@ import { Dashboard } from '../../app/ui'
 const facetNotSelectedLabel = 'Please select a facet'
 const displayListEmptyLabel = 'No matches found'
 
+const footerLinks = {
+  homepage: '/',
+  termsOfUse: 'https://datacite.org/terms.html',
+  privacyPolicy: 'https://datacite.org/privacy.html',
+  twitterUrl: 'https://twitter.com/datacite',
+  githubUrl: 'https://github.com/datacite/datacite',
+  youtubeUrl: 'https://www.youtube.com/channel/UCVsSDZhIN_WbnD_v5o9eB_A',
+  linkedinUrl: 'https://www.linkedin.com/company/datacite',
+  contactUs: 'mailto:support@datacite.org',
+  blog: 'https://blog.datacite.org/',
+  team: 'https://datacite.org/team.html',
+  whatWeDo: 'https://datacite.org/value.html',
+  governance: 'https://datacite.org/governance.html',
+  jobOpportunities: 'https://datacite.org/jobopportunities.html',
+  steeringGroups: 'https://datacite.org/steering.html',
+  createDois: 'https://doi.datacite.org/',
+  discoverMetadata: 'https://commons.datacite.org/',
+  integrateApis: 'https://datacite.org/integratorapis.html',
+  partnerServices: 'https://datacite.org/partnerservices.html',
+  metadataSchema: 'https://schema.datacite.org/',
+  support: 'https://support.datacite.org/',
+  feeModel: 'https://datacite.org/feemodel.html',
+  members: 'https://datacite.org/members.html',
+  partners: 'https://datacite.org/partners.html',
+  serviceProviders: 'https://datacite.org/service-providers.html',
+  roadmap: 'https://datacite.org/roadmap.html',
+  fairWorkflows: 'https://datacite.org/fair-workflows.html',
+  imprint: 'https://datacite.org/imprint.html',
+}
+
 const downloadFile = (inputData, fileName, type = 'csv') => {
   const url =
     type === 'csv'
@@ -101,22 +131,19 @@ const corpusGrowthTableColumns = [
     title: 'DOI',
     dataIndex: 'DOI',
     key: 'doi',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Accession Number',
     dataIndex: 'Accession Number',
     key: 'accession',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -171,22 +198,19 @@ const uniqueCountColumns = [
     title: 'Third party aggregator',
     dataIndex: 'thirdPartyAggr',
     key: 'thirdPartyAggr',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'PID Metadata',
     dataIndex: 'pidMetadata',
     key: 'pidMetadata',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -271,22 +295,19 @@ const overTimeTableColumns = [
     title: 'DOI',
     dataIndex: 'DOI',
     key: 'doi',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Accession Number',
     dataIndex: 'Accession Number',
     key: 'accession',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total Citations',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -664,8 +685,7 @@ const bySubjectTableColumns = [
     title: 'Total Citations',
     dataIndex: 'yField',
     key: 'yField',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -891,6 +911,16 @@ const generateByPublisherData = () => [
   { id: uuid(), xField: 'Publisher 8', yField: randomNumber(1000000) },
   { id: uuid(), xField: 'Publisher 9', yField: randomNumber(1000000) },
   { id: uuid(), xField: 'Publisher 10', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 11', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 12', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 13', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 14', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 15', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 16', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 17', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 18', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 19', yField: randomNumber(1000000) },
+  { id: uuid(), xField: 'Publisher 20', yField: randomNumber(1000000) },
 ]
 
 const byPublisherData = generateByPublisherData()
@@ -905,8 +935,7 @@ const byPublisherTableColumns = [
     title: 'Total Citations',
     dataIndex: 'yField',
     key: 'yField',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -1171,22 +1200,19 @@ const bySourceTableColumns = [
     title: 'DOI',
     dataIndex: 'DOI',
     key: 'doi',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Accession Number',
     dataIndex: 'Accession Number',
     key: 'accession',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total Citations',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -2417,6 +2443,7 @@ const Template = args => {
       corpusGrowthSelectedFooterTab={corpusGrowthSelectedTab}
       corpusGrowthShowExpandButton
       corpusGrowthTableColumns={corpusGrowthTableColumns}
+      footerLinks={footerLinks}
       overTimeData={
         overTimeSelectedTab === 'chart'
           ? overTimeVisualisationData

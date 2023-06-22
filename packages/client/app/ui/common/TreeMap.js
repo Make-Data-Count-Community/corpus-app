@@ -5,7 +5,7 @@ import { createClassFromSpec } from 'react-vega'
 import { chartBackground, subjectColors } from './__helpers__/colors'
 
 const TreeMap = props => {
-  const { data, colorField, valueField, onNewView } = props
+  const { data, colorField, legendTitle, valueField, onNewView } = props
 
   const Chart = createClassFromSpec({
     spec: {
@@ -78,6 +78,7 @@ const TreeMap = props => {
       legends: [
         {
           fill: 'color',
+          title: legendTitle,
         },
       ],
 
@@ -89,6 +90,7 @@ const TreeMap = props => {
           labelFontSize: '12',
         },
         legend: {
+          titleFont: 'Barlow',
           labelFont: 'Barlow',
           labelFontWeight: 500,
           labelFontSize: '12',
@@ -110,6 +112,7 @@ const TreeMap = props => {
 TreeMap.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   colorField: PropTypes.string.isRequired,
+  legendTitle: PropTypes.string.isRequired,
   valueField: PropTypes.string.isRequired,
   onNewView: PropTypes.func,
 }

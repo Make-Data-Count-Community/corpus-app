@@ -25,12 +25,10 @@ const VisualisationRow = styled.div`
   display: flex;
   flex-direction: row;
   gap: ${grid(4)};
-  /* justify-content: space-between; */
-  /* margin: ${grid(8)}; */
-  margin: ${grid(5)} 0;
+  margin: ${grid(4)};
+  max-width: 100%;
   overflow: hidden;
   padding: ${grid(0)};
-  width: 100%;
 
   @media screen and (max-width: ${th('mediaQueries.medium')}) {
     flex-direction: column;
@@ -271,7 +269,7 @@ const Dashboard = props => {
           tableColumns={corpusGrowthTableColumns}
         />
       </VisualisationRow>
-      <Footer footerLinks={footerLinks} />
+      <Footer links={footerLinks} />
     </DashboardWrapper>
   )
 }
@@ -306,28 +304,24 @@ Dashboard.propTypes = {
     fairWorkflows: PropTypes.string,
     imprint: PropTypes.string,
   }).isRequired,
-  headerLinks: PropTypes.shape({
-    homepage: PropTypes.string,
-    dashboard: PropTypes.string,
-  }).isRequired,
 
   overTimeData: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   overTimeFilterParams: PropTypes.arrayOf(
     PropTypes.shape({
-      isFacetSelected: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
+      isFacetSelected: PropTypes.bool,
+      type: PropTypes.string,
       values: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
+          id: PropTypes.string,
+          value: PropTypes.string,
         }),
-      ).isRequired,
+      ),
     }),
   ).isRequired,
   overTimeFilterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ).isRequired,
   overTimeIsFilterOpen: PropTypes.bool.isRequired,
@@ -346,37 +340,37 @@ Dashboard.propTypes = {
   overTimeSelectedFooterTab: PropTypes.string.isRequired,
   overTimeSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ).isRequired,
   overTimeShowExpandButton: PropTypes.bool.isRequired,
   overTimeShowFilterFooter: PropTypes.bool.isRequired,
   overTimeTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      dataIndex: PropTypes.string,
+      key: PropTypes.string,
     }),
   ).isRequired,
 
   bySubjectData: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   bySubjectFilterParams: PropTypes.arrayOf(
     PropTypes.shape({
-      isFacetSelected: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
+      isFacetSelected: PropTypes.bool,
+      type: PropTypes.string,
       values: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
+          id: PropTypes.string,
+          value: PropTypes.string,
         }),
-      ).isRequired,
+      ),
     }),
   ).isRequired,
   bySubjectFilterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ).isRequired,
   bySubjectIsFilterOpen: PropTypes.bool.isRequired,
@@ -395,37 +389,37 @@ Dashboard.propTypes = {
   bySubjectSelectedFooterTab: PropTypes.string.isRequired,
   bySubjectSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ).isRequired,
   bySubjectShowExpandButton: PropTypes.bool.isRequired,
   bySubjectShowFilterFooter: PropTypes.bool.isRequired,
   bySubjectTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      dataIndex: PropTypes.string,
+      key: PropTypes.string,
     }),
   ).isRequired,
 
   byPublisherData: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   byPublisherFilterParams: PropTypes.arrayOf(
     PropTypes.shape({
-      isFacetSelected: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
+      isFacetSelected: PropTypes.bool,
+      type: PropTypes.string,
       values: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
+          id: PropTypes.string,
+          value: PropTypes.string,
         }),
-      ).isRequired,
+      ),
     }),
   ).isRequired,
   byPublisherFilterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ).isRequired,
   byPublisherIsFilterOpen: PropTypes.bool.isRequired,
@@ -444,37 +438,37 @@ Dashboard.propTypes = {
   byPublisherSelectedFooterTab: PropTypes.string.isRequired,
   byPublisherSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ).isRequired,
   byPublisherShowExpandButton: PropTypes.bool.isRequired,
   byPublisherShowFilterFooter: PropTypes.bool.isRequired,
   byPublisherTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      dataIndex: PropTypes.string,
+      key: PropTypes.string,
     }),
   ).isRequired,
 
   bySourceData: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   bySourceFilterParams: PropTypes.arrayOf(
     PropTypes.shape({
-      isFacetSelected: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
+      isFacetSelected: PropTypes.bool,
+      type: PropTypes.string,
       values: PropTypes.arrayOf(
         PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          value: PropTypes.string.isRequired,
+          id: PropTypes.string,
+          value: PropTypes.string,
         }),
-      ).isRequired,
+      ),
     }),
   ).isRequired,
   bySourceFilterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ).isRequired,
   bySourceIsDownloadListOpen: PropTypes.bool.isRequired,
@@ -493,17 +487,17 @@ Dashboard.propTypes = {
   bySourceSelectedFooterTab: PropTypes.string.isRequired,
   bySourceSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string,
+      value: PropTypes.string,
     }),
   ).isRequired,
   bySourceShowExpandButton: PropTypes.bool.isRequired,
   bySourceShowFilterFooter: PropTypes.bool.isRequired,
   bySourceTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      dataIndex: PropTypes.string,
+      key: PropTypes.string,
     }),
   ).isRequired,
 
@@ -516,9 +510,9 @@ Dashboard.propTypes = {
   uniqueCountShowExpandButton: PropTypes.bool.isRequired,
   uniqueCountTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      dataIndex: PropTypes.string,
+      key: PropTypes.string,
     }),
   ).isRequired,
 
@@ -532,9 +526,9 @@ Dashboard.propTypes = {
   corpusGrowthOnNewView: PropTypes.func.isRequired,
   corpusGrowthTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      dataIndex: PropTypes.string,
+      key: PropTypes.string,
     }),
   ).isRequired,
 }

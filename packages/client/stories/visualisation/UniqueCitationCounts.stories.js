@@ -44,22 +44,19 @@ const columns = [
     title: 'Third party aggregator',
     dataIndex: 'thirdPartyAggr',
     key: 'thirdPartyAggr',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'PID Metadata',
     dataIndex: 'pidMetadata',
     key: 'pidMetadata',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
   {
     title: 'Total',
     dataIndex: 'total',
     key: 'total',
-    render: value =>
-      value?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || 0,
+    render: value => value?.toLocaleString('en-US') || 0,
   },
 ]
 
@@ -84,8 +81,6 @@ const Template = args => {
     }
   }
 
-  const handleExpandClick = () => {}
-
   const handleDownloadOptionClick = () => {}
 
   return (
@@ -94,7 +89,6 @@ const Template = args => {
       data={transformData(data)}
       isDownloadListOpen={isDowloadListOpen}
       onDownloadOptionClick={handleDownloadOptionClick}
-      onExpandClick={handleExpandClick}
       onFooterTabClick={handleFooterTabClick}
       selectedFooterTab={selectedTab}
       tableColumns={columns}

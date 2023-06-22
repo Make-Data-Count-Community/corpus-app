@@ -6,31 +6,33 @@ import { MultiLineChart, Table } from '../common'
 
 import CsvSymbol from '../../../static/symbol-csv-file.svg'
 // import PdfSymbol from '../../../static/symbol-pdf-file.svg'
-// import PngSymbol from '../../../static/symbol-png-file.svg'
-// import SvgSymbol from '../../../static/symbol-svg-file.svg'
+import PngSymbol from '../../../static/symbol-png-file.svg'
+import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Data citations corpus growth'
 const stackField = 'stackField'
-const stackItems = ['DOI', 'Accession ID']
+const stackItems = ['DOI', 'Accession Number']
 const xField = 'xField'
 const yField = 'yField'
+const stackFieldTooltipTitle = 'Value'
+const yFieldTooltipTitle = 'Citations'
 
 const downloadOptions = [
-  //   {
-  //     type: 'png',
-  //     label: 'PNG',
-  //     symbol: PngSymbol,
-  //   },
+  {
+    type: 'png',
+    label: 'PNG',
+    symbol: PngSymbol,
+  },
   //   {
   //     type: 'pdf',
   //     label: 'PDF',
   //     symbol: PdfSymbol,
   //   },
-  //   {
-  //     type: 'svg',
-  //     label: 'SVG',
-  //     symbol: SvgSymbol,
-  //   },
+  {
+    type: 'svg',
+    label: 'SVG',
+    symbol: SvgSymbol,
+  },
   {
     type: 'csv',
     label: 'CSV',
@@ -44,8 +46,8 @@ const CitationCorpusGrowth = props => {
   const {
     data,
     isDownloadListOpen,
+    loading,
     onDownloadOptionClick,
-    onExpandClick,
     onFooterTabClick,
     onNewView,
     selectedFooterTab,
@@ -58,11 +60,12 @@ const CitationCorpusGrowth = props => {
       downloadOptions={downloadOptions}
       expandPath={expandPath}
       isDownloadListOpen={isDownloadListOpen}
+      loading={loading}
       onDownloadOptionClick={onDownloadOptionClick}
-      onExpandClick={onExpandClick}
       onFooterTabClick={onFooterTabClick}
       selectedFooterTab={selectedFooterTab}
       showExpandButton={showExpandButton}
+      showFooterChartTab
       visualisationTitle={title}
     >
       {selectedFooterTab === 'chart' && (
@@ -70,9 +73,11 @@ const CitationCorpusGrowth = props => {
           data={data}
           onNewView={onNewView}
           stackField={stackField}
+          stackFieldTooltipTitle={stackFieldTooltipTitle}
           stackItems={stackItems}
           xField={xField}
           yField={yField}
+          yFieldTooltipTitle={yFieldTooltipTitle}
         />
       )}
       {selectedFooterTab === 'table' && (
@@ -85,17 +90,17 @@ const CitationCorpusGrowth = props => {
 CitationCorpusGrowth.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   isDownloadListOpen: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   onDownloadOptionClick: PropTypes.func.isRequired,
-  onExpandClick: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
   onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
   showExpandButton: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-      key: PropTypes.string.isRequired,
+      title: PropTypes.string,
+      dataIndex: PropTypes.string,
+      key: PropTypes.string,
     }),
   ).isRequired,
 }

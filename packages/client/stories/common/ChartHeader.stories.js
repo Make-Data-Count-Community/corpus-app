@@ -315,8 +315,6 @@ const Template = args => {
     setIsFilterOpen(false)
   }
 
-  const handleExpandClick = () => {}
-
   const handleFilterButtonClick = isOpen => {
     setIsFilterOpen(isOpen)
   }
@@ -344,7 +342,6 @@ const Template = args => {
       isFilterOpen={isFilterOpen}
       onApplyFilters={handleApplyFilters}
       onEmptyListLabel={emptyFacetValueListLabel}
-      onExpandClick={handleExpandClick}
       onFacetItemClick={handleFacetItemClick}
       onFacetValueClick={handleFacetValueClick}
       onFilterClick={handleFilterButtonClick}

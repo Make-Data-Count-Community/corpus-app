@@ -12,7 +12,7 @@ const BarChart = props => {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       description: 'Bar Chart',
       width: 'container',
-      height: 300,
+      height: 330,
       autosize: { type: 'fit', contains: 'padding' },
       data: {
         values: data,
