@@ -189,8 +189,31 @@ const getAssertionsPerPublisher = async ({ input }) => {
   return chartValues
 }
 
-const getAssertionCountsPerSource = async () => {
-  const results = await Source.query()
+const getAssertionCountsPerSource = async ({ input }) => {
+  const criteria = await buildQueryForIntermediateTables(input)
+  let results = await Source.query()
+
+  if (criteria.length > 0) {
+    const sourceResults = results
+
+    const searchedAssertions = new SearchService(Assertion, {
+      groupBy: 'source_id',
+      filter: criteria,
+    })
+
+    results = await searchedAssertions.search(
+      db.raw(
+        `count(doi) as doiCount, count(accession_number) as accessionNumberCount , source_id`,
+      ),
+    )
+
+    results = results.map(result => ({
+      doiCount: result.doicount,
+      accessionNumberCount: result.accessionnumbercount,
+      title: sourceResults.find(src => src.id === result.sourceId).title,
+    }))
+  }
+
   const chartValues = []
   results.forEach((result, key) => {
     chartValues.push({

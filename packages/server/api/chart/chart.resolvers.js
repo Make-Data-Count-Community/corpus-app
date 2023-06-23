@@ -19,16 +19,16 @@ const getAssertionsPerPublisherResolver = async (_, input) => {
   return getAssertionsPerPublisher(input)
 }
 
-const getAssertionCountsPerSourceResolver = async (_, { id, options }) => {
-  return getAssertionCountsPerSource(id, options)
+const getAssertionCountsPerSourceResolver = async (_, input) => {
+  return getAssertionCountsPerSource(input)
 }
 
-const getAssertionUniqueCountsResolver = async (_, { id, options }) => {
-  return getAssertionUniqueCounts(id, options)
+const getAssertionUniqueCountsResolver = async (_, input) => {
+  return getAssertionUniqueCounts(input)
 }
 
-const getCorpusGrowthResolver = async (_, { id, options }) => {
-  return getCorpusGrowth(id, options)
+const getCorpusGrowthResolver = async (_, input) => {
+  return getCorpusGrowth(input)
 }
 
 module.exports = {
