@@ -67,7 +67,9 @@ const FilterFacet = props => {
           />
         </FilterFacetListWrapper>
         <FacetValueWrapper>
-          <FilterSearchField onChange={onSearchChange} />
+          {!!filterParams.find(f => f.isFacetSelected) && (
+            <FilterSearchField onChange={onSearchChange} />
+          )}
           <FacetValueList
             onEmptyListLabel={onEmptyListLabel}
             onItemClick={onFacetValueClick}
