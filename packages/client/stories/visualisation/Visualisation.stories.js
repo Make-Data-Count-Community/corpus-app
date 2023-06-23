@@ -398,7 +398,7 @@ const Template = args => {
       onFooterTabClick={handleFooterTabClick}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedTab}
-      showFilterFooter={!!totalSelectionCount}
+      showApplyFilterButton={!!totalSelectionCount}
       showFooterChartTab={showFooterChartTab}
       visualisationTitle={visualisationTitle}
     />

@@ -57,7 +57,7 @@ UniqueCitationCounts.propTypes = {
   onDownloadOptionClick: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
-  showExpandButton: PropTypes.bool.isRequired,
+  showExpandButton: PropTypes.bool,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -65,6 +65,10 @@ UniqueCitationCounts.propTypes = {
       key: PropTypes.string,
     }),
   ).isRequired,
+}
+
+UniqueCitationCounts.defaultProps = {
+  showExpandButton: false,
 }
 
 export default UniqueCitationCounts

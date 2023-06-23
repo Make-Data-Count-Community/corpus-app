@@ -45,12 +45,14 @@ const FilterFacet = props => {
     selectedFacetValues,
     filterParams,
     onApplyFilters,
+    onClearFilters,
     onEmptyListLabel,
     onFacetItemClick,
     onFacetValueClick,
     onClose,
     onSearchChange,
-    showFooter,
+    showApplyFilterButton,
+    showClearFilterButton,
     valueOptions,
   } = props
 
@@ -74,7 +76,14 @@ const FilterFacet = props => {
           />
         </FacetValueWrapper>
       </FilterBody>
-      {showFooter && <FilterFooter onApplyFilters={onApplyFilters} />}
+      {(showApplyFilterButton || showClearFilterButton) && (
+        <FilterFooter
+          onApplyFilters={onApplyFilters}
+          onClearFilters={onClearFilters}
+          showApplyFilterButton={showApplyFilterButton}
+          showClearFilterButton={showClearFilterButton}
+        />
+      )}
     </Wrapper>
   )
 }
@@ -99,12 +108,14 @@ FilterFacet.propTypes = {
     }),
   ).isRequired,
   onApplyFilters: PropTypes.func.isRequired,
+  onClearFilters: PropTypes.func.isRequired,
   onEmptyListLabel: PropTypes.string.isRequired,
   onFacetItemClick: PropTypes.func.isRequired,
   onFacetValueClick: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onSearchChange: PropTypes.func.isRequired,
-  showFooter: PropTypes.bool.isRequired,
+  showApplyFilterButton: PropTypes.bool.isRequired,
+  showClearFilterButton: PropTypes.bool.isRequired,
   valueOptions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,

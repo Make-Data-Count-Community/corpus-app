@@ -92,6 +92,9 @@ const CitationCountsBySubjectPage = () => {
   const [bySubjectShowApplyFilter, setBySubjectShowApplyFilter] =
     useState(false)
 
+  const [bySubjectShowClearFilter, setBySubjectShowClearFilter] =
+    useState(false)
+
   const [bySubjectVisualisationData, setBySubjectVisualisationData] = useState(
     [],
   )
@@ -180,6 +183,16 @@ const CitationCountsBySubjectPage = () => {
 
     if (storedFilters) {
       setBySubjectFilters(parsedFilters)
+
+      let shouldShowClearButton = false
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+        }
+      })
+
+      setBySubjectShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('bySubjectFilters', JSON.stringify(bySubjectFilters))
     }
@@ -237,6 +250,19 @@ const CitationCountsBySubjectPage = () => {
     })
   }
 
+  const handleBySubjectClearFilters = () => {
+    setBySubjectIsFilterOpen(false)
+    setBySubjectShowClearFilter(false)
+    setBySubjectShowApplyFilter(false)
+    localStorage.setItem(
+      'bySubjectFilters',
+      JSON.stringify(bySubjectFilterParams),
+    )
+    bySubjectQuery({
+      variables: { input: { search: { criteria: [] } } },
+    })
+  }
+
   const handleBySubjectFacetItemClick = facetType => {
     const facetIndex = bySubjectFilters.findIndex(f => f.type === facetType)
 
@@ -276,11 +302,16 @@ const CitationCountsBySubjectPage = () => {
 
     const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
     let shouldShowApplyButton = false
+    let shouldShowClearButton = false
 
     storedFilters.forEach(storedFacet => {
       const currentFacet = bySubjectFilters.find(
         f => f.type === storedFacet.type,
       )
+
+      if (storedFacet.values.length) {
+        shouldShowClearButton = true
+      }
 
       if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
@@ -288,6 +319,7 @@ const CitationCountsBySubjectPage = () => {
     })
 
     setBySubjectShowApplyFilter(shouldShowApplyButton)
+    setBySubjectShowClearFilter(shouldShowClearButton)
   }
 
   const handleBySubjectOnClose = () => {
@@ -304,6 +336,16 @@ const CitationCountsBySubjectPage = () => {
   const handleBySubjectFilterButtonClick = isOpen => {
     if (isOpen) {
       const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
+
+      let shouldShowClearButton = false
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+        }
+      })
+
+      setBySubjectShowClearFilter(shouldShowClearButton)
       setBySubjectFilters(storedFilters)
     }
 
@@ -375,6 +417,7 @@ const CitationCountsBySubjectPage = () => {
         isFilterOpen={bySubjectIsFilterOpen}
         loading={bySubjectDataLoading || fullFacetOptionsLoading}
         onApplyFilters={handleBySubjectApplyFilters}
+        onClearFilters={handleBySubjectClearFilters}
         onDownloadOptionClick={handleBySubjectDownloadOptionClick}
         onEmptyListLabel={bySubjectEmptyFacetValueListLabel}
         onFacetItemClick={handleBySubjectFacetItemClick}
@@ -386,7 +429,8 @@ const CitationCountsBySubjectPage = () => {
         onNewView={handleBySubjectOnNewView}
         selectedFacetValues={bySubjectSelectedFacetValues}
         selectedFooterTab={bySubjectSelectedTab}
-        showFilterFooter={bySubjectShowApplyFilter}
+        showApplyFilterButton={bySubjectShowApplyFilter}
+        showClearFilterButton={bySubjectShowClearFilter}
         tableColumns={bySubjectTableColumns}
       />
       <VisuallyHiddenElement

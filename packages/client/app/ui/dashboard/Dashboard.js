@@ -65,6 +65,7 @@ const Dashboard = props => {
     bySourceIsFilterOpen,
     bySourceLoading,
     bySourceOnApplyFilters,
+    bySourceOnClearFilters,
     bySourceOnDownloadOptionClick,
     bySourceOnEmptyListLabel,
     bySourceOnFacetItemClick,
@@ -77,7 +78,8 @@ const Dashboard = props => {
     bySourceSelectedFacetValues,
     bySourceSelectedFooterTab,
     bySourceShowExpandButton,
-    bySourceShowFilterFooter,
+    bySourceShowApplyFilterButton,
+    bySourceShowClearFilterButton,
     bySourceTableColumns,
 
     byPublisherData,
@@ -87,6 +89,7 @@ const Dashboard = props => {
     byPublisherIsFilterOpen,
     byPublisherLoading,
     byPublisherOnApplyFilters,
+    byPublisherOnClearFilters,
     byPublisherOnDownloadOptionClick,
     byPublisherOnEmptyListLabel,
     byPublisherOnFacetItemClick,
@@ -99,7 +102,8 @@ const Dashboard = props => {
     byPublisherSelectedFacetValues,
     byPublisherSelectedFooterTab,
     byPublisherShowExpandButton,
-    byPublisherShowFilterFooter,
+    byPublisherShowApplyFilterButton,
+    byPublisherShowClearFilterButton,
     byPublisherTableColumns,
 
     bySubjectData,
@@ -109,6 +113,7 @@ const Dashboard = props => {
     bySubjectIsFilterOpen,
     bySubjectLoading,
     bySubjectOnApplyFilters,
+    bySubjectOnClearFilters,
     bySubjectOnDownloadOptionClick,
     bySubjectOnEmptyListLabel,
     bySubjectOnFacetItemClick,
@@ -121,7 +126,8 @@ const Dashboard = props => {
     bySubjectSelectedFacetValues,
     bySubjectSelectedFooterTab,
     bySubjectShowExpandButton,
-    bySubjectShowFilterFooter,
+    bySubjectShowApplyFilterButton,
+    bySubjectShowClearFilterButton,
     bySubjectTableColumns,
 
     overTimeData,
@@ -131,6 +137,7 @@ const Dashboard = props => {
     overTimeIsFilterOpen,
     overTimeLoading,
     overTimeOnApplyFilters,
+    overTimeOnClearFilters,
     overTimeOnDownloadOptionClick,
     overTimeOnEmptyListLabel,
     overTimeOnFacetItemClick,
@@ -143,7 +150,8 @@ const Dashboard = props => {
     overTimeSelectedFacetValues,
     overTimeSelectedFooterTab,
     overTimeShowExpandButton,
-    overTimeShowFilterFooter,
+    overTimeShowApplyFilterButton,
+    overTimeShowClearFilterButton,
     overTimeTableColumns,
   } = props
 
@@ -158,6 +166,7 @@ const Dashboard = props => {
           isFilterOpen={overTimeIsFilterOpen}
           loading={overTimeLoading}
           onApplyFilters={overTimeOnApplyFilters}
+          onClearFilters={overTimeOnClearFilters}
           onDownloadOptionClick={overTimeOnDownloadOptionClick}
           onEmptyListLabel={overTimeOnEmptyListLabel}
           onFacetItemClick={overTimeOnFacetItemClick}
@@ -169,8 +178,9 @@ const Dashboard = props => {
           onNewView={overTimeOnNewView}
           selectedFacetValues={overTimeSelectedFacetValues}
           selectedFooterTab={overTimeSelectedFooterTab}
+          showApplyFilterButton={overTimeShowApplyFilterButton}
+          showClearFilterButton={overTimeShowClearFilterButton}
           showExpandButton={overTimeShowExpandButton}
-          showFilterFooter={overTimeShowFilterFooter}
           tableColumns={overTimeTableColumns}
         />
         <CitationCountsBySubject
@@ -181,6 +191,7 @@ const Dashboard = props => {
           isFilterOpen={bySubjectIsFilterOpen}
           loading={bySubjectLoading}
           onApplyFilters={bySubjectOnApplyFilters}
+          onClearFilters={bySubjectOnClearFilters}
           onDownloadOptionClick={bySubjectOnDownloadOptionClick}
           onEmptyListLabel={bySubjectOnEmptyListLabel}
           onFacetItemClick={bySubjectOnFacetItemClick}
@@ -192,8 +203,9 @@ const Dashboard = props => {
           onNewView={bySubjectOnNewView}
           selectedFacetValues={bySubjectSelectedFacetValues}
           selectedFooterTab={bySubjectSelectedFooterTab}
+          showApplyFilterButton={bySubjectShowApplyFilterButton}
+          showClearFilterButton={bySubjectShowClearFilterButton}
           showExpandButton={bySubjectShowExpandButton}
-          showFilterFooter={bySubjectShowFilterFooter}
           tableColumns={bySubjectTableColumns}
         />
       </VisualisationRow>
@@ -207,6 +219,7 @@ const Dashboard = props => {
           isFilterOpen={byPublisherIsFilterOpen}
           loading={byPublisherLoading}
           onApplyFilters={byPublisherOnApplyFilters}
+          onClearFilters={byPublisherOnClearFilters}
           onDownloadOptionClick={byPublisherOnDownloadOptionClick}
           onEmptyListLabel={byPublisherOnEmptyListLabel}
           onFacetItemClick={byPublisherOnFacetItemClick}
@@ -218,8 +231,9 @@ const Dashboard = props => {
           onNewView={byPublisherOnNewView}
           selectedFacetValues={byPublisherSelectedFacetValues}
           selectedFooterTab={byPublisherSelectedFooterTab}
+          showApplyFilterButton={byPublisherShowApplyFilterButton}
+          showClearFilterButton={byPublisherShowClearFilterButton}
           showExpandButton={byPublisherShowExpandButton}
-          showFilterFooter={byPublisherShowFilterFooter}
           tableColumns={byPublisherTableColumns}
         />
         <CitationCountsBySource
@@ -230,6 +244,7 @@ const Dashboard = props => {
           isFilterOpen={bySourceIsFilterOpen}
           loading={bySourceLoading}
           onApplyFilters={bySourceOnApplyFilters}
+          onClearFilters={bySourceOnClearFilters}
           onDownloadOptionClick={bySourceOnDownloadOptionClick}
           onEmptyListLabel={bySourceOnEmptyListLabel}
           onFacetItemClick={bySourceOnFacetItemClick}
@@ -241,8 +256,9 @@ const Dashboard = props => {
           onNewView={bySourceOnNewView}
           selectedFacetValues={bySourceSelectedFacetValues}
           selectedFooterTab={bySourceSelectedFooterTab}
+          showApplyFilterButton={bySourceShowApplyFilterButton}
+          showClearFilterButton={bySourceShowClearFilterButton}
           showExpandButton={bySourceShowExpandButton}
-          showFilterFooter={bySourceShowFilterFooter}
           tableColumns={bySourceTableColumns}
         />
       </VisualisationRow>
@@ -328,6 +344,7 @@ Dashboard.propTypes = {
   overTimeIsDownloadListOpen: PropTypes.bool.isRequired,
   overTimeLoading: PropTypes.bool.isRequired,
   overTimeOnApplyFilters: PropTypes.func.isRequired,
+  overTimeOnClearFilters: PropTypes.func.isRequired,
   overTimeOnDownloadOptionClick: PropTypes.func.isRequired,
   overTimeOnEmptyListLabel: PropTypes.string.isRequired,
   overTimeOnFacetItemClick: PropTypes.func.isRequired,
@@ -345,7 +362,8 @@ Dashboard.propTypes = {
     }),
   ).isRequired,
   overTimeShowExpandButton: PropTypes.bool.isRequired,
-  overTimeShowFilterFooter: PropTypes.bool.isRequired,
+  overTimeShowApplyFilterButton: PropTypes.bool.isRequired,
+  overTimeShowClearFilterButton: PropTypes.bool.isRequired,
   overTimeTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -377,6 +395,7 @@ Dashboard.propTypes = {
   bySubjectIsDownloadListOpen: PropTypes.bool.isRequired,
   bySubjectLoading: PropTypes.bool.isRequired,
   bySubjectOnApplyFilters: PropTypes.func.isRequired,
+  bySubjectOnClearFilters: PropTypes.func.isRequired,
   bySubjectOnDownloadOptionClick: PropTypes.func.isRequired,
   bySubjectOnEmptyListLabel: PropTypes.string.isRequired,
   bySubjectOnFacetItemClick: PropTypes.func.isRequired,
@@ -394,7 +413,8 @@ Dashboard.propTypes = {
     }),
   ).isRequired,
   bySubjectShowExpandButton: PropTypes.bool.isRequired,
-  bySubjectShowFilterFooter: PropTypes.bool.isRequired,
+  bySubjectShowApplyFilterButton: PropTypes.bool.isRequired,
+  bySubjectShowClearFilterButton: PropTypes.bool.isRequired,
   bySubjectTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -426,6 +446,7 @@ Dashboard.propTypes = {
   byPublisherIsDownloadListOpen: PropTypes.bool.isRequired,
   byPublisherLoading: PropTypes.bool.isRequired,
   byPublisherOnApplyFilters: PropTypes.func.isRequired,
+  byPublisherOnClearFilters: PropTypes.func.isRequired,
   byPublisherOnDownloadOptionClick: PropTypes.func.isRequired,
   byPublisherOnEmptyListLabel: PropTypes.string.isRequired,
   byPublisherOnFacetItemClick: PropTypes.func.isRequired,
@@ -443,7 +464,8 @@ Dashboard.propTypes = {
     }),
   ).isRequired,
   byPublisherShowExpandButton: PropTypes.bool.isRequired,
-  byPublisherShowFilterFooter: PropTypes.bool.isRequired,
+  byPublisherShowApplyFilterButton: PropTypes.bool.isRequired,
+  byPublisherShowClearFilterButton: PropTypes.bool.isRequired,
   byPublisherTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -475,6 +497,7 @@ Dashboard.propTypes = {
   bySourceIsFilterOpen: PropTypes.bool.isRequired,
   bySourceLoading: PropTypes.bool.isRequired,
   bySourceOnApplyFilters: PropTypes.func.isRequired,
+  bySourceOnClearFilters: PropTypes.func.isRequired,
   bySourceOnDownloadOptionClick: PropTypes.func.isRequired,
   bySourceOnEmptyListLabel: PropTypes.string.isRequired,
   bySourceOnFacetItemClick: PropTypes.func.isRequired,
@@ -492,7 +515,8 @@ Dashboard.propTypes = {
     }),
   ).isRequired,
   bySourceShowExpandButton: PropTypes.bool.isRequired,
-  bySourceShowFilterFooter: PropTypes.bool.isRequired,
+  bySourceShowApplyFilterButton: PropTypes.bool.isRequired,
+  bySourceShowClearFilterButton: PropTypes.bool.isRequired,
   bySourceTableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,

@@ -40,6 +40,7 @@ const ChartHeader = props => {
     isFilterOpen,
     loading,
     onApplyFilters,
+    onClearFilters,
     onFilterClose,
     onEmptyListLabel,
     onFacetItemClick,
@@ -48,7 +49,8 @@ const ChartHeader = props => {
     onFilterSearchChange,
     selectedFacetValues,
     showExpandButton,
-    showFilterFooter,
+    showApplyFilterButton,
+    showClearFilterButton,
     showFilterButton,
     filterValueOptions,
   } = props
@@ -63,13 +65,15 @@ const ChartHeader = props => {
               <FilterFacet
                 filterParams={filterParams}
                 onApplyFilters={onApplyFilters}
+                onClearFilters={onClearFilters}
                 onClose={onFilterClose}
                 onEmptyListLabel={onEmptyListLabel}
                 onFacetItemClick={onFacetItemClick}
                 onFacetValueClick={onFacetValueClick}
                 onSearchChange={onFilterSearchChange}
                 selectedFacetValues={selectedFacetValues}
-                showFooter={showFilterFooter}
+                showApplyFilterButton={showApplyFilterButton}
+                showClearFilterButton={showClearFilterButton}
                 valueOptions={filterValueOptions}
               />
             }
@@ -109,6 +113,7 @@ ChartHeader.propTypes = {
   isFilterOpen: PropTypes.bool,
   loading: PropTypes.bool,
   onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func,
   filterValueOptions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -129,7 +134,8 @@ ChartHeader.propTypes = {
   ),
   showExpandButton: PropTypes.bool.isRequired,
   showFilterButton: PropTypes.bool,
-  showFilterFooter: PropTypes.bool,
+  showApplyFilterButton: PropTypes.bool,
+  showClearFilterButton: PropTypes.bool,
   title: PropTypes.string.isRequired,
 }
 
@@ -139,6 +145,7 @@ ChartHeader.defaultProps = {
   isFilterOpen: false,
   loading: false,
   onApplyFilters: () => {},
+  onClearFilters: () => {},
   onEmptyListLabel: '',
   onFacetItemClick: () => {},
   onFacetValueClick: () => {},
@@ -147,7 +154,8 @@ ChartHeader.defaultProps = {
   onFilterSearchChange: () => {},
   selectedFacetValues: [],
   showFilterButton: false,
-  showFilterFooter: false,
+  showApplyFilterButton: false,
+  showClearFilterButton: false,
 }
 
 export default ChartHeader

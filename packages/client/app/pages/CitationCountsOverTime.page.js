@@ -150,6 +150,8 @@ const CitationCountsOverTimePage = () => {
 
   const [overTimeShowApplyFilter, setOverTimeShowApplyFilter] = useState(false)
 
+  const [overTimeShowClearFilter, setOverTimeShowClearFilter] = useState(false)
+
   const [overTimeVisualisationData, setOverTimeVisualisationData] = useState([])
 
   const [overTimeIsFilterOpen, setOverTimeIsFilterOpen] = useState(false)
@@ -220,6 +222,16 @@ const CitationCountsOverTimePage = () => {
 
     if (storedFilters) {
       setOverTimeFilters(parsedFilters)
+
+      let shouldShowClearButton = false
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+        }
+      })
+
+      setOverTimeShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('overTimeFilters', JSON.stringify(overTimeFilters))
     }
@@ -274,6 +286,19 @@ const CitationCountsOverTimePage = () => {
     })
   }
 
+  const handleOverTimeClearFilters = () => {
+    setOverTimeIsFilterOpen(false)
+    setOverTimeShowClearFilter(false)
+    setOverTimeShowApplyFilter(false)
+    localStorage.setItem(
+      'overTimeFilters',
+      JSON.stringify(overTimeFilterParams),
+    )
+    byYearQuery({
+      variables: { input: { search: { criteria: [] } } },
+    })
+  }
+
   const handleOverTimeFacetItemClick = facetType => {
     const facetIndex = overTimeFilters.findIndex(f => f.type === facetType)
 
@@ -313,11 +338,16 @@ const CitationCountsOverTimePage = () => {
 
     const storedFilters = JSON.parse(localStorage.getItem('overTimeFilters'))
     let shouldShowApplyButton = false
+    let shouldShowClearButton = false
 
     storedFilters.forEach(storedFacet => {
       const currentFacet = overTimeFilters.find(
         f => f.type === storedFacet.type,
       )
+
+      if (storedFacet.values.length) {
+        shouldShowClearButton = true
+      }
 
       if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
@@ -325,6 +355,7 @@ const CitationCountsOverTimePage = () => {
     })
 
     setOverTimeShowApplyFilter(shouldShowApplyButton)
+    setOverTimeShowClearFilter(shouldShowClearButton)
   }
 
   const handleOverTimeOnClose = () => {
@@ -341,6 +372,16 @@ const CitationCountsOverTimePage = () => {
   const handleOverTimeFilterButtonClick = isOpen => {
     if (isOpen) {
       const storedFilters = JSON.parse(localStorage.getItem('overTimeFilters'))
+
+      let shouldShowClearButton = false
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+        }
+      })
+
+      setOverTimeShowClearFilter(shouldShowClearButton)
       setOverTimeFilters(storedFilters)
     }
 
@@ -426,6 +467,7 @@ const CitationCountsOverTimePage = () => {
         isFilterOpen={overTimeIsFilterOpen}
         loading={byYearDataLoading || fullFacetOptionsLoading}
         onApplyFilters={handleOverTimeApplyFilters}
+        onClearFilters={handleOverTimeClearFilters}
         onDownloadOptionClick={handleOverTimeDownloadOptionClick}
         onEmptyListLabel={overTimeEmptyFacetValueListLabel}
         onFacetItemClick={handleOverTimeFacetItemClick}
@@ -437,7 +479,8 @@ const CitationCountsOverTimePage = () => {
         onNewView={handleOverTimeOnNewView}
         selectedFacetValues={overTimeSelectedFacetValues}
         selectedFooterTab={overTimeSelectedTab}
-        showFilterFooter={overTimeShowApplyFilter}
+        showApplyFilterButton={overTimeShowApplyFilter}
+        showClearFilterButton={overTimeShowClearFilter}
         tableColumns={overTimeTableColumns}
       />
       <VisuallyHiddenElement

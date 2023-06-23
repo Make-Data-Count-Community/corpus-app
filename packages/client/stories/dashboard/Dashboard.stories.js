@@ -2367,8 +2367,8 @@ const Template = args => {
       byPublisherOnNewView={handleByPublisherNewView}
       byPublisherSelectedFacetValues={byPublisherSelectedFacetValues}
       byPublisherSelectedFooterTab={byPublisherSelectedTab}
+      byPublisherShowApplyFilterButton={byPublisherShowApplyFilter}
       byPublisherShowExpandButton
-      byPublisherShowFilterFooter={byPublisherShowApplyFilter}
       byPublisherTableColumns={byPublisherTableColumns}
       bySourceData={
         bySourceSelectedTab === 'chart'
@@ -2397,8 +2397,8 @@ const Template = args => {
       bySourceOnNewView={handleBySourceNewView}
       bySourceSelectedFacetValues={bySourceSelectedFacetValues}
       bySourceSelectedFooterTab={bySourceSelectedTab}
+      bySourceShowApplyFilterButton={bySourceShowApplyFilter}
       bySourceShowExpandButton
-      bySourceShowFilterFooter={bySourceShowApplyFilter}
       bySourceTableColumns={bySourceTableColumns}
       bySubjectData={
         bySubjectSelectedTab === 'chart'
@@ -2422,8 +2422,8 @@ const Template = args => {
       bySubjectOnNewView={handleBySubjectNewView}
       bySubjectSelectedFacetValues={bySubjectSelectedFacetValues}
       bySubjectSelectedFooterTab={bySubjectSelectedTab}
+      bySubjectShowApplyFilterButton={bySubjectShowApplyFilter}
       bySubjectShowExpandButton
-      bySubjectShowFilterFooter={bySubjectShowApplyFilter}
       bySubjectTableColumns={bySubjectTableColumns}
       corpusGrowthData={
         corpusGrowthSelectedTab === 'chart'
@@ -2471,8 +2471,8 @@ const Template = args => {
       overTimeOnNewView={handlOverTimeOnNewView}
       overTimeSelectedFacetValues={overTimeSelectedFacetValues}
       overTimeSelectedFooterTab={overTimeSelectedTab}
+      overTimeShowApplyFilterButton={overTimeShowApplyFilter}
       overTimeShowExpandButton
-      overTimeShowFilterFooter={overTimeShowApplyFilter}
       overTimeTableColumns={overTimeTableColumns}
       uniqueCountData={transformUniqueCountData(unqiueCountData)}
       uniqueCountIsDownloadListOpen={uniqueCountIsDowloadListOpen}

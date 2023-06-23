@@ -35,6 +35,7 @@ const Visualisation = props => {
     isFilterOpen,
     loading,
     onApplyFilters,
+    onClearFilters,
     onDownloadOptionClick,
     onEmptyListLabel,
     onFacetItemClick,
@@ -47,7 +48,8 @@ const Visualisation = props => {
     selectedFooterTab,
     showExpandButton,
     showFilterButton,
-    showFilterFooter,
+    showApplyFilterButton,
+    showClearFilterButton,
     showFooterChartTab,
     visualisationTitle,
   } = props
@@ -61,6 +63,7 @@ const Visualisation = props => {
         isFilterOpen={isFilterOpen}
         loading={loading}
         onApplyFilters={onApplyFilters}
+        onClearFilters={onClearFilters}
         onEmptyListLabel={onEmptyListLabel}
         onFacetItemClick={onFacetItemClick}
         onFacetValueClick={onFacetValueClick}
@@ -68,9 +71,10 @@ const Visualisation = props => {
         onFilterClose={onFilterClose}
         onFilterSearchChange={onFilterSearchChange}
         selectedFacetValues={selectedFacetValues}
+        showApplyFilterButton={showApplyFilterButton}
+        showClearFilterButton={showClearFilterButton}
         showExpandButton={showExpandButton}
         showFilterButton={showFilterButton}
-        showFilterFooter={showFilterFooter}
         title={visualisationTitle}
       />
       <DataWrapper>
@@ -122,6 +126,7 @@ Visualisation.propTypes = {
   isFilterOpen: PropTypes.bool,
   loading: PropTypes.bool,
   onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func,
   onDownloadOptionClick: PropTypes.func.isRequired,
   onEmptyListLabel: PropTypes.string,
   onFacetItemClick: PropTypes.func,
@@ -139,7 +144,8 @@ Visualisation.propTypes = {
   selectedFooterTab: PropTypes.string.isRequired,
   showExpandButton: PropTypes.bool,
   showFilterButton: PropTypes.bool,
-  showFilterFooter: PropTypes.bool,
+  showApplyFilterButton: PropTypes.bool,
+  showClearFilterButton: PropTypes.bool,
   showFooterChartTab: PropTypes.bool,
   visualisationTitle: PropTypes.string.isRequired,
 }
@@ -150,6 +156,7 @@ Visualisation.defaultProps = {
   isFilterOpen: false,
   loading: false,
   onApplyFilters: () => {},
+  onClearFilters: () => {},
   onEmptyListLabel: '',
   onFacetItemClick: () => {},
   onFacetValueClick: () => {},
@@ -159,7 +166,8 @@ Visualisation.defaultProps = {
   selectedFacetValues: [],
   showExpandButton: false,
   showFilterButton: false,
-  showFilterFooter: false,
+  showApplyFilterButton: false,
+  showClearFilterButton: false,
   showFooterChartTab: false,
 }
 

@@ -47,6 +47,7 @@ const CitationCountsBySubject = props => {
     isFilterOpen,
     loading,
     onApplyFilters,
+    onClearFilters,
     onDownloadOptionClick,
     onEmptyListLabel,
     onFacetItemClick,
@@ -59,7 +60,8 @@ const CitationCountsBySubject = props => {
     selectedFooterTab,
     selectedFacetValues,
     showExpandButton,
-    showFilterFooter,
+    showApplyFilterButton,
+    showClearFilterButton,
     tableColumns,
   } = props
 
@@ -73,6 +75,7 @@ const CitationCountsBySubject = props => {
       isFilterOpen={isFilterOpen}
       loading={loading}
       onApplyFilters={onApplyFilters}
+      onClearFilters={onClearFilters}
       onDownloadOptionClick={onDownloadOptionClick}
       onEmptyListLabel={onEmptyListLabel}
       onFacetItemClick={onFacetItemClick}
@@ -83,9 +86,10 @@ const CitationCountsBySubject = props => {
       onFooterTabClick={onFooterTabClick}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
+      showApplyFilterButton={showApplyFilterButton}
+      showClearFilterButton={showClearFilterButton}
       showExpandButton={showExpandButton}
       showFilterButton
-      showFilterFooter={showFilterFooter}
       showFooterChartTab
       visualisationTitle={title}
     >
@@ -129,6 +133,7 @@ CitationCountsBySubject.propTypes = {
   isDownloadListOpen: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   onApplyFilters: PropTypes.func.isRequired,
+  onClearFilters: PropTypes.func.isRequired,
   onDownloadOptionClick: PropTypes.func.isRequired,
   onEmptyListLabel: PropTypes.string.isRequired,
   onFacetItemClick: PropTypes.func.isRequired,
@@ -145,8 +150,9 @@ CitationCountsBySubject.propTypes = {
       value: PropTypes.string,
     }),
   ).isRequired,
-  showExpandButton: PropTypes.bool.isRequired,
-  showFilterFooter: PropTypes.bool.isRequired,
+  showExpandButton: PropTypes.bool,
+  showApplyFilterButton: PropTypes.bool.isRequired,
+  showClearFilterButton: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -154,6 +160,10 @@ CitationCountsBySubject.propTypes = {
       key: PropTypes.string,
     }),
   ).isRequired,
+}
+
+CitationCountsBySubject.defaultProps = {
+  showExpandButton: false,
 }
 
 export default CitationCountsBySubject

@@ -10,9 +10,16 @@ const Wrapper = styled.div`
   background-color: ${th('colorBackground')};
   border-top: 1px solid ${th('colorChartBackground')};
   display: flex;
+  gap: ${grid(4)};
   justify-content: flex-end;
   padding: ${grid(3)};
   width: 100%;
+`
+
+const ClearFiltersButton = styled(AntButton)`
+  background-color: ${th('colorBackground')};
+  border-radius: ${grid(10)};
+  color: ${th('colorApplyFilters')};
 `
 
 const ApplyFiltersButton = styled(AntButton)`
@@ -22,23 +29,41 @@ const ApplyFiltersButton = styled(AntButton)`
 `
 
 const FilterFooter = props => {
-  const { onApplyFilters } = props
+  const {
+    onApplyFilters,
+    onClearFilters,
+    showApplyFilterButton,
+    showClearFilterButton,
+  } = props
 
   return (
     <Wrapper>
-      <ApplyFiltersButton onClick={onApplyFilters}>
-        Apply filter
-      </ApplyFiltersButton>
+      {showClearFilterButton && (
+        <ClearFiltersButton onClick={onClearFilters}>
+          Clear filter
+        </ClearFiltersButton>
+      )}
+      {showApplyFilterButton && (
+        <ApplyFiltersButton onClick={onApplyFilters}>
+          Apply filter
+        </ApplyFiltersButton>
+      )}
     </Wrapper>
   )
 }
 
 FilterFooter.propTypes = {
   onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func,
+  showApplyFilterButton: PropTypes.bool,
+  showClearFilterButton: PropTypes.bool,
 }
 
 FilterFooter.defaultProps = {
   onApplyFilters: () => {},
+  onClearFilters: () => {},
+  showApplyFilterButton: false,
+  showClearFilterButton: false,
 }
 
 export default FilterFooter
