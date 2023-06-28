@@ -1,17 +1,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
 const { Transform } = require('stream')
-const { uuid } = require('@coko/server')
 const { flatten, get, uniqBy } = require('lodash')
-
-const {
-  Repository,
-  AssertionSubject,
-  Affiliation,
-  AssertionAffiliation,
-  AssertionFunder,
-  Funder,
-} = require('@pubsweet/models')
 
 const axios = require('../axiosService')
 
@@ -24,16 +14,14 @@ class Datacite extends Transform {
 
   // eslint-disable-next-line class-methods-use-this, no-underscore-dangle
   async _transform(chunk, _encoding, callback) {
-    let doi = null
-    const sourceId = chunk.event.attributes['source-id']
+    const { dataCiteDoi } = chunk.event
 
-    if (sourceId === 'datacite-crossref') {
-      doi = chunk.event.attributes['subj-id'].replace('https://doi.org/', '')
-    } else {
-      doi = chunk.event.attributes['obj-id'].replace('https://doi.org/', '')
+    if (!dataCiteDoi) {
+      callback(null, chunk)
+      return
     }
 
-    const { data } = await axios.dataciteApiDoi(`${Datacite.URL}${doi}`)
+    const { data } = await axios.dataciteApiDoi(`${Datacite.URL}${dataCiteDoi}`)
 
     if (data && !data.errors) {
       // Get Title
@@ -82,103 +70,6 @@ class Datacite extends Transform {
     }
 
     callback(null, chunk)
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async transformToAssertion(assertionInstance, chunk, trx) {
-    assertionInstance.sourceId = chunk.source
-    assertionInstance.title = chunk.datacite.title
-    assertionInstance.sourceType = chunk.event.attributes['source-id']
-    assertionInstance.id = assertionInstance.id || uuid()
-    assertionInstance.relationTypeId =
-      chunk.event.attributes['relation-type-id']
-
-    assertionInstance.objId = chunk.event.attributes['obj-id']
-    assertionInstance.subjId = chunk.event.attributes['subj-id']
-
-    if (chunk.datacite.subjects) {
-      const titles = chunk.datacite.subjects
-
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < titles.length; i++) {
-        const exists = this.subjects.find(
-          subj => subj.title.toLowerCase() === titles[i].toLowerCase(),
-        )
-
-        if (exists) {
-          const subjectId = exists.id
-          await AssertionSubject.query(trx).insert({
-            assertionId: assertionInstance.id,
-            subjectId,
-          })
-        }
-      }
-    }
-
-    if (chunk.datacite.affiliations) {
-      const titles = chunk.datacite.affiliations
-
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < titles.length; i++) {
-        const exists = await Affiliation.query(trx).findOne({
-          title: titles[i].name,
-        })
-
-        let affiliation = null
-
-        if (!exists) {
-          affiliation = await Affiliation.query(trx)
-            .insert({ title: titles[i].name, externalId: titles[i].identifier })
-            .returning('*')
-        }
-
-        const affiliationId = (exists || {}).id || affiliation.id
-        await AssertionAffiliation.query(trx).insert({
-          assertionId: assertionInstance.id,
-          affiliationId,
-        })
-      }
-    }
-
-    if (chunk.datacite.funders) {
-      const titles = chunk.datacite.funders
-
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < titles.length; i++) {
-        const exists = await Funder.query(trx).findOne({
-          title: titles[i].name,
-        })
-
-        let funder = null
-
-        if (!exists) {
-          funder = await Funder.query(trx)
-            .insert({ title: titles[i].name, externalId: titles[i].identifier })
-            .returning('*')
-        }
-
-        const funderId = (exists || {}).id || funder.id
-        await AssertionFunder.query(trx).insert({
-          assertionId: assertionInstance.id,
-          funderId,
-        })
-      }
-    }
-
-    if (chunk.datacite.repository) {
-      const title = chunk.datacite.repository
-
-      const exists = await Repository.query(trx).findOne({ title })
-      let repository = exists
-
-      if (!exists) {
-        repository = await Repository.query(trx)
-          .insert({ title })
-          .returning('*')
-      }
-
-      assertionInstance.repositoryId = repository.id
-    }
   }
 }
 

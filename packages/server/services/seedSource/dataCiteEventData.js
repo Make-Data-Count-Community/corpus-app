@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-await-in-loop */
 const { logger, db } = require('@coko/server')
 const { model: ActivityLog } = require('../../models/activityLog')
@@ -34,16 +35,49 @@ class DataCiteEventData {
         result.value.data = await this.filterOutExistingCitations(
           result.value.data,
         )
+        const currentBulk = []
 
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < result.value.data.length; i++) {
-          this.citations.push(result.value.data[i])
+          const event = result.value.data[i]
+          const sourceId = event.attributes['source-id']
+
+          let dataCiteDoi = null
+          let crossrefDoi = null
+
+          if (sourceId === 'datacite-crossref') {
+            dataCiteDoi = event.attributes['subj-id'].replace(
+              'https://doi.org/',
+              '',
+            )
+          } else {
+            dataCiteDoi = event.attributes['obj-id'].replace(
+              'https://doi.org/',
+              '',
+            )
+          }
+
+          if (sourceId === 'crossref') {
+            crossrefDoi = event.attributes['subj-id'].replace(
+              'https://doi.org/',
+              '',
+            )
+          } else {
+            crossrefDoi = event.attributes['obj-id'].replace(
+              'https://doi.org/',
+              '',
+            )
+          }
+
+          const citation = { dataCiteDoi, crossrefDoi, ...result.value.data[i] }
+          this.citations.push(citation)
+          currentBulk.push(citation)
         }
 
-        if (result.value.data && result.value.data.length > 0) {
+        if (currentBulk.length > 0) {
           await ActivityLog.query().insert({
             action: 'assertion_incoming_datacite',
-            data: JSON.stringify(result.value.data),
+            data: JSON.stringify(currentBulk),
             tableName: 'assertions',
           })
         }

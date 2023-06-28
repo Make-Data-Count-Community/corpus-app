@@ -9,7 +9,7 @@ class CorpusDataFactory {
       'source-id=crossref',
     ])
 
-    const metadataSource = MetadataSource.createInstance()
+    const metadataSource = await MetadataSource.createInstance()
 
     const corpusData = new CorpusData(seedSource, metadataSource)
     return corpusData
@@ -21,7 +21,16 @@ class CorpusDataFactory {
       `year-month=${year}-${month}`,
     ])
 
-    const metadataSource = MetadataSource.createInstance()
+    const metadataSource = await MetadataSource.createInstance()
+
+    const corpusData = new CorpusData(seedSource, metadataSource)
+    return corpusData
+  }
+
+  static async cziFile() {
+    const seedSource = await SeedSource.createInstanceCzi()
+
+    const metadataSource = await MetadataSource.createInstance()
 
     const corpusData = new CorpusData(seedSource, metadataSource)
     return corpusData

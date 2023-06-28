@@ -1,14 +1,7 @@
 const { Writable, Readable } = require('stream')
-const { chunk } = require('lodash')
-
-const { useTransaction } = require('@coko/server')
 const DataCite = require('./datacite')
 const Crossref = require('./crossref')
-
-const { model: ActivityLog } = require('../../models/activityLog')
-const { model: Assertion } = require('../../models/assertion')
 const { model: Subject } = require('../../models/subject')
-const Source = require('../../models/source/source')
 
 class MetadataSource {
   constructor(streamApis) {
@@ -59,102 +52,16 @@ class MetadataSource {
     this.readable.push(data)
   }
 
-  static createInstance(sourceType) {
-    let metadataApis = [new DataCite(), new Crossref()]
+  static async createInstance(sourceType) {
+    const subjects = await Subject.query()
+
+    let metadataApis = [new DataCite(subjects), new Crossref()]
 
     if (sourceType === 'datacite') {
       metadataApis = [new DataCite()]
     }
 
     return new MetadataSource(metadataApis)
-  }
-
-  static async loadCitationsFromDB(selected = null) {
-    // eslint-disable-next-line no-console
-    const subjects = await Subject.query()
-
-    const sources = await Source.query()
-
-    const metadataApis = [new DataCite(subjects), new Crossref()]
-
-    const metadataSource = new MetadataSource(metadataApis)
-
-    const citationDataQuery = ActivityLog.query()
-      .select('id')
-      .where({ proccessed: false })
-
-    if (selected) {
-      citationDataQuery.andWhere(builder => {
-        builder.whereBetween('cursorId', [selected.start, selected.end])
-      })
-    }
-
-    const citationData = await citationDataQuery
-
-    const item = citationData[Math.floor(Math.random() * citationData.length)]
-
-    if (item) {
-      const res = await ActivityLog.query().patchAndFetchById(item.id, {
-        proccessed: true,
-      })
-
-      const data = JSON.parse(res.data)
-      // eslint-disable-next-line no-console
-      data.forEach(citation => {
-        const { id } = sources.find(
-          s => s.abbreviation === res.action.replace('assertion_incoming_', ''),
-        )
-
-        if (id) {
-          const assertions = {
-            source: id,
-            event: citation,
-            datacite: {},
-            crossref: {},
-          }
-
-          metadataSource.startStreamCitations(assertions)
-        }
-      })
-
-      metadataSource.startStreamCitations(null)
-
-      try {
-        const result = await metadataSource.getResult
-        useTransaction(async trx => {
-          // eslint-disable-next-line no-unused-vars
-          const assertions = []
-
-          // eslint-disable-next-line no-plusplus
-          for (let i = 0; i < result.length; i++) {
-            const assertion = {}
-            const chunks = result[i]
-            // eslint-disable-next-line no-await-in-loop
-            await Promise.all(
-              metadataSource.streamApis.map(api =>
-                api.transformToAssertion(assertion, chunks, trx),
-              ),
-            )
-            assertion.activityId = item.id
-            assertions.push(assertion)
-          }
-
-          const assertionsArray = chunk(assertions, 5000)
-
-          await Promise.all(
-            assertionsArray.map(assert => Assertion.query(trx).insert(assert)),
-          )
-
-          await ActivityLog.query(trx).findById(item.id).patch({ done: true })
-        })
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(`failed at ${item.id} $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$`)
-        throw new Error(e)
-      }
-    }
-
-    return []
   }
 }
 

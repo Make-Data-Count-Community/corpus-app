@@ -35,8 +35,11 @@ class ScheduledTaskService {
         }
 
         logger.info(`######### Start Reading source : 'crossref' ######### `)
-
         corpusdata = await CorpusDataFactory.dataciteSourceCrossref()
+        await corpusdata.seedSource.readSource()
+
+        logger.info(`######### Start Reading CZI files ######### `)
+        corpusdata = await CorpusDataFactory.cziFile()
         await corpusdata.seedSource.readSource()
 
         logger.info(`######### Start Retreving Data from API ######### `)
