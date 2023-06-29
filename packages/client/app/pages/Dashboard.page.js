@@ -398,6 +398,9 @@ const DashboardPage = () => {
     [],
   )
 
+  const [overTimeSelectedFacetCount, setOverTimeSelectedFacetCount] =
+    useState(0)
+
   const [overTimeSelectedFacetValues, setOverTimeSelectedFacetValues] =
     useState([])
 
@@ -441,6 +444,9 @@ const DashboardPage = () => {
 
   const [bySubjectDisplayFacetValues, setBySubjectDisplayFacetValues] =
     useState([])
+
+  const [bySubjectSelectedFacetCount, setBySubjectSelectedFacetCount] =
+    useState(0)
 
   const [bySubjectSelectedFacetValues, setBySubjectSelectedFacetValues] =
     useState([])
@@ -492,6 +498,9 @@ const DashboardPage = () => {
   const [byPublisherDisplayFacetValues, setByPublisherDisplayFacetValues] =
     useState([])
 
+  const [byPublisherSelectedFacetCount, setByPublisherSelectedFacetCount] =
+    useState(0)
+
   const [byPublisherSelectedFacetValues, setByPublisherSelectedFacetValues] =
     useState([])
 
@@ -538,6 +547,9 @@ const DashboardPage = () => {
   const [bySourceDisplayFacetValues, setBySourceDisplayFacetValues] = useState(
     [],
   )
+
+  const [bySourceSelectedFacetCount, setBySourceSelectedFacetCount] =
+    useState(0)
 
   const [bySourceSelectedFacetValues, setBySourceSelectedFacetValues] =
     useState([])
@@ -734,13 +746,16 @@ const DashboardPage = () => {
       setOverTimeFilters(parsedFilters)
 
       let shouldShowClearButton = false
+      let selectionCount = 0
 
       storedFilters.forEach(s => {
         if (s.values.length) {
           shouldShowClearButton = true
+          selectionCount += 1
         }
       })
 
+      setOverTimeSelectedFacetCount(selectionCount)
       setOverTimeShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('overTimeFilters', JSON.stringify(overTimeFilters))
@@ -779,13 +794,16 @@ const DashboardPage = () => {
       setBySubjectFilters(parsedFilters)
 
       let shouldShowClearButton = false
+      let selectionCount = 0
 
       storedFilters.forEach(s => {
         if (s.values.length) {
           shouldShowClearButton = true
+          selectionCount += 1
         }
       })
 
+      setBySubjectSelectedFacetCount(selectionCount)
       setBySubjectShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('bySubjectFilters', JSON.stringify(bySubjectFilters))
@@ -824,13 +842,16 @@ const DashboardPage = () => {
       setByPublisherFilters(parsedFilters)
 
       let shouldShowClearButton = false
+      let selectionCount = 0
 
       storedFilters.forEach(s => {
         if (s.values.length) {
           shouldShowClearButton = true
+          selectionCount += 1
         }
       })
 
+      setByPublisherSelectedFacetCount(selectionCount)
       setByPublisherShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem(
@@ -872,13 +893,16 @@ const DashboardPage = () => {
       setBySourceFilters(parsedFilters)
 
       let shouldShowClearButton = false
+      let selectionCount = 0
 
       storedFilters.forEach(s => {
         if (s.values.length) {
           shouldShowClearButton = true
+          selectionCount += 1
         }
       })
 
+      setBySourceSelectedFacetCount(selectionCount)
       setBySourceShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('bySourceFilters', JSON.stringify(bySourceFilters))
@@ -923,6 +947,16 @@ const DashboardPage = () => {
 
     localStorage.setItem('overTimeFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setOverTimeSelectedFacetCount(selectionCount)
+
     setOverTimeShowApplyFilter(false)
     setOverTimeDisplayFacetValues([])
 
@@ -942,6 +976,7 @@ const DashboardPage = () => {
     setOverTimeIsFilterOpen(false)
     setOverTimeShowClearFilter(false)
     setOverTimeShowApplyFilter(false)
+    setOverTimeSelectedFacetCount(0)
     localStorage.setItem(
       'overTimeFilters',
       JSON.stringify(overTimeFilterParams),
@@ -1119,6 +1154,16 @@ const DashboardPage = () => {
 
     localStorage.setItem('bySubjectFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setBySubjectSelectedFacetCount(selectionCount)
+
     setBySubjectShowApplyFilter(false)
     setBySubjectDisplayFacetValues([])
 
@@ -1138,6 +1183,7 @@ const DashboardPage = () => {
     setBySubjectIsFilterOpen(false)
     setBySubjectShowClearFilter(false)
     setBySubjectShowApplyFilter(false)
+    setBySubjectSelectedFacetCount(0)
     localStorage.setItem(
       'bySubjectFilters',
       JSON.stringify(bySubjectFilterParams),
@@ -1306,6 +1352,16 @@ const DashboardPage = () => {
 
     localStorage.setItem('byPublisherFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setByPublisherSelectedFacetCount(selectionCount)
+
     setByPublisherShowApplyFilter(false)
     setByPublisherDisplayFacetValues([])
 
@@ -1325,6 +1381,7 @@ const DashboardPage = () => {
     setByPublisherIsFilterOpen(false)
     setByPublisherShowClearFilter(false)
     setByPublisherShowApplyFilter(false)
+    setByPublisherSelectedFacetCount(0)
     localStorage.setItem(
       'byPublisherFilters',
       JSON.stringify(byPublisherFilterParams),
@@ -1498,6 +1555,16 @@ const DashboardPage = () => {
 
     localStorage.setItem('bySourceFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setBySourceSelectedFacetCount(selectionCount)
+
     setBySourceShowApplyFilter(false)
     setBySourceDisplayFacetValues([])
 
@@ -1517,6 +1584,7 @@ const DashboardPage = () => {
     setBySourceIsFilterOpen(false)
     setBySourceShowClearFilter(false)
     setBySourceShowApplyFilter(false)
+    setBySourceSelectedFacetCount(0)
     localStorage.setItem(
       'bySourceFilters',
       JSON.stringify(bySourceFilterParams),
@@ -1779,6 +1847,7 @@ const DashboardPage = () => {
         byPublisherOnFilterSearchChange={handleByPublisherSearchChange}
         byPublisherOnFooterTabClick={handleByPublisherFooterTabClick}
         byPublisherOnNewView={handleByPublisherOnNewView}
+        byPublisherSelectedFacetCount={byPublisherSelectedFacetCount}
         byPublisherSelectedFacetValues={byPublisherSelectedFacetValues}
         byPublisherSelectedFooterTab={byPublisherSelectedTab}
         byPublisherShowApplyFilterButton={byPublisherShowApplyFilter}
@@ -1811,6 +1880,7 @@ const DashboardPage = () => {
         bySourceOnFilterSearchChange={handleBySourceSearchChange}
         bySourceOnFooterTabClick={handleBySourceFooterTabClick}
         bySourceOnNewView={handleBySourceOnNewView}
+        bySourceSelectedFacetCount={bySourceSelectedFacetCount}
         bySourceSelectedFacetValues={bySourceSelectedFacetValues}
         bySourceSelectedFooterTab={bySourceSelectedTab}
         bySourceShowApplyFilterButton={bySourceShowApplyFilter}
@@ -1838,6 +1908,7 @@ const DashboardPage = () => {
         bySubjectOnFilterSearchChange={handleBySubjectSearchChange}
         bySubjectOnFooterTabClick={handleBySubjectFooterTabClick}
         bySubjectOnNewView={handleBySubjectOnNewView}
+        bySubjectSelectedFacetCount={bySubjectSelectedFacetCount}
         bySubjectSelectedFacetValues={bySubjectSelectedFacetValues}
         bySubjectSelectedFooterTab={bySubjectSelectedTab}
         bySubjectShowApplyFilterButton={bySubjectShowApplyFilter}
@@ -1891,6 +1962,7 @@ const DashboardPage = () => {
         overTimeOnFilterSearchChange={handleOverTimeSearchChange}
         overTimeOnFooterTabClick={handleOverTimeFooterTabClick}
         overTimeOnNewView={handleOverTimeOnNewView}
+        overTimeSelectedFacetCount={overTimeSelectedFacetCount}
         overTimeSelectedFacetValues={overTimeSelectedFacetValues}
         overTimeSelectedFooterTab={overTimeSelectedTab}
         overTimeShowApplyFilterButton={overTimeShowApplyFilter}

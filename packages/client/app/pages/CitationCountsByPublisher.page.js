@@ -92,6 +92,9 @@ const CitationCountsByPublisherPage = () => {
   const [byPublisherDisplayFacetValues, setByPublisherDisplayFacetValues] =
     useState([])
 
+  const [byPublisherSelectedFacetCount, setByPublisherSelectedFacetCount] =
+    useState(0)
+
   const [byPublisherSelectedFacetValues, setByPublisherSelectedFacetValues] =
     useState([])
 
@@ -157,13 +160,16 @@ const CitationCountsByPublisherPage = () => {
       setByPublisherFilters(parsedFilters)
 
       let shouldShowClearButton = false
+      let selectionCount = 0
 
       storedFilters.forEach(s => {
         if (s.values.length) {
           shouldShowClearButton = true
+          selectionCount += 1
         }
       })
 
+      setByPublisherSelectedFacetCount(selectionCount)
       setByPublisherShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem(
@@ -230,6 +236,15 @@ const CitationCountsByPublisherPage = () => {
 
     localStorage.setItem('byPublisherFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setByPublisherSelectedFacetCount(selectionCount)
     setByPublisherShowApplyFilter(false)
     setByPublisherDisplayFacetValues([])
 
@@ -249,6 +264,7 @@ const CitationCountsByPublisherPage = () => {
     setByPublisherIsFilterOpen(false)
     setByPublisherShowClearFilter(false)
     setByPublisherShowApplyFilter(false)
+    setByPublisherSelectedFacetCount(0)
     localStorage.setItem(
       'byPublisherFilters',
       JSON.stringify(byPublisherFilterParams),
@@ -426,6 +442,7 @@ const CitationCountsByPublisherPage = () => {
         onFilterSearchChange={handleByPublisherSearchChange}
         onFooterTabClick={handleByPublisherFooterTabClick}
         onNewView={handleByPublisherOnNewView}
+        selectedFacetCount={byPublisherSelectedFacetCount}
         selectedFacetValues={byPublisherSelectedFacetValues}
         selectedFooterTab={byPublisherSelectedTab}
         showApplyFilterButton={byPublisherShowApplyFilter}

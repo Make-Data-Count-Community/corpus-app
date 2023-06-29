@@ -47,6 +47,7 @@ const ChartHeader = props => {
     onFacetValueClick,
     onFilterClick,
     onFilterSearchChange,
+    selectedFacetCount,
     selectedFacetValues,
     showExpandButton,
     showApplyFilterButton,
@@ -82,7 +83,9 @@ const ChartHeader = props => {
             placement="bottomRight"
             trigger="click"
           >
-            <FilterButton>Filter Facets</FilterButton>
+            <FilterButton loading={loading} selected={!!selectedFacetCount}>
+              Filter Facets{!!selectedFacetCount && ` (${selectedFacetCount})`}
+            </FilterButton>
           </AntPopover>
         )}
 
@@ -126,6 +129,7 @@ ChartHeader.propTypes = {
   onFilterClick: PropTypes.func,
   onFilterClose: PropTypes.func,
   onFilterSearchChange: PropTypes.func,
+  selectedFacetCount: PropTypes.number,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -152,6 +156,7 @@ ChartHeader.defaultProps = {
   onFilterClick: () => {},
   onFilterClose: () => {},
   onFilterSearchChange: () => {},
+  selectedFacetCount: 0,
   selectedFacetValues: [],
   showFilterButton: false,
   showApplyFilterButton: false,

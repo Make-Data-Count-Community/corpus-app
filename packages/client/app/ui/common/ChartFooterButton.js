@@ -7,10 +7,8 @@ import { th, grid } from '@coko/client'
 
 const StyledButton = styled(AntButton)`
   align-items: center;
-  background-color: ${props =>
-    props.selected
-      ? props.theme.colorBackground
-      : props.theme.colorTextPlaceholder};
+  background-color: ${({ selected, theme }) =>
+    selected ? theme.colorBackground : theme.colorTextPlaceholder};
   border: 1px solid ${th('colorPrimary')};
   display: flex;
   flex-direction: row;

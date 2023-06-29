@@ -60,6 +60,7 @@ const CitationCountsByPublisher = props => {
     onFooterTabClick,
     onNewView,
     selectedFooterTab,
+    selectedFacetCount,
     selectedFacetValues,
     showExpandButton,
     showApplyFilterButton,
@@ -86,6 +87,7 @@ const CitationCountsByPublisher = props => {
       onFilterClose={onFilterClose}
       onFilterSearchChange={onFilterSearchChange}
       onFooterTabClick={onFooterTabClick}
+      selectedFacetCount={selectedFacetCount}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
       showApplyFilterButton={showApplyFilterButton}
@@ -148,6 +150,7 @@ CitationCountsByPublisher.propTypes = {
   onFooterTabClick: PropTypes.func.isRequired,
   onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
+  selectedFacetCount: PropTypes.number.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,

@@ -145,6 +145,9 @@ const CitationCountsOverTimePage = () => {
     [],
   )
 
+  const [overTimeSelectedFacetCount, setOverTimeSelectedFacetCount] =
+    useState(0)
+
   const [overTimeSelectedFacetValues, setOverTimeSelectedFacetValues] =
     useState([])
 
@@ -224,13 +227,16 @@ const CitationCountsOverTimePage = () => {
       setOverTimeFilters(parsedFilters)
 
       let shouldShowClearButton = false
+      let selectionCount = 0
 
       storedFilters.forEach(s => {
         if (s.values.length) {
           shouldShowClearButton = true
+          selectionCount += 1
         }
       })
 
+      setOverTimeSelectedFacetCount(selectionCount)
       setOverTimeShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('overTimeFilters', JSON.stringify(overTimeFilters))
@@ -271,6 +277,16 @@ const CitationCountsOverTimePage = () => {
 
     localStorage.setItem('overTimeFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setOverTimeSelectedFacetCount(selectionCount)
+
     setOverTimeShowApplyFilter(false)
     setOverTimeDisplayFacetValues([])
 
@@ -290,6 +306,7 @@ const CitationCountsOverTimePage = () => {
     setOverTimeIsFilterOpen(false)
     setOverTimeShowClearFilter(false)
     setOverTimeShowApplyFilter(false)
+    setOverTimeSelectedFacetCount(0)
     localStorage.setItem(
       'overTimeFilters',
       JSON.stringify(overTimeFilterParams),
@@ -477,6 +494,7 @@ const CitationCountsOverTimePage = () => {
         onFilterSearchChange={handleOverTimeSearchChange}
         onFooterTabClick={handleOverTimeFooterTabClick}
         onNewView={handleOverTimeOnNewView}
+        selectedFacetCount={overTimeSelectedFacetCount}
         selectedFacetValues={overTimeSelectedFacetValues}
         selectedFooterTab={overTimeSelectedTab}
         showApplyFilterButton={overTimeShowApplyFilter}

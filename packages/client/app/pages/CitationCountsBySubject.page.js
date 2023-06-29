@@ -86,6 +86,9 @@ const CitationCountsBySubjectPage = () => {
   const [bySubjectDisplayFacetValues, setBySubjectDisplayFacetValues] =
     useState([])
 
+  const [bySubjectSelectedFacetCount, setBySubjectSelectedFacetCount] =
+    useState(0)
+
   const [bySubjectSelectedFacetValues, setBySubjectSelectedFacetValues] =
     useState([])
 
@@ -185,13 +188,16 @@ const CitationCountsBySubjectPage = () => {
       setBySubjectFilters(parsedFilters)
 
       let shouldShowClearButton = false
+      let selectionCount = 0
 
       storedFilters.forEach(s => {
         if (s.values.length) {
           shouldShowClearButton = true
+          selectionCount += 1
         }
       })
 
+      setBySubjectSelectedFacetCount(selectionCount)
       setBySubjectShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('bySubjectFilters', JSON.stringify(bySubjectFilters))
@@ -235,6 +241,15 @@ const CitationCountsBySubjectPage = () => {
 
     localStorage.setItem('bySubjectFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setBySubjectSelectedFacetCount(selectionCount)
     setBySubjectShowApplyFilter(false)
     setBySubjectDisplayFacetValues([])
 
@@ -254,6 +269,7 @@ const CitationCountsBySubjectPage = () => {
     setBySubjectIsFilterOpen(false)
     setBySubjectShowClearFilter(false)
     setBySubjectShowApplyFilter(false)
+    setBySubjectSelectedFacetCount(0)
     localStorage.setItem(
       'bySubjectFilters',
       JSON.stringify(bySubjectFilterParams),
@@ -427,6 +443,7 @@ const CitationCountsBySubjectPage = () => {
         onFilterSearchChange={handleBySubjectSearchChange}
         onFooterTabClick={handleBySubjectFooterTabClick}
         onNewView={handleBySubjectOnNewView}
+        selectedFacetCount={bySubjectSelectedFacetCount}
         selectedFacetValues={bySubjectSelectedFacetValues}
         selectedFooterTab={bySubjectSelectedTab}
         showApplyFilterButton={bySubjectShowApplyFilter}

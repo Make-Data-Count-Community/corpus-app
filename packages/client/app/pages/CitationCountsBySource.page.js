@@ -139,6 +139,9 @@ const CitationCountsBySourcePage = () => {
     [],
   )
 
+  const [bySourceSelectedFacetCount, setBySourceSelectedFacetCount] =
+    useState(0)
+
   const [bySourceSelectedFacetValues, setBySourceSelectedFacetValues] =
     useState([])
 
@@ -221,13 +224,16 @@ const CitationCountsBySourcePage = () => {
       setBySourceFilters(parsedFilters)
 
       let shouldShowClearButton = false
+      let selectionCount = 0
 
       storedFilters.forEach(s => {
         if (s.values.length) {
           shouldShowClearButton = true
+          selectionCount += 1
         }
       })
 
+      setBySourceSelectedFacetCount(selectionCount)
       setBySourceShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('bySourceFilters', JSON.stringify(bySourceFilters))
@@ -271,6 +277,16 @@ const CitationCountsBySourcePage = () => {
 
     localStorage.setItem('bySourceFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setBySourceSelectedFacetCount(selectionCount)
+
     setBySourceShowApplyFilter(false)
     setBySourceDisplayFacetValues([])
 
@@ -290,6 +306,7 @@ const CitationCountsBySourcePage = () => {
     setBySourceIsFilterOpen(false)
     setBySourceShowClearFilter(false)
     setBySourceShowApplyFilter(false)
+    setBySourceSelectedFacetCount(0)
     localStorage.setItem(
       'bySourceFilters',
       JSON.stringify(bySourceFilterParams),
@@ -479,6 +496,7 @@ const CitationCountsBySourcePage = () => {
         onFilterSearchChange={handleBySourceSearchChange}
         onFooterTabClick={handleBySourceFooterTabClick}
         onNewView={handleBySourceOnNewView}
+        selectedFacetCount={bySourceSelectedFacetCount}
         selectedFacetValues={bySourceSelectedFacetValues}
         selectedFooterTab={bySourceSelectedTab}
         showApplyFilterButton={bySourceShowApplyFilter}

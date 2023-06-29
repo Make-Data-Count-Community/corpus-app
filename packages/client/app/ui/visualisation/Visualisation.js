@@ -44,6 +44,7 @@ const Visualisation = props => {
     onFilterClose,
     onFilterSearchChange,
     onFooterTabClick,
+    selectedFacetCount,
     selectedFacetValues,
     selectedFooterTab,
     showExpandButton,
@@ -70,6 +71,7 @@ const Visualisation = props => {
         onFilterClick={onFilterClick}
         onFilterClose={onFilterClose}
         onFilterSearchChange={onFilterSearchChange}
+        selectedFacetCount={selectedFacetCount}
         selectedFacetValues={selectedFacetValues}
         showApplyFilterButton={showApplyFilterButton}
         showClearFilterButton={showClearFilterButton}
@@ -135,6 +137,7 @@ Visualisation.propTypes = {
   onFilterClose: PropTypes.func,
   onFilterSearchChange: PropTypes.func,
   onFooterTabClick: PropTypes.func.isRequired,
+  selectedFacetCount: PropTypes.number,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -163,6 +166,7 @@ Visualisation.defaultProps = {
   onFilterClick: () => {},
   onFilterClose: () => {},
   onFilterSearchChange: () => {},
+  selectedFacetCount: 0,
   selectedFacetValues: [],
   showExpandButton: false,
   showFilterButton: false,

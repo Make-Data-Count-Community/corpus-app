@@ -75,6 +75,7 @@ const Dashboard = props => {
     bySourceOnFilterSearchChange,
     bySourceOnFooterTabClick,
     bySourceOnNewView,
+    bySourceSelectedFacetCount,
     bySourceSelectedFacetValues,
     bySourceSelectedFooterTab,
     bySourceShowExpandButton,
@@ -99,6 +100,7 @@ const Dashboard = props => {
     byPublisherOnFilterSearchChange,
     byPublisherOnFooterTabClick,
     byPublisherOnNewView,
+    byPublisherSelectedFacetCount,
     byPublisherSelectedFacetValues,
     byPublisherSelectedFooterTab,
     byPublisherShowExpandButton,
@@ -123,6 +125,7 @@ const Dashboard = props => {
     bySubjectOnFilterSearchChange,
     bySubjectOnFooterTabClick,
     bySubjectOnNewView,
+    bySubjectSelectedFacetCount,
     bySubjectSelectedFacetValues,
     bySubjectSelectedFooterTab,
     bySubjectShowExpandButton,
@@ -147,6 +150,7 @@ const Dashboard = props => {
     overTimeOnFilterSearchChange,
     overTimeOnFooterTabClick,
     overTimeOnNewView,
+    overTimeSelectedFacetCount,
     overTimeSelectedFacetValues,
     overTimeSelectedFooterTab,
     overTimeShowExpandButton,
@@ -176,6 +180,7 @@ const Dashboard = props => {
           onFilterSearchChange={overTimeOnFilterSearchChange}
           onFooterTabClick={overTimeOnFooterTabClick}
           onNewView={overTimeOnNewView}
+          selectedFacetCount={overTimeSelectedFacetCount}
           selectedFacetValues={overTimeSelectedFacetValues}
           selectedFooterTab={overTimeSelectedFooterTab}
           showApplyFilterButton={overTimeShowApplyFilterButton}
@@ -201,6 +206,7 @@ const Dashboard = props => {
           onFilterSearchChange={bySubjectOnFilterSearchChange}
           onFooterTabClick={bySubjectOnFooterTabClick}
           onNewView={bySubjectOnNewView}
+          selectedFacetCount={bySubjectSelectedFacetCount}
           selectedFacetValues={bySubjectSelectedFacetValues}
           selectedFooterTab={bySubjectSelectedFooterTab}
           showApplyFilterButton={bySubjectShowApplyFilterButton}
@@ -229,6 +235,7 @@ const Dashboard = props => {
           onFilterSearchChange={byPublisherOnFilterSearchChange}
           onFooterTabClick={byPublisherOnFooterTabClick}
           onNewView={byPublisherOnNewView}
+          selectedFacetCount={byPublisherSelectedFacetCount}
           selectedFacetValues={byPublisherSelectedFacetValues}
           selectedFooterTab={byPublisherSelectedFooterTab}
           showApplyFilterButton={byPublisherShowApplyFilterButton}
@@ -254,6 +261,7 @@ const Dashboard = props => {
           onFilterSearchChange={bySourceOnFilterSearchChange}
           onFooterTabClick={bySourceOnFooterTabClick}
           onNewView={bySourceOnNewView}
+          selectedFacetCount={bySourceSelectedFacetCount}
           selectedFacetValues={bySourceSelectedFacetValues}
           selectedFooterTab={bySourceSelectedFooterTab}
           showApplyFilterButton={bySourceShowApplyFilterButton}
@@ -354,6 +362,7 @@ Dashboard.propTypes = {
   overTimeOnFilterSearchChange: PropTypes.func.isRequired,
   overTimeOnFooterTabClick: PropTypes.func.isRequired,
   overTimeOnNewView: PropTypes.func.isRequired,
+  overTimeSelectedFacetCount: PropTypes.number.isRequired,
   overTimeSelectedFooterTab: PropTypes.string.isRequired,
   overTimeSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -405,6 +414,7 @@ Dashboard.propTypes = {
   bySubjectOnFilterSearchChange: PropTypes.func.isRequired,
   bySubjectOnFooterTabClick: PropTypes.func.isRequired,
   bySubjectOnNewView: PropTypes.func.isRequired,
+  bySubjectSelectedFacetCount: PropTypes.number.isRequired,
   bySubjectSelectedFooterTab: PropTypes.string.isRequired,
   bySubjectSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -456,6 +466,7 @@ Dashboard.propTypes = {
   byPublisherOnFilterSearchChange: PropTypes.func.isRequired,
   byPublisherOnFooterTabClick: PropTypes.func.isRequired,
   byPublisherOnNewView: PropTypes.func.isRequired,
+  byPublisherSelectedFacetCount: PropTypes.number.isRequired,
   byPublisherSelectedFooterTab: PropTypes.string.isRequired,
   byPublisherSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -507,6 +518,7 @@ Dashboard.propTypes = {
   bySourceOnFilterSearchChange: PropTypes.func.isRequired,
   bySourceOnFooterTabClick: PropTypes.func.isRequired,
   bySourceOnNewView: PropTypes.func.isRequired,
+  bySourceSelectedFacetCount: PropTypes.number.isRequired,
   bySourceSelectedFooterTab: PropTypes.string.isRequired,
   bySourceSelectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
