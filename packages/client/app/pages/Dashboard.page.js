@@ -707,7 +707,10 @@ const DashboardPage = () => {
 
   const { loading: corpusGrowthLoading } = useQuery(GET_CORPUS_GROWTH, {
     onCompleted: data => {
-      const getCorpusGrowthRaw = cloneDeep(data.getCorpusGrowth)
+      const getCorpusGrowthRaw = cloneDeep(data.getCorpusGrowth).sort((a, b) =>
+        a.xField < b.xField ? -1 : 1,
+      )
+
       let totalDoi = 0
       let totalAccession = 0
 
