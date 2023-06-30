@@ -290,6 +290,8 @@ const Template = args => {
     setSelectedFacetValues(filters[facetIndex].values)
   }
 
+  const handleClearFilters = () => {}
+
   const handleFacetValueClick = valueId => {
     const facet = filters.find(f => f.isFacetSelected)
 
@@ -341,6 +343,7 @@ const Template = args => {
       filterValueOptions={displayFacetValues}
       isFilterOpen={isFilterOpen}
       onApplyFilters={handleApplyFilters}
+      onClearFilters={handleClearFilters}
       onEmptyListLabel={emptyFacetValueListLabel}
       onFacetItemClick={handleFacetItemClick}
       onFacetValueClick={handleFacetValueClick}
@@ -348,7 +351,7 @@ const Template = args => {
       onFilterClose={handleOnClose}
       onFilterSearchChange={handleSearchChange}
       selectedFacetValues={selectedFacetValues}
-      showFilterFooter={!!totalSelectionCount}
+      showApplyFilterButton={!!totalSelectionCount}
       title={title}
     />
   )

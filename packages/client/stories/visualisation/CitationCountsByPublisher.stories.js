@@ -407,7 +407,7 @@ const Template = args => {
       onNewView={handleNewView}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedTab}
-      showFilterFooter={!!totalSelectionCount}
+      showApplyFilterButton={!!totalSelectionCount}
       tableColumns={columns}
     />
   )

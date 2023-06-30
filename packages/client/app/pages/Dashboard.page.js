@@ -398,10 +398,15 @@ const DashboardPage = () => {
     [],
   )
 
+  const [overTimeSelectedFacetCount, setOverTimeSelectedFacetCount] =
+    useState(0)
+
   const [overTimeSelectedFacetValues, setOverTimeSelectedFacetValues] =
     useState([])
 
   const [overTimeShowApplyFilter, setOverTimeShowApplyFilter] = useState(false)
+
+  const [overTimeShowClearFilter, setOverTimeShowClearFilter] = useState(false)
 
   const [overTimeVisualisationData, setOverTimeVisualisationData] = useState([])
 
@@ -440,10 +445,16 @@ const DashboardPage = () => {
   const [bySubjectDisplayFacetValues, setBySubjectDisplayFacetValues] =
     useState([])
 
+  const [bySubjectSelectedFacetCount, setBySubjectSelectedFacetCount] =
+    useState(0)
+
   const [bySubjectSelectedFacetValues, setBySubjectSelectedFacetValues] =
     useState([])
 
   const [bySubjectShowApplyFilter, setBySubjectShowApplyFilter] =
+    useState(false)
+
+  const [bySubjectShowClearFilter, setBySubjectShowClearFilter] =
     useState(false)
 
   const [bySubjectVisualisationData, setBySubjectVisualisationData] = useState(
@@ -487,10 +498,16 @@ const DashboardPage = () => {
   const [byPublisherDisplayFacetValues, setByPublisherDisplayFacetValues] =
     useState([])
 
+  const [byPublisherSelectedFacetCount, setByPublisherSelectedFacetCount] =
+    useState(0)
+
   const [byPublisherSelectedFacetValues, setByPublisherSelectedFacetValues] =
     useState([])
 
   const [byPublisherShowApplyFilter, setByPublisherShowApplyFilter] =
+    useState(false)
+
+  const [byPublisherShowClearFilter, setByPublisherShowClearFilter] =
     useState(false)
 
   const [byPublisherVisualisationData, setByPublisherVisualisationData] =
@@ -531,10 +548,15 @@ const DashboardPage = () => {
     [],
   )
 
+  const [bySourceSelectedFacetCount, setBySourceSelectedFacetCount] =
+    useState(0)
+
   const [bySourceSelectedFacetValues, setBySourceSelectedFacetValues] =
     useState([])
 
   const [bySourceShowApplyFilter, setBySourceShowApplyFilter] = useState(false)
+
+  const [bySourceShowClearFilter, setBySourceShowClearFilter] = useState(false)
 
   const [bySourceVisualisationData, setBySourceVisualisationData] = useState([])
 
@@ -685,12 +707,30 @@ const DashboardPage = () => {
 
   const { loading: corpusGrowthLoading } = useQuery(GET_CORPUS_GROWTH, {
     onCompleted: data => {
-      const getCorpusGrowthRaw = cloneDeep(data.getCorpusGrowth)
+      const getCorpusGrowthRaw = cloneDeep(data.getCorpusGrowth).sort((a, b) =>
+        a.xField < b.xField ? -1 : 1,
+      )
 
-      const getCorpusGrowthEdited = getCorpusGrowthRaw.map(g => ({
-        ...g,
-        xField: new Date(parseInt(g.xField, 10)),
-      }))
+      let totalDoi = 0
+      let totalAccession = 0
+
+      const getCorpusGrowthEdited = getCorpusGrowthRaw.map(g => {
+        let yField = parseInt(g.yField, 10)
+
+        if (g.stackField === 'DOI') {
+          yField += totalDoi
+          totalDoi = yField
+        } else {
+          yField += totalAccession
+          totalAccession = yField
+        }
+
+        return {
+          ...g,
+          xField: new Date(parseInt(g.xField, 10)),
+          yField,
+        }
+      })
 
       setCorpusGrowthData(getCorpusGrowthEdited)
     },
@@ -707,6 +747,19 @@ const DashboardPage = () => {
 
     if (storedFilters) {
       setOverTimeFilters(parsedFilters)
+
+      let shouldShowClearButton = false
+      let selectionCount = 0
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+          selectionCount += 1
+        }
+      })
+
+      setOverTimeSelectedFacetCount(selectionCount)
+      setOverTimeShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('overTimeFilters', JSON.stringify(overTimeFilters))
     }
@@ -742,6 +795,19 @@ const DashboardPage = () => {
 
     if (storedFilters) {
       setBySubjectFilters(parsedFilters)
+
+      let shouldShowClearButton = false
+      let selectionCount = 0
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+          selectionCount += 1
+        }
+      })
+
+      setBySubjectSelectedFacetCount(selectionCount)
+      setBySubjectShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('bySubjectFilters', JSON.stringify(bySubjectFilters))
     }
@@ -777,6 +843,19 @@ const DashboardPage = () => {
 
     if (storedFilters) {
       setByPublisherFilters(parsedFilters)
+
+      let shouldShowClearButton = false
+      let selectionCount = 0
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+          selectionCount += 1
+        }
+      })
+
+      setByPublisherSelectedFacetCount(selectionCount)
+      setByPublisherShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem(
         'byPublisherFilters',
@@ -815,6 +894,19 @@ const DashboardPage = () => {
 
     if (storedFilters) {
       setBySourceFilters(parsedFilters)
+
+      let shouldShowClearButton = false
+      let selectionCount = 0
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+          selectionCount += 1
+        }
+      })
+
+      setBySourceSelectedFacetCount(selectionCount)
+      setBySourceShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('bySourceFilters', JSON.stringify(bySourceFilters))
     }
@@ -858,6 +950,16 @@ const DashboardPage = () => {
 
     localStorage.setItem('overTimeFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setOverTimeSelectedFacetCount(selectionCount)
+
     setOverTimeShowApplyFilter(false)
     setOverTimeDisplayFacetValues([])
 
@@ -870,6 +972,20 @@ const DashboardPage = () => {
 
     byYearQuery({
       variables: { input: { search: { criteria: params } } },
+    })
+  }
+
+  const handleOverTimeClearFilters = () => {
+    setOverTimeIsFilterOpen(false)
+    setOverTimeShowClearFilter(false)
+    setOverTimeShowApplyFilter(false)
+    setOverTimeSelectedFacetCount(0)
+    localStorage.setItem(
+      'overTimeFilters',
+      JSON.stringify(overTimeFilterParams),
+    )
+    byYearQuery({
+      variables: { input: { search: { criteria: [] } } },
     })
   }
 
@@ -912,11 +1028,16 @@ const DashboardPage = () => {
 
     const storedFilters = JSON.parse(localStorage.getItem('overTimeFilters'))
     let shouldShowApplyButton = false
+    let shouldShowClearButton = false
 
     storedFilters.forEach(storedFacet => {
       const currentFacet = overTimeFilters.find(
         f => f.type === storedFacet.type,
       )
+
+      if (storedFacet.values.length) {
+        shouldShowClearButton = true
+      }
 
       if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
@@ -924,6 +1045,7 @@ const DashboardPage = () => {
     })
 
     setOverTimeShowApplyFilter(shouldShowApplyButton)
+    setOverTimeShowClearFilter(shouldShowClearButton)
   }
 
   const handleOverTimeOnClose = () => {
@@ -940,6 +1062,16 @@ const DashboardPage = () => {
   const handleOverTimeFilterButtonClick = isOpen => {
     if (isOpen) {
       const storedFilters = JSON.parse(localStorage.getItem('overTimeFilters'))
+
+      let shouldShowClearButton = false
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+        }
+      })
+
+      setOverTimeShowClearFilter(shouldShowClearButton)
       setOverTimeFilters(storedFilters)
     }
 
@@ -1025,6 +1157,16 @@ const DashboardPage = () => {
 
     localStorage.setItem('bySubjectFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setBySubjectSelectedFacetCount(selectionCount)
+
     setBySubjectShowApplyFilter(false)
     setBySubjectDisplayFacetValues([])
 
@@ -1037,6 +1179,20 @@ const DashboardPage = () => {
 
     bySubjectQuery({
       variables: { input: { search: { criteria: params } } },
+    })
+  }
+
+  const handleBySubjectClearFilters = () => {
+    setBySubjectIsFilterOpen(false)
+    setBySubjectShowClearFilter(false)
+    setBySubjectShowApplyFilter(false)
+    setBySubjectSelectedFacetCount(0)
+    localStorage.setItem(
+      'bySubjectFilters',
+      JSON.stringify(bySubjectFilterParams),
+    )
+    bySubjectQuery({
+      variables: { input: { search: { criteria: [] } } },
     })
   }
 
@@ -1079,11 +1235,16 @@ const DashboardPage = () => {
 
     const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
     let shouldShowApplyButton = false
+    let shouldShowClearButton = false
 
     storedFilters.forEach(storedFacet => {
       const currentFacet = bySubjectFilters.find(
         f => f.type === storedFacet.type,
       )
+
+      if (storedFacet.values.length) {
+        shouldShowClearButton = true
+      }
 
       if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
@@ -1091,6 +1252,7 @@ const DashboardPage = () => {
     })
 
     setBySubjectShowApplyFilter(shouldShowApplyButton)
+    setBySubjectShowClearFilter(shouldShowClearButton)
   }
 
   const handleBySubjectOnClose = () => {
@@ -1107,6 +1269,16 @@ const DashboardPage = () => {
   const handleBySubjectFilterButtonClick = isOpen => {
     if (isOpen) {
       const storedFilters = JSON.parse(localStorage.getItem('bySubjectFilters'))
+
+      let shouldShowClearButton = false
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+        }
+      })
+
+      setBySubjectShowClearFilter(shouldShowClearButton)
       setBySubjectFilters(storedFilters)
     }
 
@@ -1183,6 +1355,16 @@ const DashboardPage = () => {
 
     localStorage.setItem('byPublisherFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setByPublisherSelectedFacetCount(selectionCount)
+
     setByPublisherShowApplyFilter(false)
     setByPublisherDisplayFacetValues([])
 
@@ -1195,6 +1377,20 @@ const DashboardPage = () => {
 
     byPublisherQuery({
       variables: { input: { search: { criteria: params } } },
+    })
+  }
+
+  const handleByPublisherClearFilters = () => {
+    setByPublisherIsFilterOpen(false)
+    setByPublisherShowClearFilter(false)
+    setByPublisherShowApplyFilter(false)
+    setByPublisherSelectedFacetCount(0)
+    localStorage.setItem(
+      'byPublisherFilters',
+      JSON.stringify(byPublisherFilterParams),
+    )
+    byPublisherQuery({
+      variables: { input: { search: { criteria: [] } } },
     })
   }
 
@@ -1239,31 +1435,24 @@ const DashboardPage = () => {
 
     const storedFilters = JSON.parse(localStorage.getItem('byPublisherFilters'))
     let shouldShowApplyButton = false
+    let shouldShowClearButton = false
 
     storedFilters.forEach(storedFacet => {
       const currentFacet = byPublisherFilters.find(
         f => f.type === storedFacet.type,
       )
 
-      //   storedFacet.values.map(c => {
-      //     console.log('c', c)
-      //     console.log('stored.v', currentFacet.values)
-
-      //     if (!currentFacet.values.find(s => s.id === c.id)) {
-      //       shouldShowApplyButton = true
-      //     }
-      //   })
+      if (storedFacet.values.length) {
+        shouldShowClearButton = true
+      }
 
       if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
       }
-
-      //   if (storedFacet.values.length !== storedFacet.values.length) {
-      //     shouldShowApplyButton = true
-      //   }
     })
 
     setByPublisherShowApplyFilter(shouldShowApplyButton)
+    setByPublisherShowClearFilter(shouldShowClearButton)
   }
 
   const handleByPublisherOnClose = () => {
@@ -1282,6 +1471,16 @@ const DashboardPage = () => {
       const storedFilters = JSON.parse(
         localStorage.getItem('byPublisherFilters'),
       )
+
+      let shouldShowClearButton = false
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+        }
+      })
+
+      setByPublisherShowClearFilter(shouldShowClearButton)
 
       setByPublisherFilters(storedFilters)
     }
@@ -1359,6 +1558,16 @@ const DashboardPage = () => {
 
     localStorage.setItem('bySourceFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setBySourceSelectedFacetCount(selectionCount)
+
     setBySourceShowApplyFilter(false)
     setBySourceDisplayFacetValues([])
 
@@ -1371,6 +1580,20 @@ const DashboardPage = () => {
 
     bySourceQuery({
       variables: { input: { search: { criteria: params } } },
+    })
+  }
+
+  const handleBySourceClearFilters = () => {
+    setBySourceIsFilterOpen(false)
+    setBySourceShowClearFilter(false)
+    setBySourceShowApplyFilter(false)
+    setBySourceSelectedFacetCount(0)
+    localStorage.setItem(
+      'bySourceFilters',
+      JSON.stringify(bySourceFilterParams),
+    )
+    bySourceQuery({
+      variables: { input: { search: { criteria: [] } } },
     })
   }
 
@@ -1413,11 +1636,16 @@ const DashboardPage = () => {
 
     const storedFilters = JSON.parse(localStorage.getItem('bySourceFilters'))
     let shouldShowApplyButton = false
+    let shouldShowClearButton = false
 
     storedFilters.forEach(storedFacet => {
       const currentFacet = bySourceFilters.find(
         f => f.type === storedFacet.type,
       )
+
+      if (storedFacet.values.length) {
+        shouldShowClearButton = true
+      }
 
       if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
@@ -1425,6 +1653,7 @@ const DashboardPage = () => {
     })
 
     setBySourceShowApplyFilter(shouldShowApplyButton)
+    setBySourceShowClearFilter(shouldShowClearButton)
   }
 
   const handleBySourceOnClose = () => {
@@ -1441,6 +1670,16 @@ const DashboardPage = () => {
   const handleBySourceFilterButtonClick = isOpen => {
     if (isOpen) {
       const storedFilters = JSON.parse(localStorage.getItem('bySourceFilters'))
+
+      let shouldShowClearButton = false
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+        }
+      })
+
+      setBySourceShowClearFilter(shouldShowClearButton)
 
       setBySourceFilters(storedFilters)
     }
@@ -1601,6 +1840,7 @@ const DashboardPage = () => {
         byPublisherIsFilterOpen={byPublisherIsFilterOpen}
         byPublisherLoading={byPublisherDataLoading || fullFacetOptionsLoading}
         byPublisherOnApplyFilters={handleByPublisherApplyFilters}
+        byPublisherOnClearFilters={handleByPublisherClearFilters}
         byPublisherOnDownloadOptionClick={handleByPublisherDownloadOptionClick}
         byPublisherOnEmptyListLabel={byPublisherEmptyFacetValueListLabel}
         byPublisherOnFacetItemClick={handleByPublisherFacetItemClick}
@@ -1610,10 +1850,12 @@ const DashboardPage = () => {
         byPublisherOnFilterSearchChange={handleByPublisherSearchChange}
         byPublisherOnFooterTabClick={handleByPublisherFooterTabClick}
         byPublisherOnNewView={handleByPublisherOnNewView}
+        byPublisherSelectedFacetCount={byPublisherSelectedFacetCount}
         byPublisherSelectedFacetValues={byPublisherSelectedFacetValues}
         byPublisherSelectedFooterTab={byPublisherSelectedTab}
+        byPublisherShowApplyFilterButton={byPublisherShowApplyFilter}
+        byPublisherShowClearFilterButton={byPublisherShowClearFilter}
         byPublisherShowExpandButton
-        byPublisherShowFilterFooter={byPublisherShowApplyFilter}
         byPublisherTableColumns={byPublisherTableColumns}
         bySourceData={
           bySourceSelectedTab === 'chart'
@@ -1631,6 +1873,7 @@ const DashboardPage = () => {
         bySourceIsFilterOpen={bySourceIsFilterOpen}
         bySourceLoading={bySourceDataLoading || fullFacetOptionsLoading}
         bySourceOnApplyFilters={handleBySourceApplyFilters}
+        bySourceOnClearFilters={handleBySourceClearFilters}
         bySourceOnDownloadOptionClick={handleBySourceDownloadOptionClick}
         bySourceOnEmptyListLabel={bySourceEmptyFacetValueListLabel}
         bySourceOnFacetItemClick={handleBySourceFacetItemClick}
@@ -1640,10 +1883,12 @@ const DashboardPage = () => {
         bySourceOnFilterSearchChange={handleBySourceSearchChange}
         bySourceOnFooterTabClick={handleBySourceFooterTabClick}
         bySourceOnNewView={handleBySourceOnNewView}
+        bySourceSelectedFacetCount={bySourceSelectedFacetCount}
         bySourceSelectedFacetValues={bySourceSelectedFacetValues}
         bySourceSelectedFooterTab={bySourceSelectedTab}
+        bySourceShowApplyFilterButton={bySourceShowApplyFilter}
+        bySourceShowClearFilterButton={bySourceShowClearFilter}
         bySourceShowExpandButton
-        bySourceShowFilterFooter={bySourceShowApplyFilter}
         bySourceTableColumns={bySourceTableColumns}
         bySubjectData={
           bySubjectSelectedTab === 'chart'
@@ -1656,6 +1901,7 @@ const DashboardPage = () => {
         bySubjectIsFilterOpen={bySubjectIsFilterOpen}
         bySubjectLoading={bySubjectDataLoading || fullFacetOptionsLoading}
         bySubjectOnApplyFilters={handleBySubjectApplyFilters}
+        bySubjectOnClearFilters={handleBySubjectClearFilters}
         bySubjectOnDownloadOptionClick={handleBySubjectDownloadOptionClick}
         bySubjectOnEmptyListLabel={bySubjectEmptyFacetValueListLabel}
         bySubjectOnFacetItemClick={handleBySubjectFacetItemClick}
@@ -1665,10 +1911,12 @@ const DashboardPage = () => {
         bySubjectOnFilterSearchChange={handleBySubjectSearchChange}
         bySubjectOnFooterTabClick={handleBySubjectFooterTabClick}
         bySubjectOnNewView={handleBySubjectOnNewView}
+        bySubjectSelectedFacetCount={bySubjectSelectedFacetCount}
         bySubjectSelectedFacetValues={bySubjectSelectedFacetValues}
         bySubjectSelectedFooterTab={bySubjectSelectedTab}
+        bySubjectShowApplyFilterButton={bySubjectShowApplyFilter}
+        bySubjectShowClearFilterButton={bySubjectShowClearFilter}
         bySubjectShowExpandButton
-        bySubjectShowFilterFooter={bySubjectShowApplyFilter}
         bySubjectTableColumns={bySubjectTableColumns}
         corpusGrowthData={
           corpusGrowthSelectedTab === 'chart'
@@ -1707,6 +1955,7 @@ const DashboardPage = () => {
         overTimeIsFilterOpen={overTimeIsFilterOpen}
         overTimeLoading={byYearDataLoading || fullFacetOptionsLoading}
         overTimeOnApplyFilters={handleOverTimeApplyFilters}
+        overTimeOnClearFilters={handleOverTimeClearFilters}
         overTimeOnDownloadOptionClick={handleOverTimeDownloadOptionClick}
         overTimeOnEmptyListLabel={overTimeEmptyFacetValueListLabel}
         overTimeOnFacetItemClick={handleOverTimeFacetItemClick}
@@ -1716,10 +1965,12 @@ const DashboardPage = () => {
         overTimeOnFilterSearchChange={handleOverTimeSearchChange}
         overTimeOnFooterTabClick={handleOverTimeFooterTabClick}
         overTimeOnNewView={handleOverTimeOnNewView}
+        overTimeSelectedFacetCount={overTimeSelectedFacetCount}
         overTimeSelectedFacetValues={overTimeSelectedFacetValues}
         overTimeSelectedFooterTab={overTimeSelectedTab}
+        overTimeShowApplyFilterButton={overTimeShowApplyFilter}
+        overTimeShowClearFilterButton={overTimeShowClearFilter}
         overTimeShowExpandButton
-        overTimeShowFilterFooter={overTimeShowApplyFilter}
         overTimeTableColumns={overTimeTableColumns}
         uniqueCountData={uniqueCountData}
         uniqueCountIsDownloadListOpen={uniqueCountIsDowloadListOpen}

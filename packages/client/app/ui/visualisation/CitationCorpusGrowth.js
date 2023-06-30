@@ -95,7 +95,7 @@ CitationCorpusGrowth.propTypes = {
   onFooterTabClick: PropTypes.func.isRequired,
   onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
-  showExpandButton: PropTypes.bool.isRequired,
+  showExpandButton: PropTypes.bool,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -103,6 +103,10 @@ CitationCorpusGrowth.propTypes = {
       key: PropTypes.string,
     }),
   ).isRequired,
+}
+
+CitationCorpusGrowth.defaultProps = {
+  showExpandButton: false,
 }
 
 export default CitationCorpusGrowth
