@@ -98,14 +98,51 @@ const getAssertionsPerYear = async ({ input }) => {
       xField: result.year,
       yField: result.countdoi,
       stackField: 'DOI',
+      type: 'doi',
     })
     chartValues.push({
       id: uuid(),
       xField: result.year,
       yField: result.accessionumber,
       stackField: 'Accession Number',
+      type: 'accessionNumber',
     })
   })
+
+  const currentYear = new Date().getFullYear()
+
+  // Loop through each year for the last 10 years
+  // eslint-disable-next-line no-plusplus
+  for (let year = currentYear - 9; year <= currentYear; year++) {
+    const hasDoi = chartValues.find(
+      chart => parseInt(chart.xField, 10) === year && chart.type === 'doi',
+    )
+
+    const hasAccessionNumber = chartValues.find(
+      chart =>
+        parseInt(chart.xField, 10) === year && chart.type === 'accessionNumber',
+    )
+
+    if (!hasDoi) {
+      chartValues.push({
+        id: uuid(),
+        xField: year.toString(),
+        yField: '0',
+        stackField: 'DOI',
+        type: 'doi',
+      })
+    }
+
+    if (!hasAccessionNumber) {
+      chartValues.push({
+        id: uuid(),
+        xField: year.toString(),
+        yField: '0',
+        stackField: 'Accession Number',
+        type: 'accessionNumber',
+      })
+    }
+  }
 
   return chartValues
 }

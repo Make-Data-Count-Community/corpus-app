@@ -1,26 +1,28 @@
-const path = require('path')
 const { chunk } = require('lodash')
 
 const { useTransaction } = require('@coko/server')
 const Source = require('../../models/source/source')
+const { model: Subject } = require('../../models/subject')
 const Assertion = require('../../models/assertion/assertion')
 const ActivityLog = require('../../models/activityLog/activityLog')
+
+const DataciteToAssertion = require('./dataciteToAssertion')
+const DataciteEventToAssertion = require('./dataciteEventToAssertion')
+const CrossrefToAssertion = require('./crossrefToAssertion')
+const CziToAssertion = require('./cziToAssertion')
 
 class AssertionFactory {
   static SOURCE_MAP_CLASS = {
     datacite: [
-      path.join(__dirname, './dataciteToAssertion'),
-      path.join(__dirname, './dataciteEventToAssertion'),
-      path.join(__dirname, './crossrefToAssertion'),
+      DataciteToAssertion,
+      DataciteEventToAssertion,
+      CrossrefToAssertion,
     ],
-    czi: [
-      path.join(__dirname, './dataciteToAssertion'),
-      path.join(__dirname, './crossrefToAssertion'),
-      path.join(__dirname, './cziToAssertion'),
-    ],
+    czi: [DataciteToAssertion, CrossrefToAssertion, CziToAssertion],
   }
 
   static async saveDataToAssertionModel(data) {
+    const subjects = await Subject.query()
     const sources = await Source.query()
     const assertions = []
     useTransaction(async trx => {
@@ -38,7 +40,7 @@ class AssertionFactory {
         // eslint-disable-next-line no-await-in-loop
         await Promise.all(
           classes.map(Cls => {
-            const saveClass = new Cls()
+            const saveClass = new Cls(subjects)
             return saveClass.transformToAssertion(assertion, chunks, trx)
           }),
         )

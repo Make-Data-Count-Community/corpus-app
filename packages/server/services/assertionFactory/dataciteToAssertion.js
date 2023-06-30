@@ -11,16 +11,10 @@ const {
   Funder,
 } = require('@pubsweet/models')
 
-class DataciteToAssertion {
-  // eslint-disable-next-line class-methods-use-this
+const AssertionHelpers = require('./assertionHelpers')
+
+class DataciteToAssertion extends AssertionHelpers {
   async transformToAssertion(assertionInstance, chunk, trx) {
-    assertionInstance.sourceType = chunk.event.attributes['source-id']
-    assertionInstance.relationTypeId =
-      chunk.event.attributes['relation-type-id']
-
-    assertionInstance.objId = chunk.event.attributes['obj-id']
-    assertionInstance.subjId = chunk.event.attributes['subj-id']
-
     assertionInstance.sourceId = chunk.source
     assertionInstance.title = chunk.datacite.title
     assertionInstance.id = assertionInstance.id || uuid()

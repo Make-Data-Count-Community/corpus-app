@@ -1,7 +1,6 @@
 const { Writable, Readable } = require('stream')
 const DataCite = require('./datacite')
 const Crossref = require('./crossref')
-const { model: Subject } = require('../../models/subject')
 
 class MetadataSource {
   constructor(streamApis) {
@@ -53,9 +52,7 @@ class MetadataSource {
   }
 
   static async createInstance(sourceType) {
-    const subjects = await Subject.query()
-
-    let metadataApis = [new DataCite(subjects), new Crossref()]
+    let metadataApis = [new DataCite(), new Crossref()]
 
     if (sourceType === 'datacite') {
       metadataApis = [new DataCite()]

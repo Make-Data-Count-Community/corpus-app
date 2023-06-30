@@ -34,9 +34,9 @@ class Crossref extends Transform {
 
     this.count += 1
 
-    if (this.count % 100 === 0) {
-      logger.info('Item:', this.count)
-    }
+    // if (this.count % 100 === 0) {
+    logger.info('Item:', this.count)
+    // }
 
     callback(null, chunk)
   }

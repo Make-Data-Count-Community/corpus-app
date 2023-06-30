@@ -35,6 +35,16 @@ class CorpusDataFactory {
     const corpusData = new CorpusData(seedSource, metadataSource)
     return corpusData
   }
+
+  static async loadDataFromDB() {
+    const metadataSource = await MetadataSource.createInstance()
+
+    const corpusData = new CorpusData(null, metadataSource)
+
+    await corpusData.loadCitationsFromDB()
+
+    return corpusData
+  }
 }
 
 module.exports = CorpusDataFactory

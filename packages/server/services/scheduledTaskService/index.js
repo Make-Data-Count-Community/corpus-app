@@ -2,7 +2,6 @@
 const { cron, db, logger } = require('@coko/server')
 const { model: ActivityLog } = require('../../models/activityLog')
 const CorpusDataFactory = require('../corpusDataFactory')
-const MetadataSource = require('../metadata/metadataSource')
 const Source = require('../../models/source/source')
 const Assertion = require('../../models/assertion/assertion')
 
@@ -45,7 +44,7 @@ class ScheduledTaskService {
         logger.info(`######### Start Retreving Data from API ######### `)
 
         async function myAsyncFunction() {
-          await MetadataSource.loadCitationsFromDB()
+          await CorpusDataFactory.loadDataFromDB()
 
           const countAssertions = await ActivityLog.query()
             .count({ count: '*' })
