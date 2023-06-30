@@ -27,7 +27,7 @@ const MultiLineChart = props => {
       data: {
         values: data,
       },
-      mark: { type: 'line', tooltip: true },
+      mark: { type: 'line', tooltip: true, point: true },
       encoding: {
         x: {
           field: xField,
