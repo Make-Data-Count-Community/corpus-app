@@ -92,10 +92,16 @@ const CitationCountsByPublisherPage = () => {
   const [byPublisherDisplayFacetValues, setByPublisherDisplayFacetValues] =
     useState([])
 
+  const [byPublisherSelectedFacetCount, setByPublisherSelectedFacetCount] =
+    useState(0)
+
   const [byPublisherSelectedFacetValues, setByPublisherSelectedFacetValues] =
     useState([])
 
   const [byPublisherShowApplyFilter, setByPublisherShowApplyFilter] =
+    useState(false)
+
+  const [byPublisherShowClearFilter, setByPublisherShowClearFilter] =
     useState(false)
 
   const [byPublisherVisualisationData, setByPublisherVisualisationData] =
@@ -152,6 +158,19 @@ const CitationCountsByPublisherPage = () => {
 
     if (storedFilters) {
       setByPublisherFilters(parsedFilters)
+
+      let shouldShowClearButton = false
+      let selectionCount = 0
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+          selectionCount += 1
+        }
+      })
+
+      setByPublisherSelectedFacetCount(selectionCount)
+      setByPublisherShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem(
         'byPublisherFilters',
@@ -217,6 +236,15 @@ const CitationCountsByPublisherPage = () => {
 
     localStorage.setItem('byPublisherFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setByPublisherSelectedFacetCount(selectionCount)
     setByPublisherShowApplyFilter(false)
     setByPublisherDisplayFacetValues([])
 
@@ -229,6 +257,20 @@ const CitationCountsByPublisherPage = () => {
 
     byPublisherQuery({
       variables: { input: { search: { criteria: params } } },
+    })
+  }
+
+  const handleByPublisherClearFilters = () => {
+    setByPublisherIsFilterOpen(false)
+    setByPublisherShowClearFilter(false)
+    setByPublisherShowApplyFilter(false)
+    setByPublisherSelectedFacetCount(0)
+    localStorage.setItem(
+      'byPublisherFilters',
+      JSON.stringify(byPublisherFilterParams),
+    )
+    byPublisherQuery({
+      variables: { input: { search: { criteria: [] } } },
     })
   }
 
@@ -273,11 +315,16 @@ const CitationCountsByPublisherPage = () => {
 
     const storedFilters = JSON.parse(localStorage.getItem('byPublisherFilters'))
     let shouldShowApplyButton = false
+    let shouldShowClearButton = false
 
     storedFilters.forEach(storedFacet => {
       const currentFacet = byPublisherFilters.find(
         f => f.type === storedFacet.type,
       )
+
+      if (storedFacet.values.length) {
+        shouldShowClearButton = true
+      }
 
       if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
@@ -285,6 +332,7 @@ const CitationCountsByPublisherPage = () => {
     })
 
     setByPublisherShowApplyFilter(shouldShowApplyButton)
+    setByPublisherShowClearFilter(shouldShowClearButton)
   }
 
   const handleByPublisherOnClose = () => {
@@ -304,6 +352,15 @@ const CitationCountsByPublisherPage = () => {
         localStorage.getItem('byPublisherFilters'),
       )
 
+      let shouldShowClearButton = false
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+        }
+      })
+
+      setByPublisherShowClearFilter(shouldShowClearButton)
       setByPublisherFilters(storedFilters)
     }
 
@@ -375,6 +432,7 @@ const CitationCountsByPublisherPage = () => {
         isFilterOpen={byPublisherIsFilterOpen}
         loading={byPublisherDataLoading || fullFacetOptionsLoading}
         onApplyFilters={handleByPublisherApplyFilters}
+        onClearFilters={handleByPublisherClearFilters}
         onDownloadOptionClick={handleByPublisherDownloadOptionClick}
         onEmptyListLabel={byPublisherEmptyFacetValueListLabel}
         onFacetItemClick={handleByPublisherFacetItemClick}
@@ -384,9 +442,11 @@ const CitationCountsByPublisherPage = () => {
         onFilterSearchChange={handleByPublisherSearchChange}
         onFooterTabClick={handleByPublisherFooterTabClick}
         onNewView={handleByPublisherOnNewView}
+        selectedFacetCount={byPublisherSelectedFacetCount}
         selectedFacetValues={byPublisherSelectedFacetValues}
         selectedFooterTab={byPublisherSelectedTab}
-        showFilterFooter={byPublisherShowApplyFilter}
+        showApplyFilterButton={byPublisherShowApplyFilter}
+        showClearFilterButton={byPublisherShowClearFilter}
         tableColumns={byPublisherTableColumns}
       />
       <VisuallyHiddenElement

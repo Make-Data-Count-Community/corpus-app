@@ -103,12 +103,30 @@ const CitationCorpusGrowthPage = () => {
 
   const { loading: corpusGrowthLoading } = useQuery(GET_CORPUS_GROWTH, {
     onCompleted: data => {
-      const getCorpusGrowthRaw = cloneDeep(data.getCorpusGrowth)
+      const getCorpusGrowthRaw = cloneDeep(data.getCorpusGrowth).sort((a, b) =>
+        a.xField < b.xField ? -1 : 1,
+      )
 
-      const getCorpusGrowthEdited = getCorpusGrowthRaw.map(g => ({
-        ...g,
-        xField: new Date(parseInt(g.xField, 10)),
-      }))
+      let totalDoi = 0
+      let totalAccession = 0
+
+      const getCorpusGrowthEdited = getCorpusGrowthRaw.map(g => {
+        let yField = parseInt(g.yField, 10)
+
+        if (g.stackField === 'DOI') {
+          yField += totalDoi
+          totalDoi = yField
+        } else {
+          yField += totalAccession
+          totalAccession = yField
+        }
+
+        return {
+          ...g,
+          xField: new Date(parseInt(g.xField, 10)),
+          yField,
+        }
+      })
 
       setCorpusGrowthData(getCorpusGrowthEdited)
     },

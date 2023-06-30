@@ -57,6 +57,7 @@ const CitationCountsOverTime = props => {
     isFilterOpen,
     loading,
     onApplyFilters,
+    onClearFilters,
     onDownloadOptionClick,
     onEmptyListLabel,
     onFacetItemClick,
@@ -67,9 +68,11 @@ const CitationCountsOverTime = props => {
     onFooterTabClick,
     onNewView,
     selectedFooterTab,
+    selectedFacetCount,
     selectedFacetValues,
     showExpandButton,
-    showFilterFooter,
+    showApplyFilterButton,
+    showClearFilterButton,
     tableColumns,
   } = props
 
@@ -83,6 +86,7 @@ const CitationCountsOverTime = props => {
       isFilterOpen={isFilterOpen}
       loading={loading}
       onApplyFilters={onApplyFilters}
+      onClearFilters={onClearFilters}
       onDownloadOptionClick={onDownloadOptionClick}
       onEmptyListLabel={onEmptyListLabel}
       onFacetItemClick={onFacetItemClick}
@@ -91,11 +95,13 @@ const CitationCountsOverTime = props => {
       onFilterClose={onFilterClose}
       onFilterSearchChange={onFilterSearchChange}
       onFooterTabClick={onFooterTabClick}
+      selectedFacetCount={selectedFacetCount}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
+      showApplyFilterButton={showApplyFilterButton}
+      showClearFilterButton={showClearFilterButton}
       showExpandButton={showExpandButton}
       showFilterButton
-      showFilterFooter={showFilterFooter}
       showFooterChartTab
       visualisationTitle={title}
     >
@@ -142,6 +148,7 @@ CitationCountsOverTime.propTypes = {
   isDownloadListOpen: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   onApplyFilters: PropTypes.func.isRequired,
+  onClearFilters: PropTypes.func.isRequired,
   onDownloadOptionClick: PropTypes.func.isRequired,
   onEmptyListLabel: PropTypes.string.isRequired,
   onFacetItemClick: PropTypes.func.isRequired,
@@ -152,14 +159,16 @@ CitationCountsOverTime.propTypes = {
   onFooterTabClick: PropTypes.func.isRequired,
   onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
+  selectedFacetCount: PropTypes.number.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       value: PropTypes.string,
     }),
   ).isRequired,
-  showExpandButton: PropTypes.bool.isRequired,
-  showFilterFooter: PropTypes.bool.isRequired,
+  showExpandButton: PropTypes.bool,
+  showApplyFilterButton: PropTypes.bool.isRequired,
+  showClearFilterButton: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,
@@ -167,6 +176,10 @@ CitationCountsOverTime.propTypes = {
       key: PropTypes.string,
     }),
   ).isRequired,
+}
+
+CitationCountsOverTime.defaultProps = {
+  showExpandButton: false,
 }
 
 export default CitationCountsOverTime

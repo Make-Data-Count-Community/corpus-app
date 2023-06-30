@@ -139,10 +139,15 @@ const CitationCountsBySourcePage = () => {
     [],
   )
 
+  const [bySourceSelectedFacetCount, setBySourceSelectedFacetCount] =
+    useState(0)
+
   const [bySourceSelectedFacetValues, setBySourceSelectedFacetValues] =
     useState([])
 
   const [bySourceShowApplyFilter, setBySourceShowApplyFilter] = useState(false)
+
+  const [bySourceShowClearFilter, setBySourceShowClearFilter] = useState(false)
 
   const [bySourceVisualisationData, setBySourceVisualisationData] = useState([])
 
@@ -217,6 +222,19 @@ const CitationCountsBySourcePage = () => {
 
     if (storedFilters) {
       setBySourceFilters(parsedFilters)
+
+      let shouldShowClearButton = false
+      let selectionCount = 0
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+          selectionCount += 1
+        }
+      })
+
+      setBySourceSelectedFacetCount(selectionCount)
+      setBySourceShowClearFilter(shouldShowClearButton)
     } else {
       localStorage.setItem('bySourceFilters', JSON.stringify(bySourceFilters))
     }
@@ -259,6 +277,16 @@ const CitationCountsBySourcePage = () => {
 
     localStorage.setItem('bySourceFilters', JSON.stringify(filters))
 
+    let selectionCount = 0
+
+    filters.forEach(s => {
+      if (s.values.length) {
+        selectionCount += 1
+      }
+    })
+
+    setBySourceSelectedFacetCount(selectionCount)
+
     setBySourceShowApplyFilter(false)
     setBySourceDisplayFacetValues([])
 
@@ -271,6 +299,20 @@ const CitationCountsBySourcePage = () => {
 
     bySourceQuery({
       variables: { input: { search: { criteria: params } } },
+    })
+  }
+
+  const handleBySourceClearFilters = () => {
+    setBySourceIsFilterOpen(false)
+    setBySourceShowClearFilter(false)
+    setBySourceShowApplyFilter(false)
+    setBySourceSelectedFacetCount(0)
+    localStorage.setItem(
+      'bySourceFilters',
+      JSON.stringify(bySourceFilterParams),
+    )
+    bySourceQuery({
+      variables: { input: { search: { criteria: [] } } },
     })
   }
 
@@ -313,11 +355,16 @@ const CitationCountsBySourcePage = () => {
 
     const storedFilters = JSON.parse(localStorage.getItem('bySourceFilters'))
     let shouldShowApplyButton = false
+    let shouldShowClearButton = false
 
     storedFilters.forEach(storedFacet => {
       const currentFacet = bySourceFilters.find(
         f => f.type === storedFacet.type,
       )
+
+      if (storedFacet.values.length) {
+        shouldShowClearButton = true
+      }
 
       if (compareArrays(currentFacet.values, storedFacet.values)) {
         shouldShowApplyButton = true
@@ -325,6 +372,7 @@ const CitationCountsBySourcePage = () => {
     })
 
     setBySourceShowApplyFilter(shouldShowApplyButton)
+    setBySourceShowClearFilter(shouldShowClearButton)
   }
 
   const handleBySourceOnClose = () => {
@@ -342,6 +390,15 @@ const CitationCountsBySourcePage = () => {
     if (isOpen) {
       const storedFilters = JSON.parse(localStorage.getItem('bySourceFilters'))
 
+      let shouldShowClearButton = false
+
+      storedFilters.forEach(s => {
+        if (s.values.length) {
+          shouldShowClearButton = true
+        }
+      })
+
+      setBySourceShowClearFilter(shouldShowClearButton)
       setBySourceFilters(storedFilters)
     }
 
@@ -429,6 +486,7 @@ const CitationCountsBySourcePage = () => {
         isFilterOpen={bySourceIsFilterOpen}
         loading={bySourceDataLoading || fullFacetOptionsLoading}
         onApplyFilters={handleBySourceApplyFilters}
+        onClearFilters={handleBySourceClearFilters}
         onDownloadOptionClick={handleBySourceDownloadOptionClick}
         onEmptyListLabel={bySourceEmptyFacetValueListLabel}
         onFacetItemClick={handleBySourceFacetItemClick}
@@ -438,9 +496,11 @@ const CitationCountsBySourcePage = () => {
         onFilterSearchChange={handleBySourceSearchChange}
         onFooterTabClick={handleBySourceFooterTabClick}
         onNewView={handleBySourceOnNewView}
+        selectedFacetCount={bySourceSelectedFacetCount}
         selectedFacetValues={bySourceSelectedFacetValues}
         selectedFooterTab={bySourceSelectedTab}
-        showFilterFooter={bySourceShowApplyFilter}
+        showApplyFilterButton={bySourceShowApplyFilter}
+        showClearFilterButton={bySourceShowClearFilter}
         tableColumns={bySourceTableColumns}
       />
       <VisuallyHiddenElement
