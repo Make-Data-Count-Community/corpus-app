@@ -163,7 +163,6 @@ const getAssertionsPerSubject = async ({ input }) => {
 
   const searchedAssertions = new SearchService(AssertionSubject, {
     join,
-    take: 20,
     groupBy: 'subject_id',
     filter: criteria,
     sort: { field: ['cnt'], direction: 'desc' },
@@ -178,13 +177,24 @@ const getAssertionsPerSubject = async ({ input }) => {
   const subjects = await Subject.query().whereIn('id', subjectIds)
 
   const chartValues = []
+  let total = 0
   results.forEach((result, key) => {
-    const { title } = subjects.find(subj => subj.id === result.subjectId)
-    chartValues.push({
-      id: uuid(),
-      xField: title,
-      yField: result.cnt,
-    })
+    if (key > 18) {
+      total += parseInt(result.cnt, 10)
+    } else {
+      const { title } = subjects.find(subj => subj.id === result.subjectId)
+      chartValues.push({
+        id: uuid(),
+        xField: title,
+        yField: result.cnt,
+      })
+    }
+  })
+
+  chartValues.push({
+    id: uuid(),
+    xField: 'Other Subjects',
+    yField: total,
   })
 
   return chartValues
@@ -199,7 +209,6 @@ const getAssertionsPerPublisher = async ({ input }) => {
   })
 
   const searchedAssertions = new SearchService(Assertion, {
-    take: 20,
     groupBy: 'publisher_id',
     filter: criteria,
     sort: { field: ['cnt'], direction: 'desc' },
@@ -214,13 +223,24 @@ const getAssertionsPerPublisher = async ({ input }) => {
   const publishers = await Publisher.query().whereIn('id', publisherIds)
 
   const chartValues = []
+  let total = 0
   results.forEach((result, key) => {
-    const { title } = publishers.find(subj => subj.id === result.publisherId)
-    chartValues.push({
-      id: uuid(),
-      xField: title,
-      yField: result.cnt,
-    })
+    if (key > 18) {
+      total += parseInt(result.cnt, 10)
+    } else {
+      const { title } = publishers.find(subj => subj.id === result.publisherId)
+      chartValues.push({
+        id: uuid(),
+        xField: title,
+        yField: result.cnt,
+      })
+    }
+  })
+
+  chartValues.push({
+    id: uuid(),
+    xField: 'Other Publishers',
+    yField: total,
   })
 
   return chartValues
