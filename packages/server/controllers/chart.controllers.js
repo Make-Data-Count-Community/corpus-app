@@ -272,20 +272,19 @@ const getAssertionCountsPerSource = async ({ input }) => {
 
 const getAssertionUniqueCounts = async () => {
   const results = await db.raw(
-    'SELECT count, source_id, facet, title, abbreviation FROM public.facet_unique_counts inner join sources s on source_id = s.id',
+    "select SUM(CASE WHEN abbreviation = 'datacite' THEN count else 0 end) as datacite_count, SUM(CASE WHEN abbreviation != 'datacite' THEN count else 0 end) as others_count, facet  from public.facet_unique_counts inner join sources s on source_id = s.id group by facet",
   )
 
-  const datacite = results.rows.filter(res => res.abbreviation === 'datacite')
-
   const chartValues = []
-  datacite.forEach((result, key) => {
+  results.rows.forEach((result, key) => {
     chartValues.push({
       id: uuid(),
       facet: result.facet.charAt(0).toUpperCase() + result.facet.slice(1),
       key: result.facet,
-      pidMetadata: parseInt(result.count, 10),
-      thirdPartyAggr: 0,
-      total: parseInt(result.count, 10),
+      pidMetadata: parseInt(result.datacite_count, 10),
+      thirdPartyAggr: parseInt(result.others_count, 10),
+      total:
+        parseInt(result.datacite_count, 10) + parseInt(result.others_count, 10),
     })
   })
 
