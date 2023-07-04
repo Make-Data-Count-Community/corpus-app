@@ -20,7 +20,7 @@ const PieChart = props => {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       description: 'Pie Chart',
       width: 'container',
-      height: 330,
+      height: 'container',
       autosize: { type: 'fit', contains: 'padding' },
       data: {
         values: data,

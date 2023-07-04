@@ -22,7 +22,7 @@ const MultiLineChart = props => {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       description: 'Stacked Bar Chart',
       width: 'container',
-      height: 330,
+      height: 'container',
       autosize: { type: 'fit', contains: 'padding' },
       data: {
         values: data,
@@ -92,9 +92,7 @@ const MultiLineChart = props => {
       actions={false}
       onNewView={onNewView}
       style={{ width: '100%', height: '100%' }}
-      tooltip={{
-        theme: 'custom',
-      }}
+      tooltip={{ theme: 'custom' }}
     />
   )
 }
