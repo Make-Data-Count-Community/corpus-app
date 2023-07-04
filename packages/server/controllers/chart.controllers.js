@@ -193,7 +193,7 @@ const getAssertionsPerSubject = async ({ input }) => {
 
   chartValues.push({
     id: uuid(),
-    xField: 'Other Subjects',
+    xField: 'others',
     yField: total,
   })
 
@@ -239,7 +239,7 @@ const getAssertionsPerPublisher = async ({ input }) => {
 
   chartValues.push({
     id: uuid(),
-    xField: 'Other Publishers',
+    xField: 'others',
     yField: total,
   })
 
