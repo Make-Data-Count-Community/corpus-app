@@ -69,7 +69,7 @@ const buildQueryForIntermediateTables = async input => {
 
   if (assertions.length > 0) {
     criteria.push({
-      field: 'id',
+      field: 'assertions.id',
       operator: { in: assertions.map(a => a.assertionId) },
     })
   }
@@ -148,6 +148,8 @@ const getAssertionsPerYear = async ({ input }) => {
 }
 
 const getAssertionsPerSubject = async ({ input }) => {
+  const criteria = await buildQueryForIntermediateTables(input)
+
   const join = [
     {
       innerJoin: [
@@ -158,8 +160,6 @@ const getAssertionsPerSubject = async ({ input }) => {
       ],
     },
   ]
-
-  const criteria = get(input, 'search.criteria', [])
 
   const searchedAssertions = new SearchService(AssertionSubject, {
     join,
@@ -179,7 +179,7 @@ const getAssertionsPerSubject = async ({ input }) => {
   const chartValues = []
   let total = 0
   results.forEach((result, key) => {
-    if (key > 18) {
+    if (key > 19) {
       total += parseInt(result.cnt, 10)
     } else {
       const { title } = subjects.find(subj => subj.id === result.subjectId)
@@ -191,11 +191,13 @@ const getAssertionsPerSubject = async ({ input }) => {
     }
   })
 
-  chartValues.push({
-    id: uuid(),
-    xField: 'others',
-    yField: total,
-  })
+  if (chartValues.length > 19) {
+    chartValues.push({
+      id: uuid(),
+      xField: 'others',
+      yField: total,
+    })
+  }
 
   return chartValues
 }
@@ -225,7 +227,7 @@ const getAssertionsPerPublisher = async ({ input }) => {
   const chartValues = []
   let total = 0
   results.forEach((result, key) => {
-    if (key > 18) {
+    if (key > 19) {
       total += parseInt(result.cnt, 10)
     } else {
       const { title } = publishers.find(subj => subj.id === result.publisherId)
@@ -237,11 +239,13 @@ const getAssertionsPerPublisher = async ({ input }) => {
     }
   })
 
-  chartValues.push({
-    id: uuid(),
-    xField: 'others',
-    yField: total,
-  })
+  if (chartValues.length > 19) {
+    chartValues.push({
+      id: uuid(),
+      xField: 'others',
+      yField: total,
+    })
+  }
 
   return chartValues
 }
