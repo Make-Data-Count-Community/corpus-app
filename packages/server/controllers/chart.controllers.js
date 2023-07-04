@@ -22,7 +22,10 @@ const { model: Subject } = require('../models/subject')
 
 const { model: Publisher } = require('../models/publisher')
 
-const buildQueryForIntermediateTables = async input => {
+const buildQueryForIntermediateTables = async (
+  input,
+  sourceTable = 'assertions',
+) => {
   let criteria = get(input, 'search.criteria', [])
 
   const hasSubject = criteria.find(crit => crit.field === 'subjectId')
@@ -69,7 +72,7 @@ const buildQueryForIntermediateTables = async input => {
 
   if (assertions.length > 0) {
     criteria.push({
-      field: 'assertions.id',
+      field: `${sourceTable}.id`,
       operator: { in: assertions.map(a => a.assertionId) },
     })
   }
@@ -78,7 +81,10 @@ const buildQueryForIntermediateTables = async input => {
 }
 
 const getAssertionsPerYear = async ({ input }) => {
-  const criteria = await buildQueryForIntermediateTables(input)
+  const criteria = await buildQueryForIntermediateTables(
+    input,
+    AssertionLastTenYear.tableName,
+  )
 
   const searchedAssertions = new SearchService(AssertionLastTenYear, {
     groupBy: 'year',
