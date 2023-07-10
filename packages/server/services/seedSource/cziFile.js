@@ -10,12 +10,17 @@ const { model: ActivityLog } = require('../../models/activityLog')
 const files = require('../../storage/czi')
 
 class CziFile {
-  constructor() {
+  constructor(fileStreams = null) {
     this.citations = []
 
-    this.fileNames = files
-    this.currentFileIndex = 0
+    this.fileNames =
+      fileStreams ||
+      files.map(fileName =>
+        // eslint-disable-next-line node/no-path-concat
+        fs.createReadStream(`${__dirname}/../../storage/czi/${fileName}`),
+      )
 
+    this.currentFileIndex = 0
     this.doiPattern = /^10\.\d{4,9}\/[-._;()/:A-Z0-9]+$/i
   }
 
@@ -35,10 +40,9 @@ class CziFile {
     return new Promise((resolve, reject) => {
       const fileName = this.fileNames[this.currentFileIndex]
 
-      const fileStream = fs
-        // eslint-disable-next-line node/no-path-concat
-        .createReadStream(`${__dirname}/../../storage/czi/${fileName}`)
-        .pipe(JSONStream.parse('*'))
+      const fileStream = this.fileNames[this.currentFileIndex].pipe(
+        JSONStream.parse('*'),
+      )
 
       fileStream.pipe(
         es.mapSync(async data => {
@@ -71,7 +75,6 @@ class CziFile {
         logger.info(`Finished streaming file:, ${fileName}`)
 
         const citations = await this.filterOutExistingCitations(citationBulk)
-
         await ActivityLog.query().insert({
           action: 'assertion_incoming_czi',
           data: JSON.stringify(citations),
