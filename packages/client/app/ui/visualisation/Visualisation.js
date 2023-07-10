@@ -18,10 +18,21 @@ const Wrapper = styled.div`
 `
 
 const DataWrapper = styled.div`
-  height: ${grid(90)};
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  height: ${({ expandedView }) => grid(expandedView ? 160 : 100)};
+  justify-content: flex-end;
   padding: ${grid(2)} ${grid(4)};
   width: 100%;
+`
+
+const SpinWrapper = styled(Spin)`
+  height: 100%;
+`
+
+const ChildrenWrapper = styled.div`
+  height: ${({ expandedView }) => grid(expandedView ? 150 : 90)};
+  overflow: ${({ showOverflow }) => (showOverflow ? 'auto' : 'hidden')};
 `
 
 const Visualisation = props => {
@@ -56,7 +67,7 @@ const Visualisation = props => {
   } = props
 
   return (
-    <Wrapper id="visWrapper">
+    <Wrapper>
       <ChartHeader
         expandPath={expandPath}
         filterParams={filterParams}
@@ -79,10 +90,15 @@ const Visualisation = props => {
         showFilterButton={showFilterButton}
         title={visualisationTitle}
       />
-      <DataWrapper>
-        <Spin renderBackground={false} spinning={loading}>
-          {children}
-        </Spin>
+      <DataWrapper expandedView={!showExpandButton}>
+        <SpinWrapper renderBackground={false} spinning={loading}>
+          <ChildrenWrapper
+            expandedView={!showExpandButton}
+            showOverflow={selectedFooterTab === 'table'}
+          >
+            {children}
+          </ChildrenWrapper>
+        </SpinWrapper>
       </DataWrapper>
       <ChartFooter
         downloadOptions={downloadOptions}

@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
 const { cron, db, logger } = require('@coko/server')
+const seedSource = require('../seedSource/seedSource')
 const { model: ActivityLog } = require('../../models/activityLog')
 const CorpusDataFactory = require('../corpusDataFactory')
 const Source = require('../../models/source/source')
@@ -38,8 +39,7 @@ class ScheduledTaskService {
         await corpusdata.seedSource.readSource()
 
         logger.info(`######### Start Reading CZI files ######### `)
-        corpusdata = await CorpusDataFactory.cziFile()
-        await corpusdata.seedSource.readSource()
+        await seedSource.createInstanceReadS3Czi()
 
         logger.info(`######### Start Retreving Data from API ######### `)
 

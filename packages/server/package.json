@@ -14,6 +14,7 @@
     "@coko/server": "3.0.0-beta.3",
     "@pubsweet/models": "^0.3.26",
     "axios": "^1.3.5",
+    "aws-sdk": "^2.1411.0",
     "cheerio": "^1.0.0-rc.12",
     "config": "^3.3.6",
     "event-stream": "^4.0.1",
