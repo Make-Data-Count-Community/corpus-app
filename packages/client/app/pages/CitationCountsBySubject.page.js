@@ -28,9 +28,11 @@ const downloadFile = (inputData, fileName, type = 'csv') => {
 }
 
 const addKeytoData = sourceData => {
-  return sourceData.map(s => {
-    return { ...s, key: s.id }
-  })
+  return sourceData
+    .map(s => {
+      return { ...s, key: s.id }
+    })
+    .filter(f => f.id !== 0)
 }
 
 const compareArrays = (a, b) => {

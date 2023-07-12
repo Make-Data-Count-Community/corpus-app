@@ -553,9 +553,11 @@ const Template = args => {
   const handleNewView = () => {}
 
   const transformData = sourceData => {
-    return sourceData.map(s => {
-      return { ...s, key: s.id }
-    })
+    return sourceData
+      .map(s => {
+        return { ...s, key: s.id }
+      })
+      .filter(f => f.id !== parentId)
   }
 
   return (

@@ -960,9 +960,11 @@ const byPublisherTableColumns = [
 ]
 
 const addKeytoData = sourceData => {
-  return sourceData.map(s => {
-    return { ...s, key: s.id }
-  })
+  return sourceData
+    .map(s => {
+      return { ...s, key: s.id }
+    })
+    .filter(f => f.id !== bySubjectParentId)
 }
 
 const byPublisherFilterParams = [
