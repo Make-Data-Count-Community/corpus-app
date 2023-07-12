@@ -54,6 +54,7 @@ const PieChart = props => {
         background: chartBackground,
         legend: {
           titleFont: 'Barlow',
+          titleFontSize: '14',
           labelFont: 'Barlow',
           labelFontWeight: 500,
           labelFontSize: '12',

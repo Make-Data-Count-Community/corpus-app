@@ -99,7 +99,7 @@ const CitationCountsBySubject = props => {
         <TreeMap
           colorField={colorField}
           data={data}
-          legendTitle={`Top ${data.length - 1}`}
+          legendTitle={`Top ${data.length - 1} subjects`}
           onNewView={onNewView}
           valueField={valueField}
         />

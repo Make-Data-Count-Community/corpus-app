@@ -102,7 +102,7 @@ const CitationCountsByPublisher = props => {
           colorField={colorField}
           colorFieldTooltipTitle={colorFieldTooltipTitle}
           data={data}
-          legendTitle={`Top ${data.length}`}
+          legendTitle={`Top ${data.length} publishers`}
           onNewView={onNewView}
           thetaField={thetaField}
           thetaFieldTooltipTitle={thetaFieldTooltipTitle}

@@ -31,6 +31,7 @@ const TreeMap = props => {
               size: [{ signal: 'width' }, { signal: 'height' }],
             },
             { type: 'flatten', fields: ['tooltip'] },
+            { type: 'filter', expr: 'datum.id !== 0' },
           ],
         },
       ],
@@ -80,6 +81,7 @@ const TreeMap = props => {
         },
         legend: {
           titleFont: 'Barlow',
+          titleFontSize: '14',
           labelFont: 'Barlow',
           labelFontWeight: 500,
           labelFontSize: '12',
