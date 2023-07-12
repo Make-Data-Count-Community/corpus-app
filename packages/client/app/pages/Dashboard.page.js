@@ -638,6 +638,12 @@ const DashboardPage = () => {
           ...s,
           yField: parseInt(s.yField, 10),
           parent: 0,
+          tooltip: [
+            {
+              Subject: s.xField,
+              Citations: parseInt(s.yField, 10).toLocaleString('en-US'),
+            },
+          ],
         }))
 
         const idArray = [
@@ -646,6 +652,7 @@ const DashboardPage = () => {
             xField: '',
             yField: 0,
             parent: null,
+            tooltip: [{ Subject: '', Citations: '' }],
           },
         ]
 

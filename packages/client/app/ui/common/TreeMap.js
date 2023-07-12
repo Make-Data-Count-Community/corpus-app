@@ -30,6 +30,7 @@ const TreeMap = props => {
               field: valueField,
               size: [{ signal: 'width' }, { signal: 'height' }],
             },
+            { type: 'flatten', fields: ['tooltip'] },
           ],
         },
       ],
@@ -41,21 +42,6 @@ const TreeMap = props => {
           range: subjectColors,
         },
       ],
-      //   encoding: {
-      //     tooltip: [
-      //       {
-      //         field: colorField,
-      //         type: 'nominal',
-      //         //   title: colorFieldTooltipTitle,
-      //       },
-      //       {
-      //         field: valueField,
-      //         format: ',',
-      //         type: 'quantitative',
-      //         //   title: thetaFieldTooltipTitle,
-      //       },
-      //     ],
-      //   },
 
       marks: [
         {
@@ -70,6 +56,9 @@ const TreeMap = props => {
               x2: { field: 'x1' },
               y: { field: 'y0' },
               y2: { field: 'y1' },
+            },
+            hover: {
+              tooltip: { signal: "datum['tooltip']" },
             },
           },
         },
