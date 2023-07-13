@@ -1,6 +1,7 @@
 const isEmpty = require('lodash/isEmpty')
 const isFunction = require('lodash/isFunction')
 const has = require('lodash/has')
+const { db } = require('@coko/server')
 
 const parseJsonField = (criterion, operator) => {
   const pieces = criterion.field.split('.')
@@ -27,7 +28,9 @@ class SearchService {
 
     this.or = options.or
 
-    this.query = Model.query()
+    this.knexInstance = options.knexInstance || false
+
+    this.query = this.knexInstance ? db(Model.tableName) : Model.query()
   }
 
   get metadata() {
@@ -83,6 +86,12 @@ class SearchService {
 
       return {
         where: [criterion.field, criterion.operator.is],
+      }
+    }
+
+    if (criterion.operator.whereRaw) {
+      return {
+        whereRaw: criterion.operator.whereRaw,
       }
     }
 

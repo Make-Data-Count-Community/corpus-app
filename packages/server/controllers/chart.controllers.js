@@ -66,14 +66,19 @@ const buildQueryForIntermediateTables = async (
     criteria = criteria.filter(crit => crit.field !== 'affiliationId')
   }
 
-  assertions.push('assertion_id')
-
+  assertions.push('assertionId')
   assertions = intersectionBy(...assertions)
 
   if (assertions.length > 0) {
     criteria.push({
       field: `${sourceTable}.id`,
-      operator: { in: assertions.map(a => a.assertionId) },
+      operator: {
+        whereRaw: [
+          `${sourceTable}.id in ('${assertions
+            .map(a => a.assertionId)
+            .join("','")}')`,
+        ],
+      },
     })
   }
 
