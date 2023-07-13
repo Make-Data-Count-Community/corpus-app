@@ -107,6 +107,8 @@ const CitationCountsByPublisherPage = () => {
   const [byPublisherVisualisationData, setByPublisherVisualisationData] =
     useState([])
 
+  const [byPublisherOtherCount, setByPublisherOtherCount] = useState(0)
+
   const [byPublisherIsFilterOpen, setByPublisherIsFilterOpen] = useState(false)
 
   const [byPublisherIsDownloadListOpen, setByPublisherIsDownloadListOpen] =
@@ -212,6 +214,17 @@ const CitationCountsByPublisherPage = () => {
         const getAssertionsPerPublisher = cloneDeep(
           data.getAssertionsPerPublisher,
         )
+          .filter(d => d.xField !== 'others')
+          .map(s => ({
+            ...s,
+            yField: parseInt(s.yField, 10),
+          }))
+
+        const otherData = data.getAssertionsPerPublisher.find(
+          d => d.xField === 'others',
+        )
+
+        setByPublisherOtherCount(parseInt(otherData.yField, 10))
 
         setByPublisherVisualisationData(getAssertionsPerPublisher)
       },
@@ -442,6 +455,7 @@ const CitationCountsByPublisherPage = () => {
         onFilterSearchChange={handleByPublisherSearchChange}
         onFooterTabClick={handleByPublisherFooterTabClick}
         onNewView={handleByPublisherOnNewView}
+        otherCount={byPublisherOtherCount}
         selectedFacetCount={byPublisherSelectedFacetCount}
         selectedFacetValues={byPublisherSelectedFacetValues}
         selectedFooterTab={byPublisherSelectedTab}

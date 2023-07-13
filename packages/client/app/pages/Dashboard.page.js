@@ -463,6 +463,8 @@ const DashboardPage = () => {
     [],
   )
 
+  const [bySubjectOtherCount, setBySubjectOtherCount] = useState(0)
+
   const [bySubjectIsFilterOpen, setBySubjectIsFilterOpen] = useState(false)
 
   const [bySubjectIsDownloadListOpen, setBySubjectIsDownloadListOpen] =
@@ -514,6 +516,8 @@ const DashboardPage = () => {
 
   const [byPublisherVisualisationData, setByPublisherVisualisationData] =
     useState([])
+
+  const [byPublisherOtherCount, setByPublisherOtherCount] = useState(0)
 
   const [byPublisherIsFilterOpen, setByPublisherIsFilterOpen] = useState(false)
 
@@ -634,19 +638,25 @@ const DashboardPage = () => {
         },
       },
       onCompleted: data => {
-        const getAssertionsPerSubject = cloneDeep(
-          data.getAssertionsPerSubject,
-        ).map(s => ({
-          ...s,
-          yField: parseInt(s.yField, 10),
-          parent: 0,
-          tooltip: [
-            {
-              Subject: s.xField,
-              Citations: parseInt(s.yField, 10).toLocaleString('en-US'),
-            },
-          ],
-        }))
+        const getAssertionsPerSubject = cloneDeep(data.getAssertionsPerSubject)
+          .filter(d => d.xField !== 'others')
+          .map(s => ({
+            ...s,
+            yField: parseInt(s.yField, 10),
+            parent: 0,
+            tooltip: [
+              {
+                Subject: s.xField,
+                Citations: parseInt(s.yField, 10).toLocaleString('en-US'),
+              },
+            ],
+          }))
+
+        const otherData = data.getAssertionsPerSubject.find(
+          d => d.xField === 'others',
+        )
+
+        setBySubjectOtherCount(parseInt(otherData.yField, 10))
 
         const idArray = [
           {
@@ -676,10 +686,18 @@ const DashboardPage = () => {
       onCompleted: data => {
         const getAssertionsPerPublisher = cloneDeep(
           data.getAssertionsPerPublisher,
-        ).map(s => ({
-          ...s,
-          yField: parseInt(s.yField, 10),
-        }))
+        )
+          .filter(d => d.xField !== 'others')
+          .map(s => ({
+            ...s,
+            yField: parseInt(s.yField, 10),
+          }))
+
+        const otherData = data.getAssertionsPerPublisher.find(
+          d => d.xField === 'others',
+        )
+
+        setByPublisherOtherCount(parseInt(otherData.yField, 10))
 
         setByPublisherVisualisationData(getAssertionsPerPublisher)
       },
@@ -1859,6 +1877,7 @@ const DashboardPage = () => {
         byPublisherOnFilterSearchChange={handleByPublisherSearchChange}
         byPublisherOnFooterTabClick={handleByPublisherFooterTabClick}
         byPublisherOnNewView={handleByPublisherOnNewView}
+        byPublisherOtherCount={byPublisherOtherCount}
         byPublisherSelectedFacetCount={byPublisherSelectedFacetCount}
         byPublisherSelectedFacetValues={byPublisherSelectedFacetValues}
         byPublisherSelectedFooterTab={byPublisherSelectedTab}
@@ -1920,6 +1939,7 @@ const DashboardPage = () => {
         bySubjectOnFilterSearchChange={handleBySubjectSearchChange}
         bySubjectOnFooterTabClick={handleBySubjectFooterTabClick}
         bySubjectOnNewView={handleBySubjectOnNewView}
+        bySubjectOtherCount={bySubjectOtherCount}
         bySubjectSelectedFacetCount={bySubjectSelectedFacetCount}
         bySubjectSelectedFacetValues={bySubjectSelectedFacetValues}
         bySubjectSelectedFooterTab={bySubjectSelectedTab}

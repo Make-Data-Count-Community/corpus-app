@@ -104,6 +104,8 @@ const CitationCountsBySubjectPage = () => {
     [],
   )
 
+  const [bySubjectOtherCount, setBySubjectOtherCount] = useState(0)
+
   const [bySubjectIsFilterOpen, setBySubjectIsFilterOpen] = useState(false)
 
   const [bySubjectIsDownloadListOpen, setBySubjectIsDownloadListOpen] =
@@ -155,19 +157,25 @@ const CitationCountsBySubjectPage = () => {
         },
       },
       onCompleted: data => {
-        const getAssertionsPerSubject = cloneDeep(
-          data.getAssertionsPerSubject,
-        ).map(s => ({
-          ...s,
-          yField: parseInt(s.yField, 10),
-          parent: 0,
-          tooltip: [
-            {
-              Subject: s.xField,
-              Citations: parseInt(s.yField, 10).toLocaleString('en-US'),
-            },
-          ],
-        }))
+        const getAssertionsPerSubject = cloneDeep(data.getAssertionsPerSubject)
+          .filter(d => d.xField !== 'others')
+          .map(s => ({
+            ...s,
+            yField: parseInt(s.yField, 10),
+            parent: 0,
+            tooltip: [
+              {
+                Subject: s.xField,
+                Citations: parseInt(s.yField, 10).toLocaleString('en-US'),
+              },
+            ],
+          }))
+
+        const otherData = data.getAssertionsPerSubject.find(
+          d => d.xField === 'others',
+        )
+
+        setBySubjectOtherCount(otherData.yField)
 
         const idArray = [
           {
@@ -452,6 +460,7 @@ const CitationCountsBySubjectPage = () => {
         onFilterSearchChange={handleBySubjectSearchChange}
         onFooterTabClick={handleBySubjectFooterTabClick}
         onNewView={handleBySubjectOnNewView}
+        otherCount={bySubjectOtherCount}
         selectedFacetCount={bySubjectSelectedFacetCount}
         selectedFacetValues={bySubjectSelectedFacetValues}
         selectedFooterTab={bySubjectSelectedTab}
