@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk')
+const { logger } = require('@coko/server')
 
 class AwsS3Service {
   constructor() {
@@ -10,6 +11,24 @@ class AwsS3Service {
 
     // Create an instance of the S3 service
     this.s3 = new AWS.S3()
+  }
+
+  async uploadS3File(bucket, path, streamFile) {
+    const params = {
+      Bucket: bucket,
+      Key: path,
+      Body: streamFile, // Replace with the path to your local file
+    }
+
+    // Upload the file to the S3 folder
+    this.s3.upload(params, (err, data) => {
+      if (err) {
+        logger.error('Error uploading file:', err)
+      } else {
+        logger.info('File uploaded successfully!')
+        logger.info('File URL', data.Location)
+      }
+    })
   }
 
   async readS3Folder(bucket, folder) {
