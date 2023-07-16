@@ -21,6 +21,7 @@ const PieChart = props => {
       description: 'Pie Chart',
       width: 'container',
       height: 'container',
+      padding: 10,
       autosize: { type: 'fit', contains: 'padding' },
       data: {
         values: data,
