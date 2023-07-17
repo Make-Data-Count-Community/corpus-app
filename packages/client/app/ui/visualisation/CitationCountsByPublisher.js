@@ -59,6 +59,7 @@ const CitationCountsByPublisher = props => {
     onFilterSearchChange,
     onFooterTabClick,
     onNewView,
+    otherCount,
     selectedFooterTab,
     selectedFacetCount,
     selectedFacetValues,
@@ -72,6 +73,7 @@ const CitationCountsByPublisher = props => {
     <Visualisation
       downloadOptions={downloadOptions}
       expandPath={expandPath}
+      facetType="publisher"
       filterParams={filterParams}
       filterValueOptions={filterValueOptions}
       isDownloadListOpen={isDownloadListOpen}
@@ -87,6 +89,7 @@ const CitationCountsByPublisher = props => {
       onFilterClose={onFilterClose}
       onFilterSearchChange={onFilterSearchChange}
       onFooterTabClick={onFooterTabClick}
+      otherCount={otherCount}
       selectedFacetCount={selectedFacetCount}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
@@ -95,6 +98,7 @@ const CitationCountsByPublisher = props => {
       showExpandButton={showExpandButton}
       showFilterButton
       showFooterChartTab
+      topFacetCount={data.length}
       visualisationTitle={title}
     >
       {selectedFooterTab === 'chart' && (
@@ -102,7 +106,7 @@ const CitationCountsByPublisher = props => {
           colorField={colorField}
           colorFieldTooltipTitle={colorFieldTooltipTitle}
           data={data}
-          legendTitle={`Top ${data.length}`}
+          legendTitle={`Top ${data.length} publishers`}
           onNewView={onNewView}
           thetaField={thetaField}
           thetaFieldTooltipTitle={thetaFieldTooltipTitle}
@@ -149,6 +153,7 @@ CitationCountsByPublisher.propTypes = {
   onFilterSearchChange: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
   onNewView: PropTypes.func.isRequired,
+  otherCount: PropTypes.number.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
   selectedFacetCount: PropTypes.number.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
