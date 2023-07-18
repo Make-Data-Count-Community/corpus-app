@@ -1,4 +1,4 @@
-const { Transform } = require('stream')
+const { Transform, Duplex } = require('stream')
 
 class StreamingService {
   static getOptions = (outStream, overrides = {}) => {
@@ -19,14 +19,11 @@ class StreamingService {
     return Object.assign(defaults, overrides)
   }
 
-  static writeHead = (res, status = 200) => {
-    if (typeof res.headersSent === 'boolean' && !res.headersSent) {
-      res.writeHead(status, {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Transfer-Encoding': 'chunked',
-        'X-Content-Type-Options': 'nosniff',
-      })
-    }
+  static bufferToStream = myBuffer => {
+    const tmp = new Duplex()
+    tmp.push(myBuffer)
+    tmp.push(null)
+    return tmp
   }
 
   static getTransform = preHook => {

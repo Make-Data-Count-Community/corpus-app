@@ -19,6 +19,7 @@ class AwsS3Service {
       Key: fileName,
     }
 
+    // eslint-disable-next-line no-shadow
     return new Promise((resolve, reject) => {
       this.s3.getObject(params, (err, data) => {
         if (err) {
@@ -37,14 +38,19 @@ class AwsS3Service {
       Body: streamFile, // Replace with the path to your local file
     }
 
-    // Upload the file to the S3 folder
-    this.s3.upload(params, (err, data) => {
-      if (err) {
-        logger.error('Error uploading file:', err)
-      } else {
-        logger.info('File uploaded successfully!')
-        logger.info('File URL', data.Location)
-      }
+    // eslint-disable-next-line no-shadow
+    return new Promise((resolve, reject) => {
+      // Upload the file to the S3 folder
+      this.s3.upload(params, (err, data) => {
+        if (err) {
+          reject(err)
+          logger.error('Error uploading file:', err)
+        } else {
+          resolve(data)
+          logger.info('File uploaded successfully!')
+          logger.info('File URL', data.Location)
+        }
+      })
     })
   }
 
