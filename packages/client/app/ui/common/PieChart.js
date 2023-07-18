@@ -21,6 +21,7 @@ const PieChart = props => {
       description: 'Pie Chart',
       width: 'container',
       height: 'container',
+      padding: 10,
       autosize: { type: 'fit', contains: 'padding' },
       data: {
         values: data,
@@ -54,6 +55,7 @@ const PieChart = props => {
         background: chartBackground,
         legend: {
           titleFont: 'Barlow',
+          titleFontSize: '14',
           labelFont: 'Barlow',
           labelFontWeight: 500,
           labelFontSize: '12',

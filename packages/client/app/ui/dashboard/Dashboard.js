@@ -100,6 +100,7 @@ const Dashboard = props => {
     byPublisherOnFilterSearchChange,
     byPublisherOnFooterTabClick,
     byPublisherOnNewView,
+    byPublisherOtherCount,
     byPublisherSelectedFacetCount,
     byPublisherSelectedFacetValues,
     byPublisherSelectedFooterTab,
@@ -125,6 +126,7 @@ const Dashboard = props => {
     bySubjectOnFilterSearchChange,
     bySubjectOnFooterTabClick,
     bySubjectOnNewView,
+    bySubjectOtherCount,
     bySubjectSelectedFacetCount,
     bySubjectSelectedFacetValues,
     bySubjectSelectedFooterTab,
@@ -206,6 +208,7 @@ const Dashboard = props => {
           onFilterSearchChange={bySubjectOnFilterSearchChange}
           onFooterTabClick={bySubjectOnFooterTabClick}
           onNewView={bySubjectOnNewView}
+          otherCount={bySubjectOtherCount}
           selectedFacetCount={bySubjectSelectedFacetCount}
           selectedFacetValues={bySubjectSelectedFacetValues}
           selectedFooterTab={bySubjectSelectedFooterTab}
@@ -235,6 +238,7 @@ const Dashboard = props => {
           onFilterSearchChange={byPublisherOnFilterSearchChange}
           onFooterTabClick={byPublisherOnFooterTabClick}
           onNewView={byPublisherOnNewView}
+          otherCount={byPublisherOtherCount}
           selectedFacetCount={byPublisherSelectedFacetCount}
           selectedFacetValues={byPublisherSelectedFacetValues}
           selectedFooterTab={byPublisherSelectedFooterTab}
@@ -414,6 +418,7 @@ Dashboard.propTypes = {
   bySubjectOnFilterSearchChange: PropTypes.func.isRequired,
   bySubjectOnFooterTabClick: PropTypes.func.isRequired,
   bySubjectOnNewView: PropTypes.func.isRequired,
+  bySubjectOtherCount: PropTypes.number.isRequired,
   bySubjectSelectedFacetCount: PropTypes.number.isRequired,
   bySubjectSelectedFooterTab: PropTypes.string.isRequired,
   bySubjectSelectedFacetValues: PropTypes.arrayOf(
@@ -466,6 +471,7 @@ Dashboard.propTypes = {
   byPublisherOnFilterSearchChange: PropTypes.func.isRequired,
   byPublisherOnFooterTabClick: PropTypes.func.isRequired,
   byPublisherOnNewView: PropTypes.func.isRequired,
+  byPublisherOtherCount: PropTypes.number.isRequired,
   byPublisherSelectedFacetCount: PropTypes.number.isRequired,
   byPublisherSelectedFooterTab: PropTypes.string.isRequired,
   byPublisherSelectedFacetValues: PropTypes.arrayOf(

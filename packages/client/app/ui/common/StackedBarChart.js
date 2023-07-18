@@ -41,9 +41,9 @@ const StackedBarChart = props => {
           aggregate: 'sum',
           title: null,
           axis: { grid: false },
-          //   scale: {
-          //     domainMax: 10,
-          //   },
+          scale: {
+            domain: { unionWith: [0, 10] },
+          },
         },
         color: {
           field: stackField,

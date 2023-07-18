@@ -10,11 +10,36 @@ const TreeMap = props => {
   const Chart = createClassFromSpec({
     spec: {
       $schema: 'https://vega.github.io/schema/vega/v5.json',
-      width: 400,
-      height: 280,
-      padding: 10,
-      // autosize: { type: 'fit', contains: 'padding' },
-      autosize: { type: 'pad', resize: true, contains: 'padding' },
+      autosize: { type: 'fit', contains: 'padding' },
+
+      signals: [
+        {
+          name: 'padding',
+          init: '10',
+          on: [{ update: '10', events: 'window:resize' }],
+        },
+        {
+          name: 'width',
+          init: '(containerSize()[0] - 2*padding)',
+          on: [
+            {
+              update: '(containerSize()[0] - 2*padding)',
+              events: 'window:resize',
+            },
+          ],
+        },
+        {
+          name: 'height',
+          init: '(containerSize()[1] - 2*padding)',
+          on: [
+            {
+              update: '(containerSize()[1] - 2*padding)',
+              events: 'window:resize',
+            },
+          ],
+        },
+      ],
+
       data: [
         {
           name: 'tree',
@@ -30,6 +55,8 @@ const TreeMap = props => {
               field: valueField,
               size: [{ signal: 'width' }, { signal: 'height' }],
             },
+            { type: 'flatten', fields: ['tooltip'] },
+            { type: 'filter', expr: 'datum.id !== 0' },
           ],
         },
       ],
@@ -41,21 +68,6 @@ const TreeMap = props => {
           range: subjectColors,
         },
       ],
-      //   encoding: {
-      //     tooltip: [
-      //       {
-      //         field: colorField,
-      //         type: 'nominal',
-      //         //   title: colorFieldTooltipTitle,
-      //       },
-      //       {
-      //         field: valueField,
-      //         format: ',',
-      //         type: 'quantitative',
-      //         //   title: thetaFieldTooltipTitle,
-      //       },
-      //     ],
-      //   },
 
       marks: [
         {
@@ -70,6 +82,9 @@ const TreeMap = props => {
               x2: { field: 'x1' },
               y: { field: 'y0' },
               y2: { field: 'y1' },
+            },
+            hover: {
+              tooltip: { signal: "datum['tooltip']" },
             },
           },
         },
@@ -91,6 +106,7 @@ const TreeMap = props => {
         },
         legend: {
           titleFont: 'Barlow',
+          titleFontSize: '14',
           labelFont: 'Barlow',
           labelFontWeight: 500,
           labelFontSize: '12',

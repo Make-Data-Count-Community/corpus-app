@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 const DataWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: ${({ expandedView }) => grid(expandedView ? 160 : 100)};
+  height: ${({ expandedView }) => grid(expandedView ? 150 : 100)};
   justify-content: flex-end;
   padding: ${grid(2)} ${grid(4)};
   width: 100%;
@@ -31,8 +31,14 @@ const SpinWrapper = styled(Spin)`
 `
 
 const ChildrenWrapper = styled.div`
-  height: ${({ expandedView }) => grid(expandedView ? 150 : 90)};
+  height: ${({ expandedView }) => grid(expandedView ? 140 : 90)};
   overflow: ${({ showOverflow }) => (showOverflow ? 'auto' : 'hidden')};
+`
+
+const OtherDataWrapper = styled.div`
+  height: ${grid(8)};
+  padding: 0 ${grid(2)};
+  width: 100%;
 `
 
 const Visualisation = props => {
@@ -40,6 +46,7 @@ const Visualisation = props => {
     children,
     downloadOptions,
     expandPath,
+    facetType,
     filterParams,
     filterValueOptions,
     isDownloadListOpen,
@@ -55,6 +62,7 @@ const Visualisation = props => {
     onFilterClose,
     onFilterSearchChange,
     onFooterTabClick,
+    otherCount,
     selectedFacetCount,
     selectedFacetValues,
     selectedFooterTab,
@@ -63,6 +71,7 @@ const Visualisation = props => {
     showApplyFilterButton,
     showClearFilterButton,
     showFooterChartTab,
+    topFacetCount,
     visualisationTitle,
   } = props
 
@@ -100,6 +109,13 @@ const Visualisation = props => {
           </ChildrenWrapper>
         </SpinWrapper>
       </DataWrapper>
+      {!!otherCount && !loading && (
+        <OtherDataWrapper>
+          This graph shows the Top {topFacetCount} {facetType}
+          {topFacetCount !== 1 ? 's' : ''} only. The Data Corpus includes{' '}
+          {parseInt(otherCount, 10).toLocaleString('en-US')} other citations.
+        </OtherDataWrapper>
+      )}
       <ChartFooter
         downloadOptions={downloadOptions}
         isDowloadListOpen={isDownloadListOpen}
@@ -122,6 +138,7 @@ Visualisation.propTypes = {
     }),
   ).isRequired,
   expandPath: PropTypes.string.isRequired,
+  facetType: PropTypes.string,
   filterParams: PropTypes.arrayOf(
     PropTypes.shape({
       isFacetSelected: PropTypes.bool,
@@ -153,6 +170,7 @@ Visualisation.propTypes = {
   onFilterClose: PropTypes.func,
   onFilterSearchChange: PropTypes.func,
   onFooterTabClick: PropTypes.func.isRequired,
+  otherCount: PropTypes.number,
   selectedFacetCount: PropTypes.number,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -166,10 +184,12 @@ Visualisation.propTypes = {
   showApplyFilterButton: PropTypes.bool,
   showClearFilterButton: PropTypes.bool,
   showFooterChartTab: PropTypes.bool,
+  topFacetCount: PropTypes.number,
   visualisationTitle: PropTypes.string.isRequired,
 }
 
 Visualisation.defaultProps = {
+  facetType: '',
   filterParams: [],
   filterValueOptions: [],
   isFilterOpen: false,
@@ -182,6 +202,7 @@ Visualisation.defaultProps = {
   onFilterClick: () => {},
   onFilterClose: () => {},
   onFilterSearchChange: () => {},
+  otherCount: 0,
   selectedFacetCount: 0,
   selectedFacetValues: [],
   showExpandButton: false,
@@ -189,6 +210,7 @@ Visualisation.defaultProps = {
   showApplyFilterButton: false,
   showClearFilterButton: false,
   showFooterChartTab: false,
+  topFacetCount: 0,
 }
 
 export default Visualisation
