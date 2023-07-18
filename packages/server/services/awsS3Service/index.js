@@ -13,6 +13,23 @@ class AwsS3Service {
     this.s3 = new AWS.S3()
   }
 
+  async getS3File(bucket, fileName) {
+    const params = {
+      Bucket: bucket,
+      Key: fileName,
+    }
+
+    return new Promise((resolve, reject) => {
+      this.s3.getObject(params, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
+      })
+    })
+  }
+
   async uploadS3File(bucket, path, streamFile) {
     const params = {
       Bucket: bucket,

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-const { db, uuid } = require('@coko/server')
+const { db, uuid, logger } = require('@coko/server')
 const StreamingService = require('../services/streamService')
 const { model: AssertionSubject } = require('../models/assertionSubject')
 
@@ -57,7 +57,7 @@ module.exports = app => {
       query = `SELECT * FROM assertions`
     } else if (action === 'last-month') {
       fileName = `${uuid()}-last-month-assertions.json`
-      query = `SELECT * FROM assertions`
+      query = `SELECT * FROM assertions where created >= DATE_TRUNC('month', CURRENT_DATE) - INTERVAL '1 month'`
     }
 
     const stream = db
@@ -74,17 +74,6 @@ module.exports = app => {
     stream.pipe(transformStream)
 
     awsService.uploadS3File('exported-data-files', fileName, transformStream)
-    // transformStream.pipe(writableStream)
-
-    // Handle stream events as needed
-    // writableStream.on('finish', () => {
-    //   // eslint-disable-next-line no-console
-    //   console.log('Export completed successfully.')
-    // })
-
-    // writableStream.on('error', error => {
-    //   console.error('Export failed:', error)
-    // })
 
     res.status(202).json({
       message: 'Your request has been accepted and is being processed.',
@@ -92,5 +81,22 @@ module.exports = app => {
     })
   })
 
-  app.get('/api/data-dump/:filename', async (req, res, next) => {})
+  app.get('/api/data-dump/:filename', async (req, res, next) => {
+    const { filename } = req.params
+    const awsService = new AwsS3Service()
+
+    try {
+      const data = await awsService.getS3File('exported-data-files', filename)
+      logger.info(`Got S3 object : ${JSON.stringify(data)}`)
+      res.set({
+        'Content-Type': data.ContentType,
+        'Content-Length': data.ContentLength,
+        'Content-Disposition': `attachment; filename=${filename}`,
+      })
+      res.send(data.Body)
+    } catch (e) {
+      logger.error(e)
+      res.status(500).send(`Error retrieving File: ${filename}`)
+    }
+  })
 }
