@@ -81,7 +81,7 @@ module.exports = app => {
     })
   })
 
-  app.get('/api/data-dump/:filename', async (req, res, next) => {
+  app.get('/api/data-dump/get/:filename', async (req, res, next) => {
     const { filename } = req.params
     const awsService = new AwsS3Service()
 
