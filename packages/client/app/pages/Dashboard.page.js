@@ -656,7 +656,7 @@ const DashboardPage = () => {
           d => d.xField === 'others',
         )
 
-        setBySubjectOtherCount(parseInt(otherData.yField, 10))
+        setBySubjectOtherCount(parseInt(otherData?.yField || '0', 10))
 
         const idArray = [
           {
@@ -697,7 +697,7 @@ const DashboardPage = () => {
           d => d.xField === 'others',
         )
 
-        setByPublisherOtherCount(parseInt(otherData.yField, 10))
+        setByPublisherOtherCount(parseInt(otherData?.yField || '0', 10))
 
         setByPublisherVisualisationData(getAssertionsPerPublisher)
       },

@@ -36,6 +36,7 @@ const PieChart = props => {
             range: publisherColors,
           },
           title: legendTitle,
+          sort: { field: 'yField', order: 'descending' },
         },
         tooltip: [
           {
