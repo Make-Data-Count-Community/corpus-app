@@ -100,7 +100,6 @@ const Dashboard = props => {
     byPublisherOnFilterSearchChange,
     byPublisherOnFooterTabClick,
     byPublisherOnNewView,
-    byPublisherOtherCount,
     byPublisherSelectedFacetCount,
     byPublisherSelectedFacetValues,
     byPublisherSelectedFooterTab,
@@ -238,7 +237,6 @@ const Dashboard = props => {
           onFilterSearchChange={byPublisherOnFilterSearchChange}
           onFooterTabClick={byPublisherOnFooterTabClick}
           onNewView={byPublisherOnNewView}
-          otherCount={byPublisherOtherCount}
           selectedFacetCount={byPublisherSelectedFacetCount}
           selectedFacetValues={byPublisherSelectedFacetValues}
           selectedFooterTab={byPublisherSelectedFooterTab}
@@ -471,7 +469,6 @@ Dashboard.propTypes = {
   byPublisherOnFilterSearchChange: PropTypes.func.isRequired,
   byPublisherOnFooterTabClick: PropTypes.func.isRequired,
   byPublisherOnNewView: PropTypes.func.isRequired,
-  byPublisherOtherCount: PropTypes.number.isRequired,
   byPublisherSelectedFacetCount: PropTypes.number.isRequired,
   byPublisherSelectedFooterTab: PropTypes.string.isRequired,
   byPublisherSelectedFacetValues: PropTypes.arrayOf(

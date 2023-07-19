@@ -517,8 +517,6 @@ const DashboardPage = () => {
   const [byPublisherVisualisationData, setByPublisherVisualisationData] =
     useState([])
 
-  const [byPublisherOtherCount, setByPublisherOtherCount] = useState(0)
-
   const [byPublisherIsFilterOpen, setByPublisherIsFilterOpen] = useState(false)
 
   const [byPublisherIsDownloadListOpen, setByPublisherIsDownloadListOpen] =
@@ -692,12 +690,6 @@ const DashboardPage = () => {
             ...s,
             yField: parseInt(s.yField, 10),
           }))
-
-        const otherData = data.getAssertionsPerPublisher.find(
-          d => d.xField === 'others',
-        )
-
-        setByPublisherOtherCount(parseInt(otherData?.yField || '0', 10))
 
         setByPublisherVisualisationData(getAssertionsPerPublisher)
       },
@@ -1877,7 +1869,6 @@ const DashboardPage = () => {
         byPublisherOnFilterSearchChange={handleByPublisherSearchChange}
         byPublisherOnFooterTabClick={handleByPublisherFooterTabClick}
         byPublisherOnNewView={handleByPublisherOnNewView}
-        byPublisherOtherCount={byPublisherOtherCount}
         byPublisherSelectedFacetCount={byPublisherSelectedFacetCount}
         byPublisherSelectedFacetValues={byPublisherSelectedFacetValues}
         byPublisherSelectedFooterTab={byPublisherSelectedTab}

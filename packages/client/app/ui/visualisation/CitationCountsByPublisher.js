@@ -59,7 +59,6 @@ const CitationCountsByPublisher = props => {
     onFilterSearchChange,
     onFooterTabClick,
     onNewView,
-    otherCount,
     selectedFooterTab,
     selectedFacetCount,
     selectedFacetValues,
@@ -73,7 +72,6 @@ const CitationCountsByPublisher = props => {
     <Visualisation
       downloadOptions={downloadOptions}
       expandPath={expandPath}
-      facetType="publisher"
       filterParams={filterParams}
       filterValueOptions={filterValueOptions}
       isDownloadListOpen={isDownloadListOpen}
@@ -89,7 +87,6 @@ const CitationCountsByPublisher = props => {
       onFilterClose={onFilterClose}
       onFilterSearchChange={onFilterSearchChange}
       onFooterTabClick={onFooterTabClick}
-      otherCount={otherCount}
       selectedFacetCount={selectedFacetCount}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
@@ -153,7 +150,6 @@ CitationCountsByPublisher.propTypes = {
   onFilterSearchChange: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
   onNewView: PropTypes.func.isRequired,
-  otherCount: PropTypes.number.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
   selectedFacetCount: PropTypes.number.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
