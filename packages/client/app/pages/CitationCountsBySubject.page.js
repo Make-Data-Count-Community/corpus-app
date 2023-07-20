@@ -175,7 +175,7 @@ const CitationCountsBySubjectPage = () => {
           d => d.xField === 'others',
         )
 
-        setBySubjectOtherCount(otherData.yField)
+        setBySubjectOtherCount(parseInt(otherData?.yField || '0', 10))
 
         const idArray = [
           {

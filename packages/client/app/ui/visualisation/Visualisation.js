@@ -111,9 +111,8 @@ const Visualisation = props => {
       </DataWrapper>
       {!!otherCount && !loading && (
         <OtherDataWrapper>
-          This graph shows the Top {topFacetCount} {facetType}
-          {topFacetCount !== 1 ? 's' : ''} only. The Data Corpus includes{' '}
-          {parseInt(otherCount, 10).toLocaleString('en-US')} other citations.
+          The visualization includes the top {topFacetCount} {facetType}
+          {topFacetCount !== 1 ? 's' : ''} where metadata is available.
         </OtherDataWrapper>
       )}
       <ChartFooter
