@@ -21,7 +21,7 @@ class AssertionFactory {
     czi: [DataciteToAssertion, CrossrefToAssertion, CziToAssertion],
   }
 
-  static async saveDataToAssertionModel(data) {
+  static async saveDataToAssertionModel(data, { addAssertions = true }) {
     const subjects = await Subject.query()
     const sources = await Source.query()
     const assertions = []
@@ -49,13 +49,15 @@ class AssertionFactory {
         assertions.push(assertion)
       }
 
-      const assertionsArray = chunk(assertions, 5000)
+      if (addAssertions) {
+        const assertionsArray = chunk(assertions, 5000)
 
-      await Promise.all(
-        assertionsArray.map(assert => Assertion.query(trx).insert(assert)),
-      )
+        await Promise.all(
+          assertionsArray.map(assert => Assertion.query(trx).insert(assert)),
+        )
 
-      await ActivityLog.query(trx).findById(activityId).patch({ done: true })
+        await ActivityLog.query(trx).findById(activityId).patch({ done: true })
+      }
     })
   }
 }

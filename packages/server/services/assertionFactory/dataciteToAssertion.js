@@ -30,10 +30,12 @@ class DataciteToAssertion extends AssertionHelpers {
 
         if (exists) {
           const subjectId = exists.id
-          await AssertionSubject.query(trx).insert({
-            assertionId: assertionInstance.id,
-            subjectId,
-          })
+          await AssertionSubject.query(trx)
+            .insert({
+              assertionId: assertionInstance.id,
+              subjectId,
+            })
+            .debug()
         }
       }
     }

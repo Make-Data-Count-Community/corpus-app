@@ -55,6 +55,7 @@ class CziFile {
                 citationBulk.push({
                   id: uuid(),
                   dataCiteDoi: result.dataset,
+                  inferringDataCiteDoi: result.paper_doi,
                   crossrefDoi: result.paper_doi,
                   ...result,
                 })

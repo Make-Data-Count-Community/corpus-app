@@ -44,14 +44,23 @@ class DataCiteEventData {
 
           let dataCiteDoi = null
           let crossrefDoi = null
+          let inferringDataCiteDoi = null
 
           if (sourceId === 'datacite-crossref') {
             dataCiteDoi = event.attributes['subj-id'].replace(
               'https://doi.org/',
               '',
             )
+            inferringDataCiteDoi = event.attributes['obj-id'].replace(
+              'https://doi.org/',
+              '',
+            )
           } else {
             dataCiteDoi = event.attributes['obj-id'].replace(
+              'https://doi.org/',
+              '',
+            )
+            inferringDataCiteDoi = event.attributes['subj-id'].replace(
               'https://doi.org/',
               '',
             )
@@ -69,7 +78,13 @@ class DataCiteEventData {
             )
           }
 
-          const citation = { dataCiteDoi, crossrefDoi, ...result.value.data[i] }
+          const citation = {
+            dataCiteDoi,
+            inferringDataCiteDoi,
+            crossrefDoi,
+            ...result.value.data[i],
+          }
+
           this.citations.push(citation)
           currentBulk.push(citation)
         }
