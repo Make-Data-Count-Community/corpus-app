@@ -3,12 +3,12 @@
 const { uuid } = require('@coko/server')
 
 const {
-  Repository,
+  // Repository,
   AssertionSubject,
-  Affiliation,
-  AssertionAffiliation,
-  AssertionFunder,
-  Funder,
+  // Affiliation,
+  // AssertionAffiliation,
+  // AssertionFunder,
+  // Funder,
 } = require('@pubsweet/models')
 
 const AssertionHelpers = require('./assertionHelpers')
@@ -40,70 +40,70 @@ class DataciteToAssertion extends AssertionHelpers {
       }
     }
 
-    if (chunk.datacite.affiliations) {
-      const titles = chunk.datacite.affiliations
+    // if (chunk.datacite.affiliations) {
+    //   const titles = chunk.datacite.affiliations
 
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < titles.length; i++) {
-        const exists = await Affiliation.query(trx).findOne({
-          title: titles[i].name,
-        })
+    //   // eslint-disable-next-line no-plusplus
+    //   for (let i = 0; i < titles.length; i++) {
+    //     const exists = await Affiliation.query(trx).findOne({
+    //       title: titles[i].name,
+    //     })
 
-        let affiliation = null
+    //     let affiliation = null
 
-        if (!exists) {
-          affiliation = await Affiliation.query(trx)
-            .insert({ title: titles[i].name, externalId: titles[i].identifier })
-            .returning('*')
-        }
+    //     if (!exists) {
+    //       affiliation = await Affiliation.query(trx)
+    //         .insert({ title: titles[i].name, externalId: titles[i].identifier })
+    //         .returning('*')
+    //     }
 
-        const affiliationId = (exists || {}).id || affiliation.id
-        await AssertionAffiliation.query(trx).insert({
-          assertionId: assertionInstance.id,
-          affiliationId,
-        })
-      }
-    }
+    //     const affiliationId = (exists || {}).id || affiliation.id
+    //     await AssertionAffiliation.query(trx).insert({
+    //       assertionId: assertionInstance.id,
+    //       affiliationId,
+    //     })
+    //   }
+    // }
 
-    if (chunk.datacite.funders) {
-      const titles = chunk.datacite.funders
+    // if (chunk.datacite.funders) {
+    //   const titles = chunk.datacite.funders
 
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < titles.length; i++) {
-        const exists = await Funder.query(trx).findOne({
-          title: titles[i].name,
-        })
+    //   // eslint-disable-next-line no-plusplus
+    //   for (let i = 0; i < titles.length; i++) {
+    //     const exists = await Funder.query(trx).findOne({
+    //       title: titles[i].name,
+    //     })
 
-        let funder = null
+    //     let funder = null
 
-        if (!exists) {
-          funder = await Funder.query(trx)
-            .insert({ title: titles[i].name, externalId: titles[i].identifier })
-            .returning('*')
-        }
+    //     if (!exists) {
+    //       funder = await Funder.query(trx)
+    //         .insert({ title: titles[i].name, externalId: titles[i].identifier })
+    //         .returning('*')
+    //     }
 
-        const funderId = (exists || {}).id || funder.id
-        await AssertionFunder.query(trx).insert({
-          assertionId: assertionInstance.id,
-          funderId,
-        })
-      }
-    }
+    //     const funderId = (exists || {}).id || funder.id
+    //     await AssertionFunder.query(trx).insert({
+    //       assertionId: assertionInstance.id,
+    //       funderId,
+    //     })
+    //   }
+    // }
 
-    if (chunk.datacite.repository) {
-      const title = chunk.datacite.repository
+    // if (chunk.datacite.repository) {
+    //   const title = chunk.datacite.repository
 
-      const exists = await Repository.query(trx).findOne({ title })
-      let repository = exists
+    //   const exists = await Repository.query(trx).findOne({ title })
+    //   let repository = exists
 
-      if (!exists) {
-        repository = await Repository.query(trx)
-          .insert({ title })
-          .returning('*')
-      }
+    //   if (!exists) {
+    //     repository = await Repository.query(trx)
+    //       .insert({ title })
+    //       .returning('*')
+    //   }
 
-      assertionInstance.repositoryId = repository.id
-    }
+    //   assertionInstance.repositoryId = repository.id
+    // }
   }
 }
 
