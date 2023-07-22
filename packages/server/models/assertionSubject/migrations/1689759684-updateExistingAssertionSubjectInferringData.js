@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
 /* eslint-disable camelcase */
 /* eslint-disable import/no-dynamic-require */
@@ -22,13 +23,15 @@ exports.up = async knex => {
           'SELECT ass.id FROM public.assertions ass inner join assertions_subjects as2 on ass.id = as2.assertion_id',
         ),
       )
+      .limit(320000)
+      .offset(parseInt(process.env.START_QUERY, 10))
       .orderBy('created', 'desc')
-      .limit(600000)
-      .offset(0)
       .stream()
 
     let counter = 0
     let counterApi = 0
+    let queryCounts = 0
+    let counterApiFailed = 0
     const ass = {}
 
     // eslint-disable-next-line no-restricted-syntax
@@ -47,7 +50,6 @@ exports.up = async knex => {
       )
 
       if (data && !data.errors) {
-        console.log({ counterApi })
         counterApi += 1
 
         ass[row.id] = flatten(
@@ -55,10 +57,11 @@ exports.up = async knex => {
             .map(creator => creator.subject || [])
             .filter(aff => aff.length),
         )
+      } else {
+        counterApiFailed += 1
       }
 
       if (ass[row.id]) {
-        console.log({ counter })
         const titles = ass[row.id]
 
         // eslint-disable-next-line no-plusplus
@@ -68,6 +71,7 @@ exports.up = async knex => {
           )
 
           if (exists) {
+            queryCounts += 1
             const subjectId = exists.id
             // eslint-disable-next-line no-await-in-loop
             await AssertionSubject.query()
@@ -81,26 +85,9 @@ exports.up = async knex => {
       }
 
       counter += 1
-      // metadataSource.startStreamCitations({
-      //   event: { dataCiteDoi, inferringDataCiteDoi, counter },
-      //   datacite: {},
-      //   source: row.sourceId,
-      // })
     }
 
-    // metadataSource.startStreamCitations(null)
-
-    // const result = await metadataSource.getResult
-
-    // const bulkResult = chunk(result, 5000)
-
-    // await Promise.all(
-    //   bulkResult.map(res =>
-    //     AssertionFactory.saveDataToAssertionModel(res, {
-    //       addAssertions: false,
-    //     }),
-    //   ),
-    // )
+    console.log({ counter, queryCounts, counterApi, counterApiFailed })
   } catch (error) {
     throw new Error(error)
   }
