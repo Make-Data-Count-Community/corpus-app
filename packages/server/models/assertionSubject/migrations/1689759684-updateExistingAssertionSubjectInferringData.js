@@ -1,15 +1,19 @@
+/* eslint-disable no-console */
 /* eslint-disable camelcase */
 /* eslint-disable import/no-dynamic-require */
 const { db } = require('@coko/server')
-const { chunk } = require('lodash')
+const { flatten, get } = require('lodash')
 
 // Paths are relative to the generated migrations folder
-const MetadataSource = require(`${process.cwd()}/services/metadata/metadataSource`)
-const AssertionFactory = require(`${process.cwd()}/services/assertionFactory/assertionFactory`)
+// const MetadataSource = require(`${process.cwd()}/services/metadata/metadataSource`)
+// const AssertionFactory = require(`${process.cwd()}/services/assertionFactory/assertionFactory`)
+const axios = require(`${process.cwd()}/services/axiosService`)
+const Subject = require(`${process.cwd()}/models/subject/subject`)
+const AssertionSubject = require(`${process.cwd()}/models/assertionSubject/assertionSubject`)
 
 exports.up = async knex => {
   try {
-    const metadataSource = await MetadataSource.createInstance('datacite')
+    const subjects = await Subject.query()
 
     const assertions = await db('assertions')
       .whereNotIn(
@@ -24,11 +28,12 @@ exports.up = async knex => {
       .stream()
 
     let counter = 0
+    let counterApi = 0
+    const ass = {}
 
     // eslint-disable-next-line no-restricted-syntax
     for await (const row of assertions) {
-      counter += 1
-
+      console.log(counter)
       const dataCiteDoi = row.doi
 
       const objId = row.objId.replace('https://doi.org/', '')
@@ -37,26 +42,65 @@ exports.up = async knex => {
 
       const inferringDataCiteDoi = objId === dataCiteDoi ? subj_id : objId
 
-      metadataSource.startStreamCitations({
-        event: { dataCiteDoi, inferringDataCiteDoi, counter },
-        datacite: {},
-        source: row.sourceId,
-      })
+      const { data } = await axios.dataciteApiDoi(
+        `/dois/${inferringDataCiteDoi}`,
+      )
+
+      if (data && !data.errors) {
+        console.log({ counterApi })
+        counterApi += 1
+
+        ass[row.id] = flatten(
+          get(data, 'data.attributes.subjects', [])
+            .map(creator => creator.subject || [])
+            .filter(aff => aff.length),
+        )
+      }
+
+      if (ass[row.id]) {
+        console.log({ counter })
+        const titles = ass[row.id]
+
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < titles.length; i++) {
+          const exists = subjects.find(
+            subj => subj.title.toLowerCase() === titles[i].toLowerCase(),
+          )
+
+          if (exists) {
+            const subjectId = exists.id
+            // eslint-disable-next-line no-await-in-loop
+            await AssertionSubject.query()
+              .insert({
+                assertionId: row.id,
+                subjectId,
+              })
+              .debug()
+          }
+        }
+      }
+
+      counter += 1
+      // metadataSource.startStreamCitations({
+      //   event: { dataCiteDoi, inferringDataCiteDoi, counter },
+      //   datacite: {},
+      //   source: row.sourceId,
+      // })
     }
 
-    metadataSource.startStreamCitations(null)
+    // metadataSource.startStreamCitations(null)
 
-    const result = await metadataSource.getResult
+    // const result = await metadataSource.getResult
 
-    const bulkResult = chunk(result, 5000)
+    // const bulkResult = chunk(result, 5000)
 
-    await Promise.all(
-      bulkResult.map(res =>
-        AssertionFactory.saveDataToAssertionModel(res, {
-          addAssertions: false,
-        }),
-      ),
-    )
+    // await Promise.all(
+    //   bulkResult.map(res =>
+    //     AssertionFactory.saveDataToAssertionModel(res, {
+    //       addAssertions: false,
+    //     }),
+    //   ),
+    // )
   } catch (error) {
     throw new Error(error)
   }
