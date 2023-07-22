@@ -49,7 +49,7 @@ class Datacite extends Transform {
     const { data } = await axios.dataciteApiDoi(`${Datacite.URL}${dataCiteDoi}`)
 
     if (data && !data.errors) {
-      logger.info(`Counter: ${counter}`)
+      logger.info(`Counter: ${counter} : URL: ${Datacite.URL}${dataCiteDoi}`)
       // Get Title
       chunk.datacite.title = get(
         data,
@@ -63,6 +63,9 @@ class Datacite extends Transform {
           .map(creator => creator.subject || [])
           .filter(aff => aff.length),
       )
+
+      // eslint-disable-next-line no-console
+      console.log(chunk.datacite.subjects)
 
       // Get Repository
       chunk.datacite.repository = get(data, 'data.attributes.publisher', null)
