@@ -19,6 +19,10 @@ class AssertionSubject extends BaseModel {
         subjectId: {
           type: ['string', 'null'],
         },
+        inferred: {
+          default: false,
+          type: ['boolean', false],
+        },
       },
       type: 'object',
     }

@@ -3,7 +3,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable import/no-dynamic-require */
 const { db } = require('@coko/server')
-const { flatten, get } = require('lodash')
+const { get } = require('lodash')
 
 // Paths are relative to the generated migrations folder
 // const MetadataSource = require(`${process.cwd()}/services/metadata/metadataSource`)
@@ -45,18 +45,16 @@ exports.up = async knex => {
 
       const inferringDataCiteDoi = objId === dataCiteDoi ? subj_id : objId
 
-      const { data } = await axios.dataciteApiDoi(
-        `/dois/${inferringDataCiteDoi}`,
+      const responseSubj = await axios.crossrefApi(
+        `/works/${inferringDataCiteDoi}`,
+        {},
+        { xml: false },
       )
 
-      if (data && !data.errors) {
+      if (responseSubj.data && responseSubj.status === 200) {
         counterApi += 1
 
-        ass[row.id] = flatten(
-          get(data, 'data.attributes.subjects', [])
-            .map(creator => creator.subject || [])
-            .filter(aff => aff.length),
-        )
+        ass[row.id] = get(responseSubj.data, 'message.subject', [])
       } else {
         counterApiFailed += 1
       }
@@ -78,6 +76,7 @@ exports.up = async knex => {
               .insert({
                 assertionId: row.id,
                 subjectId,
+                inferred: true,
               })
               .debug()
           }

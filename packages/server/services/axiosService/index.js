@@ -30,8 +30,10 @@ module.exports = {
 
     return response
   },
-  crossrefApi: (url, headers = {}) => {
-    url = `${url}/transform/application/vnd.crossref.unixsd+xml`
+  crossrefApi: (url, headers = {}, options = { xml: true }) => {
+    if (options.xml) {
+      url = `${url}/transform/application/vnd.crossref.unixsd+xml`
+    }
 
     const response = request({
       url,
