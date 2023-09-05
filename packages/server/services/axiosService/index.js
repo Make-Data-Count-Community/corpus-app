@@ -8,7 +8,7 @@ module.exports = {
       baseURL: 'https://api.datacite.org',
       method: 'get',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json', //NOTE datacite prefix api breaks if you include this header
         ...headers,
       },
     })

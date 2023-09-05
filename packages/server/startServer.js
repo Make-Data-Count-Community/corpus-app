@@ -1,11 +1,13 @@
 /* eslint-disable no-console */
 const { startServer } = require('@coko/server')
 // const Assertion = require('./models/assertion/assertion')
-// const ScheduledTaskService = require('./services/scheduledTaskService')
+const dataCitePrefixImport = require('./services/scheduledTaskService/dataCitePrefixImport')
 
 const init = async () => {
   try {
-    // const assertion = await Assertion.query().findOne({ id: '88158e23-9e0e-4683-ab18-f6490d2dac98' })
+    //uncomment this to fetch all prefixes from datacite API and insert into DB
+    //NOTE this is not idempotent - prefixes will be duplicated if run multiple times
+    //await dataCitePrefixImport()
 
     // console.log(assertion.$toJsonRelated({ recursive: true }));
     return startServer()
