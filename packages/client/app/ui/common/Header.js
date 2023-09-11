@@ -216,7 +216,7 @@ const Header = props => {
         Skip to main content
       </SkipLink>
       <Branding to={homepage}>
-        <h1>Data Citation Corpus</h1>
+        <h1>Data Citation Corpus Prototype</h1>
       </Branding>
       <Navigation role="navigation">
         <NavLinks id="main-nav">
@@ -226,7 +226,7 @@ const Header = props => {
                 aria-current={currentPath === dashboard ? 'page' : false}
                 to={dashboard}
               >
-                <span>Data Citation Corpus</span>
+                <span>Data Citation Corpus Prototype</span>
               </StyledLink>
             </li>
           </StyledList>
