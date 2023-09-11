@@ -80,7 +80,7 @@ class CorpusData {
             datacite: {},
             crossref: {},
           }
-
+          console.log(`Streaming ${item.id}`)
           this.metadataSource.startStreamCitations(assertions)
         }
       })

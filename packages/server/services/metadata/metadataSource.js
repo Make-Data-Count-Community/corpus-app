@@ -42,6 +42,7 @@ class MetadataSource {
 
       // If there is an error in the pipeline, reject the Promise
       streamPipeline.on('error', err => {
+        console.log("Error "+ err)
         reject(err)
       })
     })

@@ -36,7 +36,6 @@ class AssertionFactory {
 
         const source = sources.find(s => s.id === chunks.source)
         const classes = AssertionFactory.SOURCE_MAP_CLASS[source.abbreviation]
-
         // eslint-disable-next-line no-await-in-loop
         await Promise.all(
           classes.map(Cls => {

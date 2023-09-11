@@ -4,7 +4,7 @@ const { logger } = require('@coko/server')
 class AwsS3Service {
   constructor() {
     AWS.config.update({
-      accessKeyId: '***REMOVED***',
+      accessKeyId: '***REMOVED***', //TODO these creds should not be hardcoded
       secretAccessKey: '***REMOVED***',
       region: 'eu-west-1', // Replace with your desired region
     })
