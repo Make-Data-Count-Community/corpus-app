@@ -10,8 +10,8 @@ class CziToAssertion {
   async transformToAssertion(assertionInstance, chunk, trx) {
     console.log("CZI to Assertion")
     assertionInstance.id = assertionInstance.id || uuid()
-    assertionInstance.objId = chunk.event.paper_doi || chunk.event.doi
-    assertionInstance.subjId = chunk.event.dataset || chunk.event.extracted_word
+    assertionInstance.objId = chunk.event.paper_doi || chunk.event.doi || 'none'
+    assertionInstance.subjId = chunk.event.dataset || chunk.event.extracted_word || 'none'
 
     assertionInstance.accessionNumber = chunk.event.accessionNumber
       ? chunk.event.accessionNumber
