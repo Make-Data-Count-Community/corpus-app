@@ -51,6 +51,7 @@ class CorpusData {
       .where({ proccessed: false })
 
     if (selected) {
+      console.log(`Selecting data from ${selected.start} to ${selected.end}...`)
       citationDataQuery.andWhere(builder => {
         builder.whereBetween('cursorId', [selected.start, selected.end])
       })
@@ -80,7 +81,6 @@ class CorpusData {
             datacite: {},
             crossref: {},
           }
-          console.log(`Streaming ${item.id}`)
           this.metadataSource.startStreamCitations(assertions)
         }
       })
