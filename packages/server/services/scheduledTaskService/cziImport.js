@@ -30,9 +30,9 @@ const cziImport = async () => {
             builder.andWhere('done', '=', false)
         })
 
-        // if (countAssertions[0].count !== '0') {
-        //   setImmediate(myAsyncFunction)
-        // }
+        if (countAssertions[0].count !== '0') {
+          setImmediate(myAsyncFunction)
+        }
     }
 
     myAsyncFunction()

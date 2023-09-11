@@ -11,6 +11,7 @@ class CziToAssertion {
     assertionInstance.id = assertionInstance.id || uuid()
     assertionInstance.objId = chunk.event.paper_doi || chunk.event.doi || 'none'
     assertionInstance.subjId = chunk.event.dataset || chunk.event.extracted_word || 'none'
+    console.log(`CZI to assertion ${assertionInstance.id}`)
 
     assertionInstance.accessionNumber = chunk.event.accessionNumber
       ? chunk.event.accessionNumber

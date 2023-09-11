@@ -51,9 +51,8 @@ class CorpusDataFactory {
         end: process.env.END_CURSOR
       }
     }
-
     await corpusData.loadCitationsFromDB(selected)
-
+    console.log('Finished loading selected citations.')
     return corpusData
   }
 }
