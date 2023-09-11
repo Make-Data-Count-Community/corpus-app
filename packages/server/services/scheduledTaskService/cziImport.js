@@ -20,6 +20,7 @@ const cziImport = async () => {
     logger.info(`######### Start Retreving Data from API ######### `)
 
     async function myAsyncFunction() {
+        logger.info(`Calling myasync func`)
         await CorpusDataFactory.loadDataFromDB()
 
         const countAssertions = await ActivityLog.query()
@@ -29,9 +30,9 @@ const cziImport = async () => {
             builder.andWhere('done', '=', false)
         })
 
-        if (countAssertions[0].count !== '0') {
-        setImmediate(myAsyncFunction)
-        }
+        // if (countAssertions[0].count !== '0') {
+        //   setImmediate(myAsyncFunction)
+        // }
     }
 
     myAsyncFunction()

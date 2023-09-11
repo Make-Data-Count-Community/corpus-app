@@ -8,7 +8,6 @@ const {
 class CziToAssertion {
   // eslint-disable-next-line class-methods-use-this
   async transformToAssertion(assertionInstance, chunk, trx) {
-    console.log("CZI to Assertion")
     assertionInstance.id = assertionInstance.id || uuid()
     assertionInstance.objId = chunk.event.paper_doi || chunk.event.doi || 'none'
     assertionInstance.subjId = chunk.event.dataset || chunk.event.extracted_word || 'none'
@@ -26,7 +25,6 @@ class CziToAssertion {
       const mappedRepo = LABEL_REPOSITORY_MAPPING[repositoryAbbr]
       
       if(mappedRepo) {
-        console.log(`Found repo for ${repositoryAbbr} - ${mappedRepo}`)
         const exists = await Repository.query(trx).findOne({ title: mappedRepo })
         let repository = exists
   
