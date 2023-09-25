@@ -215,9 +215,6 @@ class CziFile {
       const doiPrefix = data.extracted_word.split('/')[0]
 
       if (!this.dataCitePrefixData.prefixSet.has(doiPrefix)) {
-        logger.info(
-          `Number excluded due to prefix: ${this.numberExcludedDueToNotBeingDataCitePrefix}`,
-        )
         // eslint-disable-next-line no-plusplus
         this.numberExcludedDueToNotBeingDataCitePrefix++
         return false
