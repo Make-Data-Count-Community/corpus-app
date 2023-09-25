@@ -116,9 +116,11 @@ class CorpusData {
       return 0
     }
 
-    await ActivityLog.query().patch({
-      proccessed: true,
-    })
+    await ActivityLog.query()
+      .patch({
+        proccessed: true,
+      })
+      .findById(activityLogRecord.id)
 
     const data = JSON.parse(res.data)
 
