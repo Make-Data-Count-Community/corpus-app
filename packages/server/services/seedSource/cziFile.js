@@ -57,8 +57,6 @@ class CziFile {
 
       JSONFileStream.pipe(
         es.mapSync(async data => {
-          logger.info(`Processing record:, ${data.paper_pmcid}`)
-
           if (this.shouldIncludeRecord(data)) {
             citationBulk.push(this.v2DataAssertion(data))
           } else {
