@@ -206,7 +206,6 @@ class CziFile {
       data.label &&
       (data.label.includes('B-DAT-nct') || data.label.includes('B-DAT-eudract'))
     ) {
-      logger.info(`Excluding record due to label:, ${data.label}`)
       return false
     }
 
