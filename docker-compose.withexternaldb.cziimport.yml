@@ -16,7 +16,7 @@ services:
     command:
       [
         'node_modules/.bin/nodemon',
-        'scripts',
+        'cziImport.js',
         '--watch',
         '--ext',
         'js,graphql',
