@@ -1,5 +1,6 @@
 -- public.facet_unique_counts source
 
+DROP MATERIALIZED VIEW public.facet_unique_counts;
 CREATE MATERIALIZED VIEW IF NOT EXISTS public.facet_unique_counts
 TABLESPACE pg_default
 AS WITH agg AS (

@@ -17,14 +17,19 @@ class SeedSource {
     try {
       const awsService = new AwsS3Service()
 
-      const fileStreams = await awsService.readS3Folder(
-        'seed-source-files', 
-        'czi/dataset_mentions_test/', //TODO change this folder Unzipped subfolder of CZI json files
+      const files = await awsService.readS3Folder(
+        'seed-source-files',
+        process.env.S3_CZI_FOLDER_PATH, // TODO change this folder Unzipped subfolder of CZI json files
       )
 
-      const czi = new CziFile(fileStreams, true) //TODO this boolean switches to parsing the new dataset format
+      files.forEach(file => {
+        // eslint-disable-next-line no-console
+        console.dir(file.fileKey) // TODO exclude files that have a key already in the activity log table
+      })
 
-      return await czi.readSource() //TODO testing first by reading a single file
+      const czi = new CziFile(files)
+
+      return await czi.readSource()
     } catch (e) {
       logger.error(e)
     }

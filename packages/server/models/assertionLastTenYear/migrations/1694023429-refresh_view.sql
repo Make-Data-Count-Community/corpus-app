@@ -1,1 +1,0 @@
-REFRESH MATERIALIZED VIEW public.last_10_years_assertions;

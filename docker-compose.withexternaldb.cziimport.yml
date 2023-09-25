@@ -1,27 +1,7 @@
 version: '3'
 
 services:
-  client:
-    build:
-      context: ./packages/client
-      dockerfile: ./Dockerfile-development
-    command: ['node_modules/.bin/coko-client-dev']
-    ports:
-      - ${CLIENT_PORT:-4000}:${CLIENT_PORT:-4000}
-    environment:
-      - NODE_ENV=development
-      - CLIENT_PORT=${CLIENT_PORT:-4000}
-      - CLIENT_FAST_REFRESH=1
-      - CLIENT_FAVICON_PATH=../static/favicon.ico
-      - CLIENT_PAGE_TITLE=${CLIENT_PAGE_TITLE:-"Basic App Template"}
-      - CLIENT_LANGUAGE=${CLIENT_LANGUAGE:-"en-US"}
-      - SERVER_URL=${SERVER_URL:-http://localhost:3000}
-    volumes:
-      - ./packages/client/app:/home/node/app/app
-      - ./packages/client/static:/home/node/app/static
-    tty: true
-
-  server:
+  importer:
     build:
       context: ./packages/server
       dockerfile: ./Dockerfile-development
@@ -36,20 +16,6 @@ services:
     command:
       [
         'node_modules/.bin/nodemon',
-        'startServer.js',
-        '--watch',
-        'api',
-        '--watch',
-        'config',
-        '--watch',
-        'controllers',
-        '--watch',
-        'models',
-        '--watch',
-        'rest',
-        '--watch',
-        'services',
-        '--watch',
         'scripts',
         '--watch',
         '--ext',
@@ -68,26 +34,13 @@ services:
       - SERVER_PORT=${SERVER_PORT:-3000}
       - HOSTNAME=${HOSTNAME}
       - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
-      - MAILER_SENDER=${MAILER_SENDER:-dev@example.com}
-      - MAILER_HOSTNAME=${MAILER_HOSTNAME}
-      - MAILER_PORT=${MAILER_PORT}
-      - MAILER_USER=${MAILER_USER}
-      - MAILER_PASSWORD=${MAILER_PASSWORD}
       - PASSWORD_RESET_PATH=${PASSWORD_RESET_PATH:-password-reset}
       - S3_PROTOCOL=http
-      - START_YEAR=${START_YEAR}
-      - END_YEAR=${END_YEAR}
-      - READ_METADATA=${READ_METADATA}
-      - ONLY_READ_DATACITE_EVENT=${ONLY_READ_DATACITE_EVENT}
-      - START_MIGRATE_DATA=${START_MIGRATE_DATA}
-      - START_MIGRATE_WEEKLY=${START_MIGRATE_WEEKLY}
       - S3_HOST=filehosting
       - S3_PORT=${S3_PORT:-9000}
       - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-nonRootUser}
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-nonRootPassword}
       - S3_BUCKET=${S3_BUCKET:-uploads}
-      - START_CURSOR=${START_CURSOR}
-      - END_CURSOR=${END_CURSOR}
       - S3_CZI_FOLDER_PATH=${S3_CZI_FOLDER_PATH}
     volumes:
       - ./packages/server/api:/home/node/app/api

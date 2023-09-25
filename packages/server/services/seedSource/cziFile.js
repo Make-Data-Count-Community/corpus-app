@@ -1,45 +1,45 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-await-in-loop */
 const { logger, db, uuid } = require('@coko/server')
-const fs = require('fs')
 const JSONStream = require('JSONStream')
 const es = require('event-stream')
 const { model: Source } = require('../../models/source')
 const { model: ActivityLog } = require('../../models/activityLog')
-const DataCitePrefixData = require('../seedSource/dataCitePrefixData')
+const DataCitePrefixData = require('./dataCitePrefixData')
 
-const files = require('../../storage/czi')
+// how many entries are saved per activity log record
+const ACTIVITY_LOG_DATA_SIZE = 500
 
 class CziFile {
-  constructor(fileStreams = null, v2FileFormat = false) {
+  /*
+   * @param {Object[]} files - File keys and streams.
+   * @param {string} files[].fileKey - The s3 path/name of the file
+   * @param {string} files[].fileStream - The readstream of the file
+   */
+  constructor(files) {
     this.citations = []
-    this.v2FileFormat = v2FileFormat //flag to change the import logic to match the new dataset file format
 
-    this.fileNames =
-      fileStreams ||
-      files.map(fileName =>
-        // eslint-disable-next-line node/no-path-concat
-        fs.createReadStream(`${__dirname}/../../storage/czi/${fileName}`),
-      )
+    this.files = files
 
     this.currentFileIndex = 0
     this.doiPattern = /^10\.\d{4,9}\/[-._;()/:A-Z0-9]+$/i
-    logger.info(`Found ${this.fileNames.length} files to process`)
+    logger.info(`Found ${this.files.length} files to process`)
 
-    //TODO datacite prefixes are used to filter CZI records
+    // TODO datacite prefixes are used to filter CZI records
     this.dataCitePrefixData = new DataCitePrefixData()
     this.dataCitePrefixData.buildPrefixSet()
 
-    this.numberOfDOI = 0;
-    this.numberOfNotDOI = 0;
-    this.numberExcludedDueToNotBeingDataCitePrefix = 0;
-    this.numberMissingDOIField = 0;
+    this.excludedRecords = 0
+    this.numberOfDOI = 0
+    this.numberOfNotDOI = 0
+    this.numberExcludedDueToNotBeingDataCitePrefix = 0
+    this.numberMissingDOIField = 0
   }
 
   readSource() {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject) => {
-      while (this.currentFileIndex < this.fileNames.length) {
+      while (this.currentFileIndex < this.files.length) {
         this.citations.concat(await this.streamNextFile())
       }
 
@@ -50,50 +50,60 @@ class CziFile {
   async streamNextFile() {
     const citationBulk = []
     return new Promise((resolve, reject) => {
-      const fileName = this.fileNames[this.currentFileIndex]
-      logger.info(`Streaming file:, ${fileName}`)
+      const { fileKey, fileStream } = this.files[this.currentFileIndex]
+      logger.info(`Streaming file:, ${fileKey}`)
 
-      const fileStream = this.fileNames[this.currentFileIndex].pipe(
-        JSONStream.parse('*'),
-      )
+      const JSONFileStream = fileStream.pipe(JSONStream.parse('*'))
 
-      fileStream.pipe(
+      JSONFileStream.pipe(
         es.mapSync(async data => {
-          logger.info(`Processing record:, ${data.paper_pmcid}`)    
-          if(this.v2FileFormat && this.shouldIncludeRecord(data)) {
+          logger.info(`Processing record:, ${data.paper_pmcid}`)
+
+          if (this.shouldIncludeRecord(data)) {
             citationBulk.push(this.v2DataAssertion(data))
+          } else {
+            this.excludedRecords += 1
           }
-          //  else {
-          //   citationBulk.push(this.v1DataAssertion(data))
-          // }    
         }),
       )
 
       fileStream.on('end', async () => {
-        logger.info(`Finished streaming file:, ${fileName}`)
-        logger.info(`Citation bulk size before filter query:, ${citationBulk.length}`)
+        logger.info(`Finished streaming file:, ${fileKey}`)
+        logger.info(`Citation bulk size:, ${citationBulk.length}`)
         logger.info(`Number of DOI:, ${this.numberOfDOI}`)
         logger.info(`Number of Not DOI:, ${this.numberOfNotDOI}`)
-        logger.info(`Number of excluded due to not being datacite prefix:, ${this.numberExcludedDueToNotBeingDataCitePrefix}`)
-        logger.info(`Number of missing DOI field:, ${this.numberMissingDOIField}`)
+        logger.info(
+          `Number of excluded due to not being datacite prefix:, ${this.numberExcludedDueToNotBeingDataCitePrefix}`,
+        )
+        logger.info(
+          `Total number of excluded records:, ${this.excludedRecords}`,
+        )
+        logger.info(
+          `Number of missing DOI field:, ${this.numberMissingDOIField}`,
+        )
         // eslint-disable-next-line no-plusplus
-        //const citations = await this.filterOutExistingCitations(citationBulk)
+        // const citations = await this.filterOutExistingCitations(citationBulk)
         const citations = citationBulk // citationBulk.slice(0, 10) //TODO fix filter query?
-        //logger.info(`Citation bulk size after filter query:, ${citations.length}`)
+        // logger.info(`Citation bulk size after filter query:, ${citations.length}`)
 
-        while(citations.length && citations.length > 0) {
-          logger.info("Inserting 1000 assertions at a time")
+        while (citations.length && citations.length > 0) {
+          logger.info(
+            `Inserting ${ACTIVITY_LOG_DATA_SIZE} assertions at a time from ${fileKey}`,
+          )
           await ActivityLog.query().insert({
             action: 'assertion_incoming_czi',
-            data: JSON.stringify(citations.splice(0, 1000)),
+            data: JSON.stringify(citations.splice(0, ACTIVITY_LOG_DATA_SIZE)),
             tableName: 'assertions',
+            countDoi: this.numberOfDOI,
+            countAccessionNumber: this.numberOfNotDOI,
+            fileKey,
           })
           logger.info(`${citations.length} citations left`)
         }
-        
-        // // eslint-disable-next-line no-plusplus
+
+        // eslint-disable-next-line no-plusplus
         this.currentFileIndex++
-        resolve(citations) 
+        resolve(citations)
       })
     })
   }
@@ -149,65 +159,73 @@ class CziFile {
         crossrefDoi: result.paper_doi,
         ...result,
       }
-    } else {
-      return {
-        id: uuid(),
-        accessionNumber: result.dataset,
-        crossrefDoi: result.paper_doi,
-        ...result,
-      }
+    }
+
+    return {
+      id: uuid(),
+      accessionNumber: result.dataset,
+      crossrefDoi: result.paper_doi,
+      ...result,
     }
   }
 
   v2DataAssertion(result) {
-    if (this.doiPattern.test(result.extracted_word)) { //TODO verify if this is the right field to test
-      logger.info("Is DOI")
-      this.numberOfDOI++;
+    if (this.doiPattern.test(result.extracted_word)) {
+      // TODO verify if this is the right field to test
+      // eslint-disable-next-line no-plusplus
+      this.numberOfDOI++
       return {
         id: uuid(),
         dataCiteDoi: result.extracted_word,
         crossrefDoi: result.doi,
         ...result,
       }
-    } else {
-      logger.info(`${result.extracted_word} Is not DOI`)
-      this.numberOfNotDOI++;
-      return {
-        id: uuid(),
-        accessionNumber: result.extracted_word,
-        crossrefDoi: result.doi,
-        ...result,
-      }
     }
 
+    // eslint-disable-next-line no-plusplus
+    this.numberOfNotDOI++
+    return {
+      id: uuid(),
+      accessionNumber: result.extracted_word,
+      crossrefDoi: result.doi,
+      ...result,
+    }
   }
 
   /**
    * CZI data provided is noisy and some records should be excluded based on discussions had
    * in this issue https://gitlab.coko.foundation/datacite/datacite/-/issues/25
    */
-  async shouldIncludeRecord(data) {
-    if(!data.doi) {
+  shouldIncludeRecord(data) {
+    if (!data.doi) {
       logger.info(`Record excluded missing DOI field:, ${data.paper_pmcid}`)
-      this.numberMissingDOIField++;
-      return false
-    
-    }
-    if(data.label && (data.label.includes('B-DAT-nct') || data.label.includes('B-DAT-eudract'))) {
-      logger.info(`Excluding record due to label:, ${data.extracted_word}`)
+      // eslint-disable-next-line no-plusplus
+      this.numberMissingDOIField++
       return false
     }
-    //if prefix is not in the list of datacite prefixes, then exclude
-    if(this.doiPattern.test(data.extracted_word)) {
-      logger.info(`Checking prefix:, ${data.extracted_word}`)
+
+    if (
+      data.label &&
+      (data.label.includes('B-DAT-nct') || data.label.includes('B-DAT-eudract'))
+    ) {
+      logger.info(`Excluding record due to label:, ${data.label}`)
+      return false
+    }
+
+    // if prefix derived from extracted_word is not in the list of datacite prefixes, then exclude
+    if (this.doiPattern.test(data.extracted_word)) {
       const doiPrefix = data.extracted_word.split('/')[0]
-      if(!this.dataCitePrefixData.prefixSet.has(doiPrefix)) {
+
+      if (!this.dataCitePrefixData.prefixSet.has(doiPrefix)) {
         logger.info(`Record excluded based on prefix:, ${doiPrefix}`)
-        this.numberExcludedDueToNotBeingDataCitePrefix++;
+        // eslint-disable-next-line no-plusplus
+        this.numberExcludedDueToNotBeingDataCitePrefix++
         return false
       }
+
+      logger.info(`Record does match to datacite prefix ${doiPrefix}`)
     }
-    
+
     return true
   }
 }

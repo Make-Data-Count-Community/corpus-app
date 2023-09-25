@@ -1,10 +1,13 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
-const { useTransaction } = require('@coko/server')
-const { model: Assertion } = require('../models/assertion')
+const { logger } = require('@coko/server')
+const eachLimit = require('async/eachLimit')
+const MetadataSource = require('./metadata/metadataSource')
 const AssertionFactory = require('./assertionFactory/assertionFactory')
 const ActivityLog = require('../models/activityLog/activityLog')
 const Source = require('../models/source/source')
+
+const NUMBER_OF_PARALLEL_IMPORT_STREAMS = 20
 
 class CorpusData {
   constructor(seedSource, metadataSource) {
@@ -13,28 +16,29 @@ class CorpusData {
     this.result = []
   }
 
-  async transformToAssertionAndSave() {
-    const assertions = []
-    // console.log(JSON.stringify(this.result))
+  async processActivityLogsInParallel() {
+    const unprocessedActivityLogs = await ActivityLog.query()
+      .select('id')
+      .where({ proccessed: false })
 
-    useTransaction(async trx => {
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < this.result.length; i++) {
-        const assertion = {}
-        const chunk = this.result[i]
+    // eslint-disable-next-line no-console
+    console.log(
+      `${unprocessedActivityLogs.length} unprocessed Activity Log entries`,
+    )
 
-        await this.seedSource.transformToAssertion(assertion, chunk, trx)
+    try {
+      await eachLimit(
+        unprocessedActivityLogs,
+        NUMBER_OF_PARALLEL_IMPORT_STREAMS,
+        this.asyncProcessActivityLog,
+      )
 
-        await Promise.all(
-          this.metadataSource.streamApis.map(api =>
-            api.transformToAssertion(assertion, chunk, trx),
-          ),
-        )
-        assertions.push(assertion)
-      }
-
-      await Assertion.query(trx).insert(assertions)
-    })
+      // eslint-disable-next-line no-console
+      console.log('Activity Log entries have been processed.')
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err)
+    }
   }
 
   /**
@@ -51,6 +55,7 @@ class CorpusData {
       .where({ proccessed: false })
 
     if (selected) {
+      // eslint-disable-next-line no-console
       console.log(`Selecting data from ${selected.start} to ${selected.end}...`)
       citationDataQuery.andWhere(builder => {
         builder.whereBetween('cursorId', [selected.start, selected.end])
@@ -81,6 +86,7 @@ class CorpusData {
             datacite: {},
             crossref: {},
           }
+
           this.metadataSource.startStreamCitations(assertions)
         }
       })
@@ -96,6 +102,57 @@ class CorpusData {
     }
   }
 
+  async asyncProcessActivityLog(activityLogRecord) {
+    const sources = await Source.query()
+    const metadataSource = await MetadataSource.createInstance()
+    // eslint-disable-next-line no-console
+    console.log(`Processing activity log ${activityLogRecord.id}...`)
+
+    const res = await ActivityLog.query().patchAndFetchById(
+      activityLogRecord.id,
+      {
+        proccessed: true,
+      },
+    )
+
+    const data = JSON.parse(res.data)
+
+    data.forEach(citation => {
+      const { id } = sources.find(
+        s => s.abbreviation === res.action.replace('assertion_incoming_', ''),
+      )
+
+      if (id) {
+        const assertions = {
+          activityId: activityLogRecord.id,
+          source: id,
+          event: citation,
+          datacite: {},
+          crossref: {},
+        }
+
+        metadataSource.startStreamCitations(assertions)
+      }
+    })
+
+    metadataSource.startStreamCitations(null)
+
+    try {
+      logger.info(
+        `Wait for activity log ${activityLogRecord.id} to be processed`,
+      )
+      const result = await metadataSource.getResult
+      logger.info(
+        `Saving ${result.length} assertions for activity log ${activityLogRecord.id}...`,
+      )
+      await AssertionFactory.saveDataToAssertionModel(result)
+      return result.length
+    } catch (e) {
+      logger.info(e)
+      throw e
+    }
+  }
+
   /**
    * At the moment is not used but can be used if you want to load all citation from memory
    *  everything from the memory
@@ -105,7 +162,7 @@ class CorpusData {
   async execute() {
     const citations = await this.seedSource.readSource()
 
-    citations.forEach((citation, index) => {
+    citations.forEach(citation => {
       const assertions = {
         event: citation,
         datacite: {},

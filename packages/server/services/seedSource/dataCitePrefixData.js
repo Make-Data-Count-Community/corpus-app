@@ -1,16 +1,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-await-in-loop */
-const { logger, db } = require('@coko/server')
-const fs = require('fs');
+const { logger } = require('@coko/server')
 const axios = require('../axiosService')
 const { model: DatacitePrefix } = require('../../models/datacitePrefix')
 
 class DataCitePrefixData {
   constructor() {
-    const options = [
-      'page[cursor]=1',
-      'page[size]=500',
-    ]
+    const options = ['page[cursor]=1', 'page[size]=500']
 
     this.url = `/prefixes?${options.join('&')}`
     this.prefixes = []
@@ -25,22 +21,24 @@ class DataCitePrefixData {
     let hasNext = true
 
     while (hasNext) {
-        const result = await getData.next(data)
-        if(result.value && result.value.data && result.value.data.length > 0) {
-            // eslint-disable-next-line no-plusplus
-            for (let i = 0; i < result.value.data.length; i++) {
-                const event = result.value.data[i]
-                this.prefixes.push({
-                    prefix: event.attributes['prefix']
-                })
-            }
+      const result = await getData.next(data)
+
+      if (result.value && result.value.data && result.value.data.length > 0) {
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < result.value.data.length; i++) {
+          const event = result.value.data[i]
+          this.prefixes.push({
+            prefix: event.attributes.prefix,
+          })
         }
+      }
+
       hasNext = !result.done
     }
 
-    await DatacitePrefix.query().insert(this.prefixes);
+    await DatacitePrefix.query().insert(this.prefixes)
 
-    console.log(`Wrote ${this.prefixes.length} prefixes to DB`)
+    logger.info(`Wrote ${this.prefixes.length} prefixes to DB`)
   }
 
   async *getNextData(url) {
@@ -56,15 +54,19 @@ class DataCitePrefixData {
   }
 
   /*
-  * Create a set of all prefixes for filtering purposes
-  */
+   * Create a set of all prefixes for filtering purposes
+   */
   async buildPrefixSet() {
-    const prefixes = await DatacitePrefix.query();
+    const prefixes = await DatacitePrefix.query()
+
+    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < prefixes.length; i++) {
       const prefix = prefixes[i]
       this.prefixSet.add(prefix.prefix)
     }
-  } 
+
+    logger.info(`Built prefix set with ${this.prefixSet.size} items`)
+  }
 }
 
 module.exports = DataCitePrefixData

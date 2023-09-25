@@ -1,0 +1,14 @@
+ALTER TABLE assertions_affiliations
+ALTER CONSTRAINT
+assertions_affiliations_assertion_id_fkey
+DEFERRABLE INITIALLY DEFERRED;
+
+ALTER TABLE assertions_funders
+ALTER CONSTRAINT
+assertions_funders_assertion_id_fkey
+DEFERRABLE INITIALLY DEFERRED;
+
+ALTER TABLE assertions_subjects
+ALTER CONSTRAINT
+assertions_subjects_assertion_id_fkey
+DEFERRABLE INITIALLY DEFERRED;

@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
 const { Transform } = require('stream')
+const { logger } = require('@coko/server')
 const { flatten, get, uniqBy } = require('lodash')
 
 const axios = require('../axiosService')
@@ -24,6 +25,21 @@ class Datacite extends Transform {
     const { data } = await axios.dataciteApiDoi(`${Datacite.URL}${dataCiteDoi}`)
 
     if (data && !data.errors) {
+      // Exclude records that are not of type "Dataset"
+      chunk.datacite.type = get(
+        data,
+        'data.attributes.types.resourceTypeGeneral',
+        null,
+      )
+
+      if (chunk.datacite.type && chunk.datacite.type !== 'Dataset') {
+        logger.info(`Excluding ${dataCiteDoi} because it is not a dataset`)
+        // set excluded flag to prevent this chunk from being saved on pipeline finish
+        chunk.excluded = true
+        callback(null, chunk)
+        return
+      }
+
       // Get Title
       chunk.datacite.title = get(
         data,
