@@ -108,12 +108,17 @@ class CorpusData {
     // eslint-disable-next-line no-console
     console.log(`Processing activity log ${activityLogRecord.id}...`)
 
-    const res = await ActivityLog.query().patchAndFetchById(
-      activityLogRecord.id,
-      {
-        proccessed: true,
-      },
-    )
+    const res = await ActivityLog.query().findById(activityLogRecord.id)
+
+    // this isn't perfect, but prevents instances that might be processing activity logs in parallel from duplicating
+    if (res.proccessed) {
+      logger.info(`Activity log ${activityLogRecord.id} already proccessed`)
+      return 0
+    }
+
+    await ActivityLog.query().patch({
+      proccessed: true,
+    })
 
     const data = JSON.parse(res.data)
 

@@ -218,8 +218,6 @@ class CziFile {
         this.numberExcludedDueToNotBeingDataCitePrefix++
         return false
       }
-
-      logger.info(`Record does match to datacite prefix ${doiPrefix}`)
     }
 
     return true

@@ -10,11 +10,11 @@ const Assertion = require('../../models/assertion/assertion')
  * Fetch all CZI records from S3 and save them to the DB
  */
 const cziImport = async () => {
-  logger.info(`######### Start Reading CZI files from S3 ######### `)
+  // logger.info(`######### Start Reading CZI files from S3 ######### `)
 
-  await seedSource.createInstanceReadS3Czi()
+  // await seedSource.createInstanceReadS3Czi()
 
-  logger.info(`######### CZI files read from S3  ######### `)
+  // logger.info(`######### CZI files read from S3  ######### `)
   logger.info(`######### Start Retreving Data from API ######### `)
 
   async function myAsyncFunction() {
