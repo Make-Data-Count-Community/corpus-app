@@ -17,7 +17,7 @@ COPY . .
 ARG server_url
 
 ENV NODE_ENV='production'
-ENV CLIENT_PAGE_TITLE='App Template page title'
+ENV CLIENT_PAGE_TITLE='Data Citation Corpus'
 ENV CLIENT_FAVICON_PATH='../static/favicon.ico'
 ENV CLIENT_LANGUAGE='en-US'
 

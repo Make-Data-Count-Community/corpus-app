@@ -4,70 +4,30 @@ services:
   client:
     build:
       context: ./packages/client
-      dockerfile: ./Dockerfile-development
-    command: ['node_modules/.bin/coko-client-dev']
+      dockerfile: ./Dockerfile-production
+      args:
+        - server_url=${SERVER_URL:-http://localhost:3000}
+    command: ['npx', 'serve', '-p', '4000', '--single', './_build']
     ports:
-      - ${CLIENT_PORT:-4000}:${CLIENT_PORT:-4000}
-    environment:
-      - NODE_ENV=development
-      - CLIENT_PORT=${CLIENT_PORT:-4000}
-      - CLIENT_FAST_REFRESH=1
-      - CLIENT_FAVICON_PATH=../static/favicon.ico
-      - CLIENT_PAGE_TITLE=${CLIENT_PAGE_TITLE:-"Basic App Template"}
-      - CLIENT_LANGUAGE=${CLIENT_LANGUAGE:-"en-US"}
-      - SERVER_URL=${SERVER_URL:-http://localhost:3000}
-    volumes:
-      - ./packages/client/app:/home/node/app/app
-      - ./packages/client/static:/home/node/app/static
-    tty: true
+      - ${CLIENT_PORT:-4000}:4000
 
   server:
     build:
       context: ./packages/server
-      dockerfile: ./Dockerfile-development
-    depends_on:
-      - db
-    entrypoint:
-      [
-        'node_modules/.bin/wait-for-it',
-        'db:5432',
-        '--',
-        'sh',
-        'scripts/setupDevServer.sh',
-      ]
-    command:
-      [
-        'node_modules/.bin/nodemon',
-        'startServer.js',
-        '--watch',
-        'api',
-        '--watch',
-        'config',
-        '--watch',
-        'controllers',
-        '--watch',
-        'models',
-        '--watch',
-        'rest',
-        '--watch',
-        'services',
-        '--watch',
-        'scripts',
-        '--watch',
-        '--ext',
-        'js,graphql',
-      ]
+      dockerfile: ./Dockerfile-production
+    entrypoint: ['sh', 'scripts/setupDevServer.sh']
+    command: ['node', 'startServer.js']
     ports:
-      - ${SERVER_PORT:-3000}:${SERVER_PORT:-3000}
+      - 3000:3000
     environment:
-      - NODE_ENV=development
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - POSTGRES_DB=${POSTGRES_DB:-dev_db}
       - POSTGRES_USER=${POSTGRES_USER:-dev_user}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dev_user_password}
       - PUBSWEET_SECRET=${PUBSWEET_SECRET:-superSecretThing}
       - SERVER_PORT=${SERVER_PORT:-3000}
+      - HOSTNAME=${HOSTNAME}
       - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
       - MAILER_SENDER=${MAILER_SENDER:-dev@example.com}
       - MAILER_HOSTNAME=${MAILER_HOSTNAME}
@@ -87,6 +47,9 @@ services:
       - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-nonRootUser}
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-nonRootPassword}
       - S3_BUCKET=${S3_BUCKET:-uploads}
+      - START_CURSOR=${START_CURSOR}
+      - END_CURSOR=${END_CURSOR}
+      - S3_CZI_FOLDER_PATH=${S3_CZI_FOLDER_PATH}
     volumes:
       - ./packages/server/api:/home/node/app/api
       - ./packages/server/config:/home/node/app/config
@@ -95,14 +58,3 @@ services:
       - ./packages/server/rest:/home/node/app/rest
       - ./packages/server/scripts:/home/node/app/scripts
       - ./packages/server/services:/home/node/app/services
-
-  db:
-    image: postgres:15
-    ports:
-      - ${POSTGRES_PORT:-5432}:5432
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB:-dev_db}
-      - POSTGRES_USER=${POSTGRES_USER:-dev_user}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dev_user_password}
-    volumes:
-      - ./scripts/init-pgboss.sql:/docker-entrypoint-initdb.d/init-pgboss.sql
