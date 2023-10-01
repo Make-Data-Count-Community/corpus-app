@@ -1,5 +1,5 @@
 /*
- * Changes to this file require rebuilding the image using 'docker-compose -f docker-compose.withexternaldb.yml build'
+ * Changes to this file require rebuilding the image using 'docker-compose -f <composefile> build'
  */
 
 /* eslint-disable no-console */

@@ -41,67 +41,9 @@ class CorpusData {
     }
   }
 
-  /**
-   * Load citations that have been saved to the db
-   * @param {*} selected object with start and end pointers of the citations you want to load
-   *
+  /*
+   * The activity log cotains data dumps from various sources, and is then processed to insert into assertions table
    */
-  async loadCitationsFromDB(selected = null) {
-    // eslint-disable-next-line no-console
-    const sources = await Source.query()
-
-    const citationDataQuery = ActivityLog.query()
-      .select('id')
-      .where({ proccessed: false })
-
-    if (selected) {
-      // eslint-disable-next-line no-console
-      console.log(`Selecting data from ${selected.start} to ${selected.end}...`)
-      citationDataQuery.andWhere(builder => {
-        builder.whereBetween('cursorId', [selected.start, selected.end])
-      })
-    }
-
-    const citationData = await citationDataQuery
-
-    const item = citationData[Math.floor(Math.random() * citationData.length)]
-
-    if (item) {
-      const res = await ActivityLog.query().patchAndFetchById(item.id, {
-        proccessed: true,
-      })
-
-      const data = JSON.parse(res.data)
-      // eslint-disable-next-line no-console
-      data.forEach(citation => {
-        const { id } = sources.find(
-          s => s.abbreviation === res.action.replace('assertion_incoming_', ''),
-        )
-
-        if (id) {
-          const assertions = {
-            activityId: item.id,
-            source: id,
-            event: citation,
-            datacite: {},
-            crossref: {},
-          }
-
-          this.metadataSource.startStreamCitations(assertions)
-        }
-      })
-
-      this.metadataSource.startStreamCitations(null)
-
-      try {
-        const result = await this.metadataSource.getResult
-        await AssertionFactory.saveDataToAssertionModel(result)
-      } catch (e) {
-        throw new Error(e)
-      }
-    }
-  }
-
   async asyncProcessActivityLog(activityLogRecord) {
     const sources = await Source.query()
     const metadataSource = await MetadataSource.createInstance()

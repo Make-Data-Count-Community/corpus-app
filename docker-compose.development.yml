@@ -4,22 +4,61 @@ services:
   client:
     build:
       context: ./packages/client
-      dockerfile: ./Dockerfile-production
-      args:
-        - server_url=${SERVER_URL:-http://localhost:3000}
-    command: ['npx', 'serve', '-p', '4000', '--single', './_build']
+      dockerfile: ./Dockerfile-development
+    command: ['node_modules/.bin/coko-client-dev']
     ports:
-      - ${CLIENT_PORT:-4000}:4000
+      - ${CLIENT_PORT:-4000}:${CLIENT_PORT:-4000}
+    environment:
+      - NODE_ENV=development
+      - CLIENT_PORT=${CLIENT_PORT:-4000}
+      - CLIENT_FAST_REFRESH=1
+      - CLIENT_FAVICON_PATH=../static/favicon.ico
+      - CLIENT_PAGE_TITLE=${CLIENT_PAGE_TITLE:-"Basic App Template"}
+      - CLIENT_LANGUAGE=${CLIENT_LANGUAGE:-"en-US"}
+      - SERVER_URL=${SERVER_URL:-http://localhost:3000}
+    volumes:
+      - ./packages/client/app:/home/node/app/app
+      - ./packages/client/static:/home/node/app/static
+    tty: true
 
   server:
     build:
       context: ./packages/server
-      dockerfile: ./Dockerfile-production
-    entrypoint: ['sh', 'scripts/setupDevServer.sh']
-    command: ['node', 'startServer.js']
+      dockerfile: ./Dockerfile-development
+    entrypoint:
+      [
+        'node_modules/.bin/wait-for-it',
+        'datacite-fulldataset.cpcwgoa3uzw1.eu-west-1.rds.amazonaws.com:5432',
+        '--',
+        'sh',
+        'scripts/setupDevServer.sh',
+      ]
+    command:
+      [
+        'node_modules/.bin/nodemon',
+        'startServer.js',
+        '--watch',
+        'api',
+        '--watch',
+        'config',
+        '--watch',
+        'controllers',
+        '--watch',
+        'models',
+        '--watch',
+        'rest',
+        '--watch',
+        'services',
+        '--watch',
+        'scripts',
+        '--watch',
+        '--ext',
+        'js,graphql',
+      ]
     ports:
       - 3000:3000
     environment:
+      - NODE_ENV=development
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - POSTGRES_DB=${POSTGRES_DB:-dev_db}

@@ -6,7 +6,7 @@ class AwsS3Service {
     AWS.config.update({
       accessKeyId: '***REMOVED***', // TODO these creds should not be hardcoded
       secretAccessKey: '***REMOVED***',
-      region: 'eu-west-1', // Replace with your desired region
+      region: 'eu-west-1',
     })
 
     // Create an instance of the S3 service

@@ -1,20 +1,38 @@
 /* eslint-disable no-await-in-loop */
 const { db, logger } = require('@coko/server')
-const seedSource = require('../seedSource/seedSource')
 const CorpusDataFactory = require('../corpusDataFactory')
 const Source = require('../../models/source/source')
 const Assertion = require('../../models/assertion/assertion')
 
 /**
- * Fetch all CZI records from S3 and save them to the DB
- * Files will be read from the path specified in S3_CZI_FOLDER_PATH env var
+ * Fetch datacite records from the API
  */
-const cziImport = async () => {
-  logger.info(`######### Start Reading CZI files from S3 ######### `)
+const dataciteImport = async () => {
+  const startDate = new Date(process.env.START_YEAR, 0, 1)
+  logger.info(`######### Start Date : ${startDate} ######### `)
 
-  await seedSource.createInstanceReadS3Czi()
+  const endDate = new Date(new Date().getFullYear(), 11, 31)
 
-  logger.info(`######### CZI files read from S3  ######### `)
+  let corpusdata = null
+
+  // eslint-disable-next-line no-unmodified-loop-condition
+  for (let d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1)) {
+    const year = d.getFullYear()
+    const month = (d.getMonth() + 1).toString().padStart(2, '0')
+
+    logger.info(`######### ${year} #### ${month} ######### `)
+
+    // eslint-disable-next-line no-await-in-loop
+    corpusdata = await CorpusDataFactory.dataciteCrossrefPerDate(year, month)
+
+    // eslint-disable-next-line no-await-in-loop
+    await corpusdata.seedSource.readSource()
+  }
+
+  logger.info(`######### Start Reading source : 'crossref' ######### `)
+  corpusdata = await CorpusDataFactory.dataciteSourceCrossref()
+  await corpusdata.seedSource.readSource()
+
   logger.info(`######### Start Retreving Data from API ######### `)
 
   await CorpusDataFactory.loadDataInParallelFromDB()
@@ -46,4 +64,4 @@ const cziImport = async () => {
   logger.info(`######### Source counts refreshed ######### `)
 }
 
-module.exports = cziImport
+module.exports = dataciteImport

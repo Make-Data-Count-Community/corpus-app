@@ -1,7 +1,5 @@
 /* eslint-disable no-await-in-loop */
 const { cron, db, logger } = require('@coko/server')
-const seedSource = require('../seedSource/seedSource')
-const { model: ActivityLog } = require('../../models/activityLog')
 const CorpusDataFactory = require('../corpusDataFactory')
 const Source = require('../../models/source/source')
 const Assertion = require('../../models/assertion/assertion')
@@ -38,27 +36,13 @@ class ScheduledTaskService {
         corpusdata = await CorpusDataFactory.dataciteSourceCrossref()
         await corpusdata.seedSource.readSource()
 
-        logger.info(`######### Start Reading CZI files ######### `)
-        await seedSource.createInstanceReadS3Czi()
-
         logger.info(`######### Start Retreving Data from API ######### `)
 
         async function myAsyncFunction() {
-          await CorpusDataFactory.loadDataFromDB()
-
-          const countAssertions = await ActivityLog.query()
-            .count({ count: '*' })
-            .andWhere(builder => {
-              builder.where('proccessed', '=', false)
-              builder.andWhere('done', '=', false)
-            })
-
-          if (countAssertions[0].count !== '0') {
-            setImmediate(myAsyncFunction)
-          }
+          await CorpusDataFactory.loadDataInParallelFromDB()
         }
 
-        myAsyncFunction()
+        await myAsyncFunction()
 
         await db.raw('REFRESH MATERIALIZED VIEW last_10_years_assertions')
         await db.raw('REFRESH MATERIALIZED VIEW count_growth_per_day')

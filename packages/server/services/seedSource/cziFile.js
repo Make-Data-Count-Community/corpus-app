@@ -58,7 +58,7 @@ class CziFile {
       JSONFileStream.pipe(
         es.mapSync(async data => {
           if (this.shouldIncludeRecord(data)) {
-            citationBulk.push(this.v2DataAssertion(data))
+            citationBulk.push(this.buildActivityLogRecord(data))
           } else {
             this.excludedRecords += 1
           }
@@ -80,9 +80,7 @@ class CziFile {
           `Number of missing DOI field:, ${this.numberMissingDOIField}`,
         )
         // eslint-disable-next-line no-plusplus
-        // const citations = await this.filterOutExistingCitations(citationBulk)
-        const citations = citationBulk // citationBulk.slice(0, 10) //TODO fix filter query?
-        // logger.info(`Citation bulk size after filter query:, ${citations.length}`)
+        const citations = citationBulk
 
         while (citations.length && citations.length > 0) {
           logger.info(
@@ -106,68 +104,7 @@ class CziFile {
     })
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  async filterOutExistingCitations(data) {
-    let result = []
-    await db.transaction(async trx => {
-      const { id } = await Source.query(trx).findOne({
-        abbreviation: 'czi',
-      })
-
-      await db
-        .raw(
-          `CREATE TEMPORARY TABLE temp_assertions (
-          id uuid,
-          source_id uuid,
-          obj_id text not null,
-          subj_id text not null
-          ) ON COMMIT DROP;
-        `,
-        )
-        .transacting(trx)
-
-      await db('temp_assertions')
-        .insert(
-          data.map(d => ({
-            id: d.id,
-            source_id: id,
-            obj_id: d.paper_doi || d.doi,
-            subj_id: d.dataset || d.extracted_word,
-          })),
-        )
-        .transacting(trx)
-
-      const notProcessed = await db
-        .raw(
-          'select b.id from temp_assertions b left join assertions a on b.obj_id = a.obj_id and b.subj_id = a.subj_id where a.id is null',
-        )
-        .transacting(trx)
-
-      result = result.concat(notProcessed.rows.map(np => np.id))
-    })
-
-    return data.filter(d => result.includes(d.id))
-  }
-
-  async v1DataAssertion(result) {
-    if (this.doiPattern.test(result.dataset)) {
-      return {
-        id: uuid(),
-        dataCiteDoi: result.dataset,
-        crossrefDoi: result.paper_doi,
-        ...result,
-      }
-    }
-
-    return {
-      id: uuid(),
-      accessionNumber: result.dataset,
-      crossrefDoi: result.paper_doi,
-      ...result,
-    }
-  }
-
-  v2DataAssertion(result) {
+  buildActivityLogRecord(result) {
     if (this.doiPattern.test(result.extracted_word)) {
       // TODO verify if this is the right field to test
       // eslint-disable-next-line no-plusplus
@@ -221,6 +158,50 @@ class CziFile {
     }
 
     return true
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  // this is not used anymore since the dataset got too large to run this reasonably
+  async filterOutExistingCitations(data) {
+    let result = []
+    await db.transaction(async trx => {
+      const { id } = await Source.query(trx).findOne({
+        abbreviation: 'czi',
+      })
+
+      await db
+        .raw(
+          `CREATE TEMPORARY TABLE temp_assertions (
+          id uuid,
+          source_id uuid,
+          obj_id text not null,
+          subj_id text not null
+          ) ON COMMIT DROP;
+        `,
+        )
+        .transacting(trx)
+
+      await db('temp_assertions')
+        .insert(
+          data.map(d => ({
+            id: d.id,
+            source_id: id,
+            obj_id: d.paper_doi || d.doi,
+            subj_id: d.dataset || d.extracted_word,
+          })),
+        )
+        .transacting(trx)
+
+      const notProcessed = await db
+        .raw(
+          'select b.id from temp_assertions b left join assertions a on b.obj_id = a.obj_id and b.subj_id = a.subj_id where a.id is null',
+        )
+        .transacting(trx)
+
+      result = result.concat(notProcessed.rows.map(np => np.id))
+    })
+
+    return data.filter(d => result.includes(d.id))
   }
 }
 
