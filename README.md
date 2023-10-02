@@ -131,6 +131,11 @@ REFRESH MATERIALIZED VIEW facet_unique_counts;
 
 The import code is already configured to run this at the end of processing all activity logs. Additonally, the `updateSourceDoiCount` function code needs to be run to update the aggregate counts for assertions in the `sources` table.
 
+## Client
+
+The client is built using React, with Apollo used to fetch data through graphQL queries.
+The data visualizations are created using React Vega (https://www.npmjs.com/package/react-vega) which creates react components based off of vega specifications - see more here https://vega.github.io/vega/
+
 ## Authors and acknowledgment
 
 Ping Grant van Helsdingen at gvanhels@gmail.com for any other questions.
