@@ -1,0 +1,9 @@
+type Funder {
+  id: ID
+  title: String
+  externalId: String
+}
+
+extend type Query {
+  getFunders(input: SearchModelInput): [Funder]
+}

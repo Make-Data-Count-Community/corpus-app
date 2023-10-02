@@ -1,2 +1,3 @@
 export * from './dashboard'
-export { VisuallyHiddenElement, Header } from './common'
+export * from './common'
+export * from './visualisation'
