@@ -136,6 +136,35 @@ The import code is already configured to run this at the end of processing all a
 The client is built using React, with Apollo used to fetch data through graphQL queries.
 The data visualizations are created using React Vega (https://www.npmjs.com/package/react-vega) which creates react components based off of vega specifications - see more here https://vega.github.io/vega/
 
+## Further work
+
+There are a couple optimizations that could be done to improve the data import process and overall functionality.
+There are issues in gitlab for those here - https://gitlab.coko.foundation/datacite/datacite/-/issues
+
+## Troubleshooting
+
+### Invalid host header error when loading dashboard
+
+This might happen if you rebuild the development docker container and launch the site and try to load it at port 80, as specified in the `CLIENT_PORT` env var. This is because the coko dev server by default serves the client at port 3000. You can hack it to allow port 80 in development by doing the following:
+
+- ssh into the running client docker container using
+
+```
+docker exec -it <docker container id> bash
+```
+
+- Then navigate to `/home/node/app/node_modules/@coko/client/webpack/webpack.config.js`
+- Edit that file and add the following to the `devServer` section:
+
+```
+devServer: {
+    //whatever else is here
+    allowedHosts: 'all',
+  },
+```
+
+This should allow traffic through port 80 until the container is rebuilt.
+
 ## Authors and acknowledgment
 
 Ping Grant van Helsdingen at gvanhels@gmail.com for any other questions.
