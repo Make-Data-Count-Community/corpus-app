@@ -21,10 +21,16 @@ class MetadataSource {
     return new Promise((resolve, reject) => {
       const writable = new Writable({
         objectMode: true,
-        write: (chunks, encoding, callback) => {
+        write: (chunk, encoding, callback) => {
           // Push the transformed chunks into the output array
-          this.result.push(chunks)
-          callback()
+          // some chunks may be excluded from the result array
+          // eslint-disable-next-line no-console
+          if (!chunk.excluded) {
+            this.result.push(chunk)
+            callback()
+          } else {
+            callback()
+          }
         },
       })
 
@@ -42,6 +48,8 @@ class MetadataSource {
 
       // If there is an error in the pipeline, reject the Promise
       streamPipeline.on('error', err => {
+        // eslint-disable-next-line no-console
+        console.log(`Error ${err}`)
         reject(err)
       })
     })

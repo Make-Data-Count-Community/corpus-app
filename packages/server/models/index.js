@@ -15,6 +15,7 @@ const Subject = require('./subject')
 const Journal = require('./journal')
 const Publisher = require('./publisher')
 const Sources = require('./source')
+const DatacitePrefix = require('./datacitePrefix')
 
 module.exports = {
   ActivityLog,
@@ -34,4 +35,5 @@ module.exports = {
   Journal,
   Publisher,
   Sources,
+  DatacitePrefix
 }

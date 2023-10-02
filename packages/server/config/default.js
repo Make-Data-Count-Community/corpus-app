@@ -61,8 +61,8 @@ module.exports = {
     uploads: 'uploads',
     pool: {
       min: 0,
-      max: 10,
-      idleTimeoutMillis: 1000,
+      max: 40,
+      idleTimeoutMillis: 1000 * 10,
     },
     useFileStorage: false,
   },

@@ -1,10 +1,13 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-param-reassign */
-const { useTransaction } = require('@coko/server')
-const { model: Assertion } = require('../models/assertion')
+const { logger } = require('@coko/server')
+const eachLimit = require('async/eachLimit')
+const MetadataSource = require('./metadata/metadataSource')
 const AssertionFactory = require('./assertionFactory/assertionFactory')
 const ActivityLog = require('../models/activityLog/activityLog')
 const Source = require('../models/source/source')
+
+const NUMBER_OF_PARALLEL_IMPORT_STREAMS = 20
 
 class CorpusData {
   constructor(seedSource, metadataSource) {
@@ -13,86 +16,89 @@ class CorpusData {
     this.result = []
   }
 
-  async transformToAssertionAndSave() {
-    const assertions = []
-    // console.log(JSON.stringify(this.result))
-
-    useTransaction(async trx => {
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < this.result.length; i++) {
-        const assertion = {}
-        const chunk = this.result[i]
-
-        await this.seedSource.transformToAssertion(assertion, chunk, trx)
-
-        await Promise.all(
-          this.metadataSource.streamApis.map(api =>
-            api.transformToAssertion(assertion, chunk, trx),
-          ),
-        )
-        assertions.push(assertion)
-      }
-
-      await Assertion.query(trx).insert(assertions)
-    })
-  }
-
-  /**
-   * Load citations that have been saved to the db
-   * @param {*} selected object with start and end pointers of the citations you want to load
-   *
-   */
-  async loadCitationsFromDB(selected = null) {
-    // eslint-disable-next-line no-console
-    const sources = await Source.query()
-
-    const citationDataQuery = ActivityLog.query()
+  async processActivityLogsInParallel() {
+    const unprocessedActivityLogs = await ActivityLog.query()
       .select('id')
       .where({ proccessed: false })
 
-    if (selected) {
-      citationDataQuery.andWhere(builder => {
-        builder.whereBetween('cursorId', [selected.start, selected.end])
-      })
+    // eslint-disable-next-line no-console
+    console.log(
+      `${unprocessedActivityLogs.length} unprocessed Activity Log entries`,
+    )
+
+    try {
+      await eachLimit(
+        unprocessedActivityLogs,
+        NUMBER_OF_PARALLEL_IMPORT_STREAMS,
+        this.asyncProcessActivityLog,
+      )
+
+      // eslint-disable-next-line no-console
+      console.log('Activity Log entries have been processed.')
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err)
+    }
+  }
+
+  /*
+   * The activity log cotains data dumps from various sources, and is then processed to insert into assertions table
+   */
+  async asyncProcessActivityLog(activityLogRecord) {
+    const sources = await Source.query()
+    const metadataSource = await MetadataSource.createInstance()
+    // eslint-disable-next-line no-console
+    console.log(`Processing activity log ${activityLogRecord.id}...`)
+
+    const res = await ActivityLog.query().findById(activityLogRecord.id)
+
+    // this isn't perfect, but prevents instances that might be processing activity logs in parallel from duplicating
+    if (res.proccessed) {
+      logger.info(`Activity log ${activityLogRecord.id} already proccessed`)
+      return 0
     }
 
-    const citationData = await citationDataQuery
-
-    const item = citationData[Math.floor(Math.random() * citationData.length)]
-
-    if (item) {
-      const res = await ActivityLog.query().patchAndFetchById(item.id, {
+    await ActivityLog.query()
+      .patch({
         proccessed: true,
       })
+      .findById(activityLogRecord.id)
 
-      const data = JSON.parse(res.data)
-      // eslint-disable-next-line no-console
-      data.forEach(citation => {
-        const { id } = sources.find(
-          s => s.abbreviation === res.action.replace('assertion_incoming_', ''),
-        )
+    const data = JSON.parse(res.data)
 
-        if (id) {
-          const assertions = {
-            activityId: item.id,
-            source: id,
-            event: citation,
-            datacite: {},
-            crossref: {},
-          }
+    data.forEach(citation => {
+      const { id } = sources.find(
+        s => s.abbreviation === res.action.replace('assertion_incoming_', ''),
+      )
 
-          this.metadataSource.startStreamCitations(assertions)
+      if (id) {
+        const assertions = {
+          activityId: activityLogRecord.id,
+          source: id,
+          event: citation,
+          datacite: {},
+          crossref: {},
         }
-      })
 
-      this.metadataSource.startStreamCitations(null)
-
-      try {
-        const result = await this.metadataSource.getResult
-        await AssertionFactory.saveDataToAssertionModel(result)
-      } catch (e) {
-        throw new Error(e)
+        metadataSource.startStreamCitations(assertions)
       }
+    })
+
+    metadataSource.startStreamCitations(null)
+
+    try {
+      logger.info(
+        `Wait for activity log ${activityLogRecord.id} to be processed`,
+      )
+      const result = await metadataSource.getResult
+      logger.info(
+        `Saving ${result.length} assertions for activity log ${activityLogRecord.id}...`,
+      )
+      await AssertionFactory.saveDataToAssertionModel(result)
+      return result.length
+    } catch (e) {
+      logger.info(e)
+      throw e
     }
   }
 
@@ -105,7 +111,7 @@ class CorpusData {
   async execute() {
     const citations = await this.seedSource.readSource()
 
-    citations.forEach((citation, index) => {
+    citations.forEach(citation => {
       const assertions = {
         event: citation,
         datacite: {},

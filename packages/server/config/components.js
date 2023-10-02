@@ -24,4 +24,5 @@ module.exports = [
   './models/funder',
   './models/assertionFunder',
   './models/source',
+  './models/datacitePrefix',
 ]

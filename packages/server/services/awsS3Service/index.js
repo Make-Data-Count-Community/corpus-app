@@ -4,9 +4,9 @@ const { logger } = require('@coko/server')
 class AwsS3Service {
   constructor() {
     AWS.config.update({
-      accessKeyId: '***REMOVED***',
+      accessKeyId: '***REMOVED***', // TODO these creds should not be hardcoded
       secretAccessKey: '***REMOVED***',
-      region: 'eu-west-1', // Replace with your desired region
+      region: 'eu-west-1',
     })
 
     // Create an instance of the S3 service
@@ -54,6 +54,10 @@ class AwsS3Service {
     })
   }
 
+  /*
+   * Returns all file names in a folder in S3, as well as a readstream for each file
+   * @returns Promise<{ fileStream: readstream, fileKey: string }>
+   */
   async readS3Folder(bucket, folder) {
     if (!bucket || !folder) {
       throw new Error('You need to specify bucket and folder')
@@ -85,9 +89,12 @@ class AwsS3Service {
               }
 
               // Retrieve each file from the S3 bucket
-              this.fileStream.push(
-                this.s3.getObject(getObjectParams).createReadStream(),
-              )
+              this.fileStream.push({
+                fileStream: this.s3
+                  .getObject(getObjectParams)
+                  .createReadStream(),
+                fileKey,
+              })
             },
           )
         }

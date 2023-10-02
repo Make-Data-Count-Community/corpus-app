@@ -25,12 +25,10 @@ services:
     build:
       context: ./packages/server
       dockerfile: ./Dockerfile-development
-    depends_on:
-      - db
     entrypoint:
       [
         'node_modules/.bin/wait-for-it',
-        'db:5432',
+        'datacite-fulldataset.cpcwgoa3uzw1.eu-west-1.rds.amazonaws.com:5432',
         '--',
         'sh',
         'scripts/setupDevServer.sh',
@@ -58,16 +56,17 @@ services:
         'js,graphql',
       ]
     ports:
-      - ${SERVER_PORT:-3000}:${SERVER_PORT:-3000}
+      - 3000:3000
     environment:
       - NODE_ENV=development
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - POSTGRES_DB=${POSTGRES_DB:-dev_db}
       - POSTGRES_USER=${POSTGRES_USER:-dev_user}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dev_user_password}
       - PUBSWEET_SECRET=${PUBSWEET_SECRET:-superSecretThing}
       - SERVER_PORT=${SERVER_PORT:-3000}
+      - HOSTNAME=${HOSTNAME}
       - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
       - MAILER_SENDER=${MAILER_SENDER:-dev@example.com}
       - MAILER_HOSTNAME=${MAILER_HOSTNAME}
@@ -78,15 +77,12 @@ services:
       - S3_PROTOCOL=http
       - START_YEAR=${START_YEAR}
       - END_YEAR=${END_YEAR}
-      - READ_METADATA=${READ_METADATA}
-      - ONLY_READ_DATACITE_EVENT=${ONLY_READ_DATACITE_EVENT}
-      - START_MIGRATE_DATA=${START_MIGRATE_DATA}
-      - START_MIGRATE_WEEKLY=${START_MIGRATE_WEEKLY}
       - S3_HOST=filehosting
       - S3_PORT=${S3_PORT:-9000}
       - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-nonRootUser}
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-nonRootPassword}
       - S3_BUCKET=${S3_BUCKET:-uploads}
+      - S3_CZI_FOLDER_PATH=${S3_CZI_FOLDER_PATH}
     volumes:
       - ./packages/server/api:/home/node/app/api
       - ./packages/server/config:/home/node/app/config
@@ -95,14 +91,3 @@ services:
       - ./packages/server/rest:/home/node/app/rest
       - ./packages/server/scripts:/home/node/app/scripts
       - ./packages/server/services:/home/node/app/services
-
-  db:
-    image: postgres:15
-    ports:
-      - ${POSTGRES_PORT:-5432}:5432
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB:-dev_db}
-      - POSTGRES_USER=${POSTGRES_USER:-dev_user}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dev_user_password}
-    volumes:
-      - ./scripts/init-pgboss.sql:/docker-entrypoint-initdb.d/init-pgboss.sql

@@ -1,6 +1,6 @@
 const { chunk } = require('lodash')
 
-const { useTransaction } = require('@coko/server')
+const { useTransaction, logger } = require('@coko/server')
 const Source = require('../../models/source/source')
 const { model: Subject } = require('../../models/subject')
 const Assertion = require('../../models/assertion/assertion')
@@ -22,10 +22,10 @@ class AssertionFactory {
   }
 
   static async saveDataToAssertionModel(data) {
-    const subjects = await Subject.query()
-    const sources = await Source.query()
     const assertions = []
-    useTransaction(async trx => {
+    return useTransaction(async trx => {
+      const subjects = await Subject.query(trx)
+      const sources = await Source.query(trx)
       let activityId = null
 
       // eslint-disable-next-line no-plusplus
@@ -36,7 +36,6 @@ class AssertionFactory {
 
         const source = sources.find(s => s.id === chunks.source)
         const classes = AssertionFactory.SOURCE_MAP_CLASS[source.abbreviation]
-
         // eslint-disable-next-line no-await-in-loop
         await Promise.all(
           classes.map(Cls => {
@@ -51,11 +50,23 @@ class AssertionFactory {
 
       const assertionsArray = chunk(assertions, 5000)
 
+      logger.info(
+        `Inserting assertions from activity log  ${activityId} into DB`,
+      )
       await Promise.all(
         assertionsArray.map(assert => Assertion.query(trx).insert(assert)),
       )
 
-      await ActivityLog.query(trx).findById(activityId).patch({ done: true })
+      logger.info(`Updating activity log ${activityId} to done`)
+
+      const patch = await ActivityLog.query(trx)
+        .findById(activityId)
+        .patch({ done: true }) // TODO do we want to import entries that have proccessed=true but done=false
+
+      logger.info(
+        `All assertions from activity log ${activityId} inserted into DB`,
+      )
+      return patch
     })
   }
 }

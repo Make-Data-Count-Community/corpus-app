@@ -7,6 +7,7 @@ class CorpusDataFactory {
   static async dataciteSourceCrossref() {
     const seedSource = await SeedSource.createInstanceDatacite([
       'source-id=crossref',
+      'relation-type-id=references,cites,is-supplemented-by',
     ])
 
     const metadataSource = await MetadataSource.createInstance()
@@ -18,7 +19,7 @@ class CorpusDataFactory {
   static async dataciteCrossrefPerDate(year, month) {
     const seedSource = await SeedSource.createInstanceDatacite([
       'source-id=datacite-crossref',
-      `year-month=${year}-${month}`,
+      `relation-type-id=is-referenced-by,is-cited-by,is-supplement-to&year-month=${year}-${month}`,
     ])
 
     const metadataSource = await MetadataSource.createInstance()
@@ -36,14 +37,10 @@ class CorpusDataFactory {
     return corpusData
   }
 
-  static async loadDataFromDB() {
-    const metadataSource = await MetadataSource.createInstance()
+  static async loadDataInParallelFromDB() {
+    const corpusData = new CorpusData(null, null)
 
-    const corpusData = new CorpusData(null, metadataSource)
-
-    await corpusData.loadCitationsFromDB()
-
-    return corpusData
+    await corpusData.processActivityLogsInParallel()
   }
 }
 

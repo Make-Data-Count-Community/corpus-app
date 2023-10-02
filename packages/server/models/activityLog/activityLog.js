@@ -48,6 +48,15 @@ class ActivityLog extends BaseModel {
         cursorId: {
           type: ['Integer'],
         },
+        countDoi: {
+          type: ['Integer'],
+        },
+        countAccessionNumber: {
+          type: ['Integer'],
+        },
+        fileKey: {
+          type: 'string',
+        },
       },
       required: ['action'],
       type: 'object',
