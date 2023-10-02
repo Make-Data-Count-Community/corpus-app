@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  importer:
+    build:
+      context: ./packages/server
+      dockerfile: ./Dockerfile-development
+    entrypoint:
+      [
+        'node_modules/.bin/wait-for-it',
+        'grant-test.cpcwgoa3uzw1.eu-west-1.rds.amazonaws.com:5432',
+        '--',
+        'sh',
+        'scripts/setupDevServer.sh',
+      ]
+    command:
+      [
+        'node_modules/.bin/nodemon',
+        'dataciteImport.js',
+        '--watch',
+        '--ext',
+        'js,graphql',
+      ]
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=development
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_DB=${POSTGRES_DB:-dev_db}
+      - POSTGRES_USER=${POSTGRES_USER:-dev_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dev_user_password}
+      - PUBSWEET_SECRET=${PUBSWEET_SECRET:-superSecretThing}
+      - SERVER_PORT=${SERVER_PORT:-3000}
+      - START_YEAR=${START_YEAR}
+      - END_YEAR=${END_YEAR}
+      - HOSTNAME=${HOSTNAME}
+      - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
+      - PASSWORD_RESET_PATH=${PASSWORD_RESET_PATH:-password-reset}
+      - S3_PROTOCOL=http
+      - S3_HOST=filehosting
+      - S3_PORT=${S3_PORT:-9000}
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-nonRootUser}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-nonRootPassword}
+      - S3_BUCKET=${S3_BUCKET:-uploads}
+      - S3_CZI_FOLDER_PATH=${S3_CZI_FOLDER_PATH}
+    volumes:
+      - ./packages/server/api:/home/node/app/api
+      - ./packages/server/config:/home/node/app/config
+      - ./packages/server/controllers:/home/node/app/controllers
+      - ./packages/server/models:/home/node/app/models
+      - ./packages/server/rest:/home/node/app/rest
+      - ./packages/server/scripts:/home/node/app/scripts
+      - ./packages/server/services:/home/node/app/services

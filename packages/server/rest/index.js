@@ -1,5 +1,5 @@
+const dataDump = require('./data-dump')
+
 module.exports = {
-  server: () => app => {
-    // Add here your Rest Api calls
-  },
+  server: () => app => dataDump(app),
 }

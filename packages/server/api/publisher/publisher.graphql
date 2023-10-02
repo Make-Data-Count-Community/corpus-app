@@ -1,0 +1,9 @@
+type Publisher {
+  id: ID
+  title: String
+  externalId: String
+}
+
+extend type Query {
+  getPublishers(input: SearchModelInput): [Publisher]
+}

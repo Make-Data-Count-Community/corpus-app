@@ -2,7 +2,7 @@ FROM node:16.19.0
 
 RUN apt-get update \ 
     && apt-get upgrade -y \
-    && apt-get install -y ranger vim
+    && apt-get install -y ranger vim p7zip-full
 
 WORKDIR /home/node/app
 

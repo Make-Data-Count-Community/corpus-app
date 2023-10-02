@@ -1,0 +1,9 @@
+type Affilation {
+  id: ID
+  title: String
+  externalId: String
+}
+
+extend type Query {
+  getAffiliations(input: SearchModelInput): [Affilation]
+}

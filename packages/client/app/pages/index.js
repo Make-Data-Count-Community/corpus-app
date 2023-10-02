@@ -1,2 +1,7 @@
-// eslint-disable-next-line import/prefer-default-export
 export { default as Dashboard } from './Dashboard.page'
+export { default as CitationCountsOverTime } from './CitationCountsOverTime.page'
+export { default as CitationCountsBySubject } from './CitationCountsBySubject.page'
+export { default as CitationCountsByPublisher } from './CitationCountsByPublisher.page'
+export { default as CitationCountsBySource } from './CitationCountsBySource.page'
+export { default as UniqueCitationCounts } from './UniqueCitationCounts.page'
+export { default as CitationCorpusGrowth } from './CitationCorpusGrowth.page'

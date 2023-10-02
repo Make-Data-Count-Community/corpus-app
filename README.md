@@ -1,103 +1,170 @@
-# App Template
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.coko.foundation/project-templates/app-template.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.coko.foundation/project-templates/app-template/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
----
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
 ## Name
 
-Choose a self-explaining name for your project.
+Datacite Citation Corpus Dashboard
 
 ## Description
 
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+The dashboard visualizes assertion data sources from the datacite and crossref APIs, as well as CZI data dumps stored in S3.
 
-## Badges
+## Architecture
 
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+### EC2
 
-## Visuals
+The client and server run within a docker container on an EC2 instance `DataciteReadSeedSource-1`.
+An elastic IP is assosciated with the instance to provide a static IP address, mapped to `http://corpus.stage.datacite.org/` DNS
 
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+### RDS
 
-## Installation
+Data is stored in a postgres RDS database - `datacite`
 
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### S3
 
-## Usage
+S3 is used as a ingest source for CZI data. CZI JSON files must be stored in the `seed-source-files` bucket. The path to the folder read to ingest the CZI data is specified in the `S3_CZI_FOLDER_PATH` environment variable in the `.env` file.
 
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Data dumps trigged through the `api/data-dump/last-month|all` API will trigger zipped data dump upload to S3 in the `exported-data-files` bucket. Data dumps take around 10 minutes to be created, so be patient!
 
-## Support
+## Development
 
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Docker containers are used for development and production builds, as well as data import scripts. You must have the docker engine running.
+To run a local instance of the client and server, use the following command to build the local containers
 
-## Roadmap
+```
+docker-compose -f docker-compose.development.yml build
+docker-compose -f docker-compose.development.yml up
+```
 
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+The app should be available at `http://localhost/dashboard`
 
-## Contributing
+## Production Deployment
 
-State if you are open to contributions and what your requirements are for accepting them.
+For the production build, the client files are bundled into a static `_build` directory from which the client app is served, through the port specified in the `.env` variable `CLIENT_PORT`.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+In order to create a production build, you need to connect to the `DataciteReadSeedSource-1` as `ec2-user`, then cd into the `/datacite` directory. From there you can build the production docker image and run it using:
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+```
+docker-compose -f docker-compose.production.yml build
+docker-compose -f docker-compose.production.yml up
+```
+
+The app should now be available throught that ec2 instances DNS, or ideally through `http://corpus.stage.datacite.org/`
+
+## Data Ingestion
+
+### CZI
+
+The process of ingesting CZI data has two steps.
+First, from an ec2 instance or locally, specify the S3 path to the JSON files in S3 through the `S3_CZI_FOLDER_PATH`. Because the CZI dataset was so large, it was necessary to run imports in parallel on multiple instances. This is why the current folder scheme is named `czi/dataset_metions_batch_<x>/`. The JSON files are split into multiple subfolders, so that multiple instances could each be assigned a folder to read from.
+To run a CZI import process, use `docker-compose.cziimport.yml` by running
+
+```
+docker-compose -f docker-compose.cziimport.yml build
+docker-compose -f docker-compose.cziimport.yml up
+```
+
+The first stage of the import streams all the files found in the specified S3 folder and for each record there is some filtering logic applied, and then the data is stored in chunks of 500 records into the `activity_log` table in posgres.
+
+Once all the file data has been read, the data in the unprocessed activity_log records is assigned to 20 parallel threads. Each thread takes the records and for each record fetches additional metadata from the datacite and crossref APIs in order to build an assertion record, and then those are batch saved to the `assertions` table in the DB.
+
+Because each CZI record requires multiple API calls, the import process for the entire dataset (approx 15 million records) takes very long. This process can be sped up by running the import from multiple EC2 instances, each assigned their own S3 subfolder through the `S3_CZI_FOLDER_PATH`.
+
+- NOTE \* the import code is not idempotent, so if you run it twice for the same folder, the same records will be duplicated in the database.
+- NOTE \* the CZI JSON files provided were not sytactically correct JSON arrays, which broke the file streaming originallly. So make sure the JSON files are properly formatted.
+
+### Datacite API
+
+The ingestion process for datacite API data is similar - data will be pulled from the API and dumped into `activity_log`, and then subseqeuntly proccessed into assertion records.
+The datacite import can be run using
+
+```
+docker-compose -f docker-compose.dataciteimport.yml build
+docker-compose -f docker-compose.dataciteimport.yml up
+```
+
+The `START_YEAR` environment variable can be set to specify date filtering on the API.
+
+## Environment Variables
+
+Each instance running either the client/server or the importer containers requires some environment vars to be configured in the top level `.env` file, which is excluded from git.
+An example file looks like this:
+
+```
+START_YEAR=2023
+END_YEAR=2023
+POSTGRES_DB=datacite
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD='2RRk3BAbv0Y+#q$c'
+POSTGRES_HOST=datacite.cpcwgoa3uzw1.eu-west-1.rds.amazonaws.com
+CLIENT_PORT=80
+S3_CZI_FOLDER_PATH='czi/dataset_metions_batch_2/'
+```
+
+This is how you can configure connections to different databases, if you need to rollback, or specifiy different folders from which to import CZI data.
+
+## Useful DB scripts
+
+Some migrations were required to remove unneeded or incorrect data during development. They can be viewed in the `migrations` folder for each model. Migrations are run automatically when a container starts, and are ordered by the timestamp used in their name.
+
+Some noteworthy ones include:
+
+### Removing all CZI data
+
+In the case of new, more accurate CZI datasets being generated, it may be necessary to delete all CZI assertions from the database - which can be millions of records.
+The `packages/server/models/assertion/migrations/1693590910-deleteCZIData.sql` query could do this, but will take days to run due to the size of the database.
+The faster approach is to save the records to keep in a temp table, and then truncate the assertions table and re-insert the remaining records from the temple table. This requires first removing the foreign key constraints, and then re-creating them after.
+You can see an exampe of this done in the set of migrations:
+
+- packages/server/models/assertion/migrations/1693840157-deleteInvalidAssertions.sql
+- packages/server/models/assertionAffiliation/migrations/1694002643-deleteInvalidAssertionAffiliations.sql
+- packages/server/models/assertionFunder/migrations/1693840158-deleteInvalidAssertionFunders.sql
+- packages/server/models/assertionSubject/migrations/1693840159-deleteInvalidAssertionSubjects.sql
+- packages/server/models/assertion/migrations/1695146647-fixDeferredConstraints.sql _NOTE_ this is required after you break the foreign key constraints, otherwise future assertion imports will fail with foreign key validation errors
+
+### Refreshing aggregate data
+
+The assertion data is summarized in a set of materialized views that need to be updated when data is added or removed. That can be done by running
+
+```
+REFRESH MATERIALIZED VIEW last_10_years_assertions;
+REFRESH MATERIALIZED VIEW count_growth_per_day;
+REFRESH MATERIALIZED VIEW facet_unique_counts;
+```
+
+The import code is already configured to run this at the end of processing all activity logs. Additonally, the `updateSourceDoiCount` function code needs to be run to update the aggregate counts for assertions in the `sources` table.
+
+## Client
+
+The client is built using React, with Apollo used to fetch data through graphQL queries.
+The data visualizations are created using React Vega (https://www.npmjs.com/package/react-vega) which creates react components based off of vega specifications - see more here https://vega.github.io/vega/
+
+## Further work
+
+There are a couple optimizations that could be done to improve the data import process and overall functionality.
+There are issues in gitlab for those here - https://gitlab.coko.foundation/datacite/datacite/-/issues
+
+## Troubleshooting
+
+### Invalid host header error when loading dashboard
+
+This might happen if you rebuild the development docker container and launch the site and try to load it at port 80, as specified in the `CLIENT_PORT` env var. This is because the coko dev server by default serves the client at port 3000. You can hack it to allow port 80 in development by doing the following:
+
+- ssh into the running client docker container using
+
+```
+docker exec -it <docker container id> bash
+```
+
+- Then navigate to `/home/node/app/node_modules/@coko/client/webpack/webpack.config.js`
+- Edit that file and add the following to the `devServer` section:
+
+```
+devServer: {
+    //whatever else is here
+    allowedHosts: 'all',
+  },
+```
+
+This should allow traffic through port 80 until the container is rebuilt.
 
 ## Authors and acknowledgment
 
-Show your appreciation to those who have contributed to the project.
-
-## License
-
-For open source projects, say how it is licensed.
-
-## Project status
-
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Ping Grant van Helsdingen at gvanhels@gmail.com for any other questions.
