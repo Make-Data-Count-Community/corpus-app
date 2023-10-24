@@ -21,6 +21,44 @@ class AssertionFactory {
     czi: [DataciteToAssertion, CrossrefToAssertion, CziToAssertion],
   }
 
+  static async updateAssertionsWithNewCrossrefData(assertions) {
+    // assertions with additional crossref node passed in here to be updated instead of new ones created
+    const updatedAssertions = []
+    return useTransaction(async trx => {
+      const CrossRefToAssertion = new CrossrefToAssertion()
+
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < assertions.length; i++) {
+        const assertion = assertions[i]
+
+        // eslint-disable-next-line no-continue
+        if (!assertion.notFound) {
+          // eslint-disable-next-line no-await-in-loop
+          await CrossRefToAssertion.transformToAssertion(
+            assertion,
+            assertion,
+            trx,
+          )
+        }
+
+        assertion.retried = true
+        delete assertion.crossref
+        updatedAssertions.push(assertion)
+      }
+
+      logger.info(
+        `Updating ${updatedAssertions.length} assertions with repopulated crossref metadata`,
+      )
+      await Promise.all(
+        updatedAssertions.map(assert =>
+          Assertion.query(trx).patchAndFetchById(assert.id, assert),
+        ),
+      )
+    })
+
+    // use updateAndFetchById()
+  }
+
   static async saveDataToAssertionModel(data) {
     const assertions = []
     return useTransaction(async trx => {

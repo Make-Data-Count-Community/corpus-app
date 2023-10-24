@@ -7,7 +7,7 @@ const AssertionFactory = require('./assertionFactory/assertionFactory')
 const ActivityLog = require('../models/activityLog/activityLog')
 const Source = require('../models/source/source')
 
-const NUMBER_OF_PARALLEL_IMPORT_STREAMS = 20
+const NUMBER_OF_PARALLEL_IMPORT_STREAMS = 1
 
 class CorpusData {
   constructor(seedSource, metadataSource) {
@@ -44,6 +44,7 @@ class CorpusData {
   /*
    * The activity log cotains data dumps from various sources, and is then processed to insert into assertions table
    */
+  // eslint-disable-next-line class-methods-use-this
   async asyncProcessActivityLog(activityLogRecord) {
     const sources = await Source.query()
     const metadataSource = await MetadataSource.createInstance()
@@ -52,7 +53,7 @@ class CorpusData {
 
     const res = await ActivityLog.query().findById(activityLogRecord.id)
 
-    // this isn't perfect, but prevents instances that might be processing activity logs in parallel from duplicating
+    // this isn't perfect due to small chance of race condition, but prevents instances that might be processing activity logs in parallel from duplicating
     if (res.proccessed) {
       logger.info(`Activity log ${activityLogRecord.id} already proccessed`)
       return 0

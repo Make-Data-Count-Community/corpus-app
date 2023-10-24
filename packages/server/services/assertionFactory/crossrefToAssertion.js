@@ -7,6 +7,11 @@ class CrossrefToAssertion {
     const publishedDate = await chunk.crossref.publishedDate
     assertionInstance.publishedDate = publishedDate
 
+    if (chunk.notFound) {
+      // the crossref call returned 404 or otherwise failed to fetch metadata
+      return
+    }
+
     if (chunk.crossref.publisher) {
       const title = chunk.crossref.publisher
       const exists = await Publisher.query(trx).findOne({ title })

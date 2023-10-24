@@ -1,6 +1,5 @@
 /* eslint-disable no-await-in-loop */
 const { db, logger } = require('@coko/server')
-const seedSource = require('../seedSource/seedSource')
 const CorpusDataFactory = require('../corpusDataFactory')
 const Source = require('../../models/source/source')
 const Assertion = require('../../models/assertion/assertion')
@@ -10,11 +9,11 @@ const Assertion = require('../../models/assertion/assertion')
  * Files will be read from the path specified in S3_CZI_FOLDER_PATH env var
  */
 const cziImport = async () => {
-  logger.info(`######### Start Reading CZI files from S3 ######### `)
+  // logger.info(`######### Start Reading CZI files from S3 ######### `)
 
-  await seedSource.createInstanceReadS3Czi()
+  // await seedSource.createInstanceReadS3Czi()
 
-  logger.info(`######### CZI files read from S3  ######### `)
+  // logger.info(`######### CZI files read from S3  ######### `)
   logger.info(`######### Start Retreving Data from API ######### `)
 
   await CorpusDataFactory.loadDataInParallelFromDB()

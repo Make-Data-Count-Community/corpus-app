@@ -162,6 +162,7 @@ class CziFile {
 
   // eslint-disable-next-line class-methods-use-this
   // this is not used anymore since the dataset got too large to run this reasonably
+  // eslint-disable-next-line class-methods-use-this
   async filterOutExistingCitations(data) {
     let result = []
     await db.transaction(async trx => {

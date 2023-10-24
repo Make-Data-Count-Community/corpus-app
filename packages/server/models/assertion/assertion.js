@@ -130,6 +130,12 @@ class Assertion extends BaseModel {
           type: 'string',
           format: 'uuid',
         },
+        notFound: {
+          type: ['boolean', 'null'],
+        },
+        retried: {
+          type: ['boolean', 'false'],
+        },
       },
       type: 'object',
     }

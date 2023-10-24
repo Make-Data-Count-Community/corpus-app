@@ -1,6 +1,7 @@
 const { Writable, Readable } = require('stream')
 const DataCite = require('./datacite')
 const Crossref = require('./crossref')
+const CrossrefRetry = require('./crossrefRetry')
 
 class MetadataSource {
   constructor(streamApis) {
@@ -56,7 +57,11 @@ class MetadataSource {
   }
 
   startStreamCitations(data) {
-    this.readable.push(data)
+    if (Array.isArray(data)) {
+      data.forEach(d => this.readable.push(d))
+    } else {
+      this.readable.push(data)
+    }
   }
 
   static async createInstance(sourceType) {
@@ -67,6 +72,10 @@ class MetadataSource {
     }
 
     return new MetadataSource(metadataApis)
+  }
+
+  static async createCrossrefRetryStream() {
+    return new MetadataSource([new CrossrefRetry()])
   }
 }
 

@@ -19,7 +19,7 @@ class SeedSource {
 
       const files = await awsService.readS3Folder(
         'seed-source-files',
-        process.env.S3_CZI_FOLDER_PATH, // TODO change this folder Unzipped subfolder of CZI json files
+        process.env.S3_CZI_FOLDER_PATH,
       )
 
       files.forEach(file => {

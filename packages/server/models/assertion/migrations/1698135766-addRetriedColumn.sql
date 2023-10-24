@@ -1,0 +1,1 @@
+ALTER TABLE assertions ADD COLUMN IF NOT EXISTS retried BOOLEAN default false;

@@ -1,0 +1,1 @@
+ALTER TABLE assertions ADD COLUMN IF NOT EXISTS not_found BOOLEAN;

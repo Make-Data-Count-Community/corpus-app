@@ -5,7 +5,7 @@ const axios = require('../axiosService')
 const CrossrefMetadataXml = require('./crossrefMetadataXml')
 const XmlFactory = require('../xmlBaseModel/xmlFactory')
 
-class Crossref extends Transform {
+class CrossrefRetry extends Transform {
   static URL = '/works/'
   constructor(_obj) {
     super({ objectMode: true })
@@ -14,37 +14,39 @@ class Crossref extends Transform {
 
   // eslint-disable-next-line class-methods-use-this, no-underscore-dangle
   async _transform(chunk, _encoding, callback) {
-    const { crossrefDoi } = chunk.event
+    const { objId } = chunk
+    let crossrefData
 
-    if (!crossrefDoi) {
+    if (!objId) {
+      logger.info('No crossref ID')
       callback(null, chunk)
       return
     }
 
-    const responseSubj = await axios.crossrefApi(
-      `${Crossref.URL}${crossrefDoi}`,
-    )
+    const responseSubj = await axios.crossrefApi(`${CrossrefRetry.URL}${objId}`)
 
     if (responseSubj.data && responseSubj.status === 200) {
-      chunk.crossref = await XmlFactory.xmlToModel(
+      logger.info('Crossref found:', `${CrossrefRetry.URL}${objId}`)
+      crossrefData = await XmlFactory.xmlToModel(
         responseSubj.data,
         CrossrefMetadataXml,
       )
+    } else {
+      logger.error(
+        'Crossref Error:',
+        responseSubj.data,
+        responseSubj.status,
+        `${CrossrefRetry.URL}${objId}`,
+      )
+      chunk.notFound = true
     }
 
-    logger.info({
-      url: `${Crossref.URL}${crossrefDoi}`,
-      ...chunk.crossref,
-    })
-
-    this.count += 1
-
-    if (this.count % 10 === 0) {
-      logger.info('Crossref Item:', this.count)
+    if (crossrefData) {
+      chunk.crossref = crossrefData
     }
 
     callback(null, chunk)
   }
 }
 
-module.exports = Crossref
+module.exports = CrossrefRetry
