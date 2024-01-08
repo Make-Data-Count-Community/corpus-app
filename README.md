@@ -167,4 +167,6 @@ This should allow traffic through port 80 until the container is rebuilt.
 
 ## Authors and acknowledgment
 
-Ping Grant van Helsdingen at gvanhels@gmail.com for any other questions.
+Development by Giannis Kopanas and Grant van Helsdingen 
+
+Contact Dione Mentis at dione@coko.foundation for any other questions.
