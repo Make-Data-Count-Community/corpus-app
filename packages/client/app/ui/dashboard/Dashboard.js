@@ -189,6 +189,45 @@ const Dashboard = props => {
           showExpandButton={overTimeShowExpandButton}
           tableColumns={overTimeTableColumns}
         />
+        <CitationCountsByPublisher
+          data={byPublisherData}
+          filterParams={byPublisherFilterParams}
+          filterValueOptions={byPublisherFilterValueOptions}
+          isDownloadListOpen={byPublisherIsDownloadListOpen}
+          isFilterOpen={byPublisherIsFilterOpen}
+          loading={byPublisherLoading}
+          onApplyFilters={byPublisherOnApplyFilters}
+          onClearFilters={byPublisherOnClearFilters}
+          onDownloadOptionClick={byPublisherOnDownloadOptionClick}
+          onEmptyListLabel={byPublisherOnEmptyListLabel}
+          onFacetItemClick={byPublisherOnFacetItemClick}
+          onFacetValueClick={byPublisherOnFacetValueClick}
+          onFilterClick={byPublisherOnFilterClick}
+          onFilterClose={byPublisherOnFilterClose}
+          onFilterSearchChange={byPublisherOnFilterSearchChange}
+          onFooterTabClick={byPublisherOnFooterTabClick}
+          onNewView={byPublisherOnNewView}
+          selectedFacetCount={byPublisherSelectedFacetCount}
+          selectedFacetValues={byPublisherSelectedFacetValues}
+          selectedFooterTab={byPublisherSelectedFooterTab}
+          showApplyFilterButton={byPublisherShowApplyFilterButton}
+          showClearFilterButton={byPublisherShowClearFilterButton}
+          showExpandButton={byPublisherShowExpandButton}
+          tableColumns={byPublisherTableColumns}
+        />
+      </VisualisationRow>
+
+      <VisualisationRow>
+        <UniqueCitationCounts
+          data={uniqueCountData}
+          isDownloadListOpen={uniqueCountIsDownloadListOpen}
+          loading={uniqueCountLoading}
+          onDownloadOptionClick={uniqueCountOnDownloadOptionClick}
+          onFooterTabClick={uniqueCountOnFooterTabClick}
+          selectedFooterTab={uniqueCountSelectedFooterTab}
+          showExpandButton={uniqueCountShowExpandButton}
+          tableColumns={uniqueCountTableColumns}
+        />
         <CitationCountsBySubject
           data={bySubjectData}
           filterParams={bySubjectFilterParams}
@@ -217,34 +256,7 @@ const Dashboard = props => {
           tableColumns={bySubjectTableColumns}
         />
       </VisualisationRow>
-
       <VisualisationRow>
-        <CitationCountsByPublisher
-          data={byPublisherData}
-          filterParams={byPublisherFilterParams}
-          filterValueOptions={byPublisherFilterValueOptions}
-          isDownloadListOpen={byPublisherIsDownloadListOpen}
-          isFilterOpen={byPublisherIsFilterOpen}
-          loading={byPublisherLoading}
-          onApplyFilters={byPublisherOnApplyFilters}
-          onClearFilters={byPublisherOnClearFilters}
-          onDownloadOptionClick={byPublisherOnDownloadOptionClick}
-          onEmptyListLabel={byPublisherOnEmptyListLabel}
-          onFacetItemClick={byPublisherOnFacetItemClick}
-          onFacetValueClick={byPublisherOnFacetValueClick}
-          onFilterClick={byPublisherOnFilterClick}
-          onFilterClose={byPublisherOnFilterClose}
-          onFilterSearchChange={byPublisherOnFilterSearchChange}
-          onFooterTabClick={byPublisherOnFooterTabClick}
-          onNewView={byPublisherOnNewView}
-          selectedFacetCount={byPublisherSelectedFacetCount}
-          selectedFacetValues={byPublisherSelectedFacetValues}
-          selectedFooterTab={byPublisherSelectedFooterTab}
-          showApplyFilterButton={byPublisherShowApplyFilterButton}
-          showClearFilterButton={byPublisherShowClearFilterButton}
-          showExpandButton={byPublisherShowExpandButton}
-          tableColumns={byPublisherTableColumns}
-        />
         <CitationCountsBySource
           data={bySourceData}
           filterParams={bySourceFilterParams}
@@ -270,18 +282,6 @@ const Dashboard = props => {
           showClearFilterButton={bySourceShowClearFilterButton}
           showExpandButton={bySourceShowExpandButton}
           tableColumns={bySourceTableColumns}
-        />
-      </VisualisationRow>
-      <VisualisationRow>
-        <UniqueCitationCounts
-          data={uniqueCountData}
-          isDownloadListOpen={uniqueCountIsDownloadListOpen}
-          loading={uniqueCountLoading}
-          onDownloadOptionClick={uniqueCountOnDownloadOptionClick}
-          onFooterTabClick={uniqueCountOnFooterTabClick}
-          selectedFooterTab={uniqueCountSelectedFooterTab}
-          showExpandButton={uniqueCountShowExpandButton}
-          tableColumns={uniqueCountTableColumns}
         />
         <CitationCorpusGrowth
           data={corpusGrowthData}

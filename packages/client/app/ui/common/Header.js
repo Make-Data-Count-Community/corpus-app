@@ -193,6 +193,21 @@ const SkipLink = styled.a`
     top: 0;
   }
 `
+
+const StyledText = styled.div`
+  color: ${th('colorTextReverse')};
+  display: flex;
+  flex-direction: column;
+  font-size: medium;
+  line-height: normal;
+  max-width: 33vw;
+`
+
+const SmallLink = styled.a`
+  color: ${th('colorTextReverse')};
+  font-size: medium;
+  font-weight: bold;
+`
 // #endregion styles
 
 const Header = props => {
@@ -216,7 +231,7 @@ const Header = props => {
         Skip to main content
       </SkipLink>
       <Branding to={homepage}>
-        <h1>Data Citation Corpus Prototype</h1>
+        <h1>Data Citation Corpus</h1>
       </Branding>
       <Navigation role="navigation">
         <NavLinks id="main-nav">
@@ -226,12 +241,27 @@ const Header = props => {
                 aria-current={currentPath === dashboard ? 'page' : false}
                 to={dashboard}
               >
-                <span>Data Citation Corpus Prototype</span>
+                <span>Data Citation Corpus</span>
               </StyledLink>
             </li>
           </StyledList>
         </NavLinks>
       </Navigation>
+      <StyledText>
+        <div style={{ marginBottom: '5px' }}>
+          For further details about the data citation corpus and the features on
+          this dashboard visit{' '}
+          <SmallLink
+            href="https://makedatacount.org/data-citation/"
+            target="_blank"
+          >
+            makedatacount.org/data-citation
+          </SmallLink>
+        </div>
+        <SmallLink href="https://forms.gle/zcPndKBErfC6Z4M26" target="_blank">
+          Request the corpus data dump
+        </SmallLink>
+      </StyledText>
     </StyledHeader>
   )
 }

@@ -30,6 +30,8 @@ class Crossref extends Transform {
         responseSubj.data,
         CrossrefMetadataXml,
       )
+    } else {
+      logger.error('Crossref Error:', responseSubj.data, responseSubj.status)
     }
 
     this.count += 1
