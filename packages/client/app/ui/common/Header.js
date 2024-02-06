@@ -259,7 +259,7 @@ const Header = props => {
           </SmallLink>
         </div>
         <SmallLink href="https://forms.gle/zcPndKBErfC6Z4M26" target="_blank">
-          Request the corpus data dump
+          Request the corpus data file
         </SmallLink>
       </StyledText>
     </StyledHeader>
