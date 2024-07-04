@@ -8,7 +8,7 @@ services:
     entrypoint:
       [
         'node_modules/.bin/wait-for-it',
-        'grant-test.cpcwgoa3uzw1.eu-west-1.rds.amazonaws.com:5432',
+        'data-cleanup-17-06-2024.cpcwgoa3uzw1.eu-west-1.rds.amazonaws.com:5432',
         '--',
         'sh',
         'scripts/setupDevServer.sh',
@@ -34,6 +34,7 @@ services:
       - SERVER_PORT=${SERVER_PORT:-3000}
       - START_YEAR=${START_YEAR}
       - END_YEAR=${END_YEAR}
+      - START_MONTH=${START_MONTH}
       - HOSTNAME=${HOSTNAME}
       - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
       - PASSWORD_RESET_PATH=${PASSWORD_RESET_PATH:-password-reset}

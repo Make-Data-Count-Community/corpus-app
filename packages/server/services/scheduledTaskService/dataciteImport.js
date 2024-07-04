@@ -8,7 +8,7 @@ const Assertion = require('../../models/assertion/assertion')
  * Fetch datacite records from the API
  */
 const dataciteImport = async () => {
-  const startDate = new Date(process.env.START_YEAR, 0, 1)
+  const startDate = new Date(process.env.START_YEAR, process.env.START_MONTH, 1)
   logger.info(`######### Start Date : ${startDate} ######### `)
 
   const endDate = new Date(new Date().getFullYear(), 11, 31)
@@ -16,18 +16,18 @@ const dataciteImport = async () => {
   let corpusdata = null
 
   // eslint-disable-next-line no-unmodified-loop-condition
-  for (let d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1)) {
-    const year = d.getFullYear()
-    const month = (d.getMonth() + 1).toString().padStart(2, '0')
+  // for (let d = startDate; d <= endDate; d.setMonth(d.getMonth() + 1)) {
+  //   const year = d.getFullYear()
+  //   const month = (d.getMonth() + 1).toString().padStart(2, '0')
 
-    logger.info(`######### ${year} #### ${month} ######### `)
+  //   logger.info(`######### ${year} #### ${month} ######### `)
 
-    // eslint-disable-next-line no-await-in-loop
-    corpusdata = await CorpusDataFactory.dataciteCrossrefPerDate(year, month)
+  //   // eslint-disable-next-line no-await-in-loop
+  //   corpusdata = await CorpusDataFactory.dataciteCrossrefPerDate(year, month)
 
-    // eslint-disable-next-line no-await-in-loop
-    await corpusdata.seedSource.readSource()
-  }
+  //   // eslint-disable-next-line no-await-in-loop
+  //   await corpusdata.seedSource.readSource()
+  // }
 
   logger.info(`######### Start Reading source : 'crossref' ######### `)
   corpusdata = await CorpusDataFactory.dataciteSourceCrossref()
