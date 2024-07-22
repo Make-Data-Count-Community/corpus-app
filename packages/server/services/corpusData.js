@@ -7,7 +7,7 @@ const AssertionFactory = require('./assertionFactory/assertionFactory')
 const ActivityLog = require('../models/activityLog/activityLog')
 const Source = require('../models/source/source')
 
-const NUMBER_OF_PARALLEL_IMPORT_STREAMS = 20
+const NUMBER_OF_PARALLEL_IMPORT_STREAMS = 5
 
 class CorpusData {
   constructor(seedSource, metadataSource) {

@@ -31,7 +31,7 @@ module.exports = {
     return response
   },
   crossrefApi: (url, headers = {}) => {
-    url = `${url}/transform/application/vnd.crossref.unixsd+xml`
+    url = `${url}/transform/application/vnd.crossref.unixsd+xml?mailto=ashwini.sukale@datacite.org`
 
     const response = request({
       url,
