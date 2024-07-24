@@ -25,7 +25,8 @@ class Crossref extends Transform {
       `${Crossref.URL}${crossrefDoi}`,
     )
 
-    if (responseSubj.data && responseSubj.status === 200) {
+    logger.info('### CrossRef API ### ',  `${Crossref.URL}${crossrefDoi}`, responseSubj.status)
+    if (responseSubj && responseSubj.data && responseSubj.status === 200) {
       chunk.crossref = await XmlFactory.xmlToModel(
         responseSubj.data,
         CrossrefMetadataXml,
