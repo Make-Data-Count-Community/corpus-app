@@ -9,6 +9,8 @@ class DataciteEventToAssertion {
 
     assertionInstance.objId = chunk.event.attributes['obj-id']
     assertionInstance.subjId = chunk.event.attributes['subj-id']
+    assertionInstance.publication = chunk.event.attributes['obj-id']
+    assertionInstance.dataset = chunk.event.attributes['subj-id']
   }
 }
 

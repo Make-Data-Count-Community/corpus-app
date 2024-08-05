@@ -13,6 +13,10 @@ class CziToAssertion {
     assertionInstance.subjId =
       chunk.event.dataset || chunk.event.extracted_word || 'none'
 
+    assertionInstance.publication = chunk.event.paper_doi || chunk.event.doi || 'none'
+    assertionInstance.dataset =
+      chunk.event.dataset || chunk.event.extracted_word || 'none'
+
     assertionInstance.accessionNumber = chunk.event.accessionNumber
       ? chunk.event.accessionNumber
       : null
