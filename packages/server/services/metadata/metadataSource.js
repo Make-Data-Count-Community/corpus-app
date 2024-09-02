@@ -60,7 +60,9 @@ class MetadataSource {
   }
 
   static async createInstance(sourceType) {
-    let metadataApis = [new DataCite(), new Crossref()]
+    // let metadataApis = [new DataCite(), new Crossref()]
+    // Avoid Crossref Metadata API call
+    let metadataApis = [new DataCite()]
 
     if (sourceType === 'datacite') {
       metadataApis = [new DataCite()]

@@ -78,6 +78,7 @@ class CorpusData {
           event: citation,
           datacite: {},
           crossref: {},
+          retried: true // Newly created assertions will be marked
         }
 
         metadataSource.startStreamCitations(assertions)
