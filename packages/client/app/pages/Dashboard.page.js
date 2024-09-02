@@ -463,8 +463,6 @@ const DashboardPage = () => {
     [],
   )
 
-  const [bySubjectOtherCount, setBySubjectOtherCount] = useState(0)
-
   const [bySubjectIsFilterOpen, setBySubjectIsFilterOpen] = useState(false)
 
   const [bySubjectIsDownloadListOpen, setBySubjectIsDownloadListOpen] =
@@ -649,12 +647,6 @@ const DashboardPage = () => {
               },
             ],
           }))
-
-        const otherData = data.getAssertionsPerSubject.find(
-          d => d.xField === 'others',
-        )
-
-        setBySubjectOtherCount(parseInt(otherData?.yField || '0', 10))
 
         const idArray = [
           {
@@ -1930,7 +1922,6 @@ const DashboardPage = () => {
         bySubjectOnFilterSearchChange={handleBySubjectSearchChange}
         bySubjectOnFooterTabClick={handleBySubjectFooterTabClick}
         bySubjectOnNewView={handleBySubjectOnNewView}
-        bySubjectOtherCount={bySubjectOtherCount}
         bySubjectSelectedFacetCount={bySubjectSelectedFacetCount}
         bySubjectSelectedFacetValues={bySubjectSelectedFacetValues}
         bySubjectSelectedFooterTab={bySubjectSelectedTab}

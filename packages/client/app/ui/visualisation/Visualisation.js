@@ -62,7 +62,6 @@ const Visualisation = props => {
     onFilterClose,
     onFilterSearchChange,
     onFooterTabClick,
-    otherCount,
     selectedFacetCount,
     selectedFacetValues,
     selectedFooterTab,
@@ -71,6 +70,7 @@ const Visualisation = props => {
     showApplyFilterButton,
     showClearFilterButton,
     showFooterChartTab,
+    showOtherData,
     topFacetCount,
     visualisationTitle,
   } = props
@@ -109,7 +109,7 @@ const Visualisation = props => {
           </ChildrenWrapper>
         </SpinWrapper>
       </DataWrapper>
-      {!!otherCount && !loading && (
+      {showOtherData && !loading && (
         <OtherDataWrapper>
           The visualization includes the top {topFacetCount} {facetType}
           {topFacetCount !== 1 ? 's' : ''} where metadata is available.
@@ -169,7 +169,6 @@ Visualisation.propTypes = {
   onFilterClose: PropTypes.func,
   onFilterSearchChange: PropTypes.func,
   onFooterTabClick: PropTypes.func.isRequired,
-  otherCount: PropTypes.number,
   selectedFacetCount: PropTypes.number,
   selectedFacetValues: PropTypes.arrayOf(
     PropTypes.shape({
@@ -183,6 +182,7 @@ Visualisation.propTypes = {
   showApplyFilterButton: PropTypes.bool,
   showClearFilterButton: PropTypes.bool,
   showFooterChartTab: PropTypes.bool,
+  showOtherData: PropTypes.bool,
   topFacetCount: PropTypes.number,
   visualisationTitle: PropTypes.string.isRequired,
 }
@@ -201,7 +201,6 @@ Visualisation.defaultProps = {
   onFilterClick: () => {},
   onFilterClose: () => {},
   onFilterSearchChange: () => {},
-  otherCount: 0,
   selectedFacetCount: 0,
   selectedFacetValues: [],
   showExpandButton: false,
@@ -209,6 +208,7 @@ Visualisation.defaultProps = {
   showApplyFilterButton: false,
   showClearFilterButton: false,
   showFooterChartTab: false,
+  showOtherData: false,
   topFacetCount: 0,
 }
 

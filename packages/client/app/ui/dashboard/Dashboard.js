@@ -125,7 +125,6 @@ const Dashboard = props => {
     bySubjectOnFilterSearchChange,
     bySubjectOnFooterTabClick,
     bySubjectOnNewView,
-    bySubjectOtherCount,
     bySubjectSelectedFacetCount,
     bySubjectSelectedFacetValues,
     bySubjectSelectedFooterTab,
@@ -246,7 +245,6 @@ const Dashboard = props => {
           onFilterSearchChange={bySubjectOnFilterSearchChange}
           onFooterTabClick={bySubjectOnFooterTabClick}
           onNewView={bySubjectOnNewView}
-          otherCount={bySubjectOtherCount}
           selectedFacetCount={bySubjectSelectedFacetCount}
           selectedFacetValues={bySubjectSelectedFacetValues}
           selectedFooterTab={bySubjectSelectedFooterTab}
@@ -416,7 +414,6 @@ Dashboard.propTypes = {
   bySubjectOnFilterSearchChange: PropTypes.func.isRequired,
   bySubjectOnFooterTabClick: PropTypes.func.isRequired,
   bySubjectOnNewView: PropTypes.func.isRequired,
-  bySubjectOtherCount: PropTypes.number.isRequired,
   bySubjectSelectedFacetCount: PropTypes.number.isRequired,
   bySubjectSelectedFooterTab: PropTypes.string.isRequired,
   bySubjectSelectedFacetValues: PropTypes.arrayOf(

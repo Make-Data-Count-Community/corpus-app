@@ -57,7 +57,6 @@ const CitationCountsBySubject = props => {
     onFilterSearchChange,
     onFooterTabClick,
     onNewView,
-    otherCount,
     selectedFooterTab,
     selectedFacetCount,
     selectedFacetValues,
@@ -87,7 +86,6 @@ const CitationCountsBySubject = props => {
       onFilterClose={onFilterClose}
       onFilterSearchChange={onFilterSearchChange}
       onFooterTabClick={onFooterTabClick}
-      otherCount={otherCount}
       selectedFacetCount={selectedFacetCount}
       selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
@@ -96,6 +94,7 @@ const CitationCountsBySubject = props => {
       showExpandButton={showExpandButton}
       showFilterButton
       showFooterChartTab
+      showOtherData
       topFacetCount={data.length - (selectedFooterTab === 'chart' ? 1 : 0)}
       visualisationTitle={title}
     >
@@ -149,7 +148,6 @@ CitationCountsBySubject.propTypes = {
   onFilterSearchChange: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
   onNewView: PropTypes.func.isRequired,
-  otherCount: PropTypes.number.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
   selectedFacetCount: PropTypes.number.isRequired,
   selectedFacetValues: PropTypes.arrayOf(
