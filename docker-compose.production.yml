@@ -10,6 +10,7 @@ services:
     command: ['npx', 'serve', '-p', '4000', '--single', './_build']
     ports:
       - ${CLIENT_PORT:-4000}:4000
+    restart: always
 
   server:
     build:
@@ -19,6 +20,7 @@ services:
     command: ['node', 'startServer.js']
     ports:
       - 3000:3000
+    restart: always
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
