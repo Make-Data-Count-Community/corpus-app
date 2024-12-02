@@ -13,6 +13,34 @@ class SeedSource {
     return new CziFile()
   }
 
+  static async createInstanceFromFile(filePath) {
+    const seedSource = new SeedSource()
+
+    // Parse the CSV file or JSON file
+    const rawData = fs.readFileSync(filePath, 'utf-8')
+    const parsedData = filePath.endsWith('.csv')
+      ? parse(rawData, { columns: true, skip_empty_lines: true })
+      : JSON.parse(rawData)
+
+    // Process the ASAP data (example transformation logic)
+    const processedData = parsedData.map(record => ({
+      doi: record['Dataset PID']?.startsWith('10.')
+        ? record['Dataset PID'] // Handle like a standard DOI
+        : null,
+      accessionNumber: !record['Dataset PID']?.startsWith('10.')
+        ? record['Dataset PID'] // Handle as accession number
+        : null,
+      title: record['Dataset PID']?.startsWith('10.')
+        ? null // Title from DOI metadata
+        : record['title'],
+      repository: record['Repository'],
+      source: 'asap',
+    }))
+
+    seedSource.data = processedData
+    return seedSource
+  }
+
   static async createInstanceReadS3Czi() {
     try {
       const awsService = new AwsS3Service()

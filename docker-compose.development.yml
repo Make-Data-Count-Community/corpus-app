@@ -16,6 +16,7 @@ services:
       - CLIENT_PAGE_TITLE=${CLIENT_PAGE_TITLE:-"Basic App Template"}
       - CLIENT_LANGUAGE=${CLIENT_LANGUAGE:-"en-US"}
       - SERVER_URL=${SERVER_URL:-http://localhost:3000}
+      - ASAP_LOCAL_FILE_PATH=${ASAP_LOCAL_FILE_PATH:-./data/asap_citations.csv}
     volumes:
       - ./packages/client/app:/home/node/app/app
       - ./packages/client/static:/home/node/app/static

@@ -2,6 +2,8 @@
 const SeedSource = require('./seedSource/seedSource')
 const MetadataSource = require('./metadata/metadataSource')
 const CorpusData = require('./corpusData')
+const fs = require('fs')
+const { parse } = require('csv-parse/sync')
 
 class CorpusDataFactory {
   static async dataciteSourceCrossref() {
@@ -35,6 +37,23 @@ class CorpusDataFactory {
 
     const corpusData = new CorpusData(seedSource, metadataSource)
     return corpusData
+  }
+
+  static async asapFile() {
+    // Read the file path from environment
+    const asapFilePath = process.env.ASAP_LOCAL_FILE_PATH
+
+    // Ensure the file exists
+    if (!fs.existsSync(asapFilePath)) {
+      throw new Error(`ASAP file not found at path: ${asapFilePath}`)
+    }
+
+    // Create the seed and metadata sources
+    const seedSource = await SeedSource.createInstanceFromFile(asapFilePath)
+    const metadataSource = await MetadataSource.createInstance()
+
+    // Return new CorpusData instance with ASAP data
+    return new CorpusData(seedSource, metadataSource)
   }
 
   static async loadDataInParallelFromDB() {
