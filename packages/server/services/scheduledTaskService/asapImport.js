@@ -1,9 +1,9 @@
 /* eslint-disable no-await-in-loop */
-const { db, logger } = require('@coko/server')
+const { logger } = require('@coko/server')
 const seedSource = require('../seedSource/seedSource')
-const CorpusDataFactory = require('../corpusDataFactory')
-const Source = require('../../models/source/source')
-const Assertion = require('../../models/assertion/assertion')
+// const CorpusDataFactory = require('../corpusDataFactory')
+// const Source = require('../../models/source/source')
+// const Assertion = require('../../models/assertion/assertion')
 
 /**
  * Fetch all CZI records from S3 and save them to the DB
@@ -11,8 +11,9 @@ const Assertion = require('../../models/assertion/assertion')
  */
 const asapImport = async () => {
   logger.info(`######### Start Reading ASAP files from local ######### `)
+
   const asapFilePath = process.env.ASAP_LOCAL_FILE_PATH
-  logger.info(asapFilePath)
+
   await seedSource.createInstanceFromFile(asapFilePath)
 
   // logger.info(`######### CZI files read from S3  ######### `)

@@ -42,7 +42,7 @@ services:
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-nonRootPassword}
       - S3_BUCKET=${S3_BUCKET:-uploads}
       - S3_CZI_FOLDER_PATH=${S3_CZI_FOLDER_PATH}
-      - ASAP_LOCAL_FILE_PATH=${ASAP_LOCAL_FILE_PATH:-data/asap_citations.csv}
+      - ASAP_LOCAL_FILE_PATH=${ASAP_LOCAL_FILE_PATH:-ingest-data/asap_citations.csv}
     volumes:
       - ./packages/server/api:/home/node/app/api
       - ./packages/server/config:/home/node/app/config
@@ -51,3 +51,4 @@ services:
       - ./packages/server/rest:/home/node/app/rest
       - ./packages/server/scripts:/home/node/app/scripts
       - ./packages/server/services:/home/node/app/services
+      - ./packages/server/data:/home/node/app/data
