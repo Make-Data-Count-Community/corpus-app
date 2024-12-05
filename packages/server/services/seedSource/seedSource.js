@@ -1,4 +1,6 @@
 const { logger } = require('@coko/server')
+const fs = require('fs')
+const { parse } = require('csv-parse/sync')
 const DataCiteEventData = require('./dataCiteEventData')
 const axios = require('../axiosService')
 const CziFile = require('./cziFile')
@@ -15,7 +17,7 @@ class SeedSource {
 
   static async createInstanceFromFile(filePath) {
     const seedSource = new SeedSource()
-
+    logger.info(`#####  entered createInstanceFromFile`)
     // Parse the CSV file or JSON file
     const rawData = fs.readFileSync(filePath, 'utf-8')
     const parsedData = filePath.endsWith('.csv')
@@ -38,6 +40,7 @@ class SeedSource {
     }))
 
     seedSource.data = processedData
+    logger.info(seedSource)
     return seedSource
   }
 

@@ -1,8 +1,12 @@
-FROM node:16.19.0
+FROM node:18-alpine
 
-RUN apt-get update \ 
-    && apt-get upgrade -y \
-    && apt-get install -y ranger vim p7zip-full
+RUN apk add --no-cache \
+    git \
+    python3 \
+    make \
+    g++ \
+    vips-dev \
+    bash
 
 WORKDIR /home/node/app
 
@@ -13,6 +17,6 @@ RUN chown -R node:node .
 USER node
 
 
-RUN yarn install --frozen-lockfile
+RUN yarn install
 # RUN yarn cache clean
 COPY --chown=node:node . .

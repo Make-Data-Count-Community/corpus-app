@@ -11,7 +11,7 @@
     "pg": "8"
   },
   "dependencies": {
-    "@coko/server": "3.0.0-beta.3",
+    "@coko/server": "4.2.0",
     "@pubsweet/models": "^0.3.26",
     "JSONStream": "^1.3.5",
     "async": "^3.2.4",
