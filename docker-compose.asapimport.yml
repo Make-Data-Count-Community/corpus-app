@@ -2,6 +2,7 @@ version: '3'
 
 services:
   importer:
+    platform: linux/amd64
     build:
       context: ./packages/server
       dockerfile: ./Dockerfile-development
