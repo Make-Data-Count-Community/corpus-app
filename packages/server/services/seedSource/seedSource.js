@@ -15,33 +15,43 @@ class SeedSource {
     return new CziFile()
   }
 
-  static async createInstanceFromFile(filePath) {
-    const seedSource = new SeedSource()
-    logger.info(`#####  entered createInstanceFromFile`)
-    // Parse the CSV file or JSON file
-    const rawData = fs.readFileSync(filePath, 'utf-8')
-    const parsedData = filePath.endsWith('.csv')
-      ? parse(rawData, { columns: true, skip_empty_lines: true })
-      : JSON.parse(rawData)
-
-    // Process the ASAP data (example transformation logic)
-    const processedData = parsedData.map(record => ({
-      doi: record['Dataset PID']?.startsWith('10.')
-        ? record['Dataset PID'] // Handle like a standard DOI
+  static async createInstanceFromFile(fileContent) {
+    const processedData = fileContent.map(record => ({
+      doi: record['dataset_id']?.startsWith('10.')
+        ? record['dataset_id'] // Handle DOIs
         : null,
-      accessionNumber: !record['Dataset PID']?.startsWith('10.')
-        ? record['Dataset PID'] // Handle as accession number
+      accessionNumber: !record['dataset_id']?.startsWith('10.')
+        ? record['dataset_id'] // Handle accession numbers
         : null,
-      title: record['Dataset PID']?.startsWith('10.')
-        ? null // Title from DOI metadata
+      title: record['dataset_id']?.startsWith('10.')
+        ? null // Title can be derived from DOI metadata
         : record['title'],
-      repository: record['Repository'],
-      source: 'asap',
+      repository: record['Repository'], // Repository name
+      source: 'asap', // Explicitly mark the source as "asap"
     }))
 
+    const seedSource = new SeedSource()
     seedSource.data = processedData
-    logger.info(seedSource)
     return seedSource
+  }
+
+  /**
+   * Process a single ASAP file, typically in JSON format, by streaming its content.
+   * New method added for processing ASAP-specific files using `AsapFile`.
+   * @param {Object} file - Contains `fileKey` and `fileStream` for ASAP processing.
+   * @returns {Promise<AsapFile>}
+   */
+  static async createInstanceAsap(file) {
+    try {
+      logger.info('##### Starting ASAP File Processing #####')
+      const processor = new AsapFile(file) // Pass ASAP file to AsapFile
+      await processor.process() // Execute the processing pipeline for ASAP
+      logger.info('##### ASAP File Processing Completed Successfully #####')
+      return processor
+    } catch (error) {
+      logger.error('Error in createInstanceAsap:', error.message)
+      throw error
+    }
   }
 
   static async createInstanceReadS3Czi() {
@@ -69,4 +79,5 @@ class SeedSource {
   }
 }
 
+// Export the SeedSource class (corrected the export)
 module.exports = SeedSource

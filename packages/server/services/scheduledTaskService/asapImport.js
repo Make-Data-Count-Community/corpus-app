@@ -1,51 +1,40 @@
-/* eslint-disable no-await-in-loop */
-const { logger } = require('@coko/server')
-const seedSource = require('../seedSource/seedSource')
-// const CorpusDataFactory = require('../corpusDataFactory')
-// const Source = require('../../models/source/source')
-// const Assertion = require('../../models/assertion/assertion')
+const { db, logger } = require('@coko/server')
+const fs = require('fs')
+const path = require('path')
+const { parse } = require('csv-parse/sync')
+const SeedSource = require('../seedSource/seedSource')
 
-/**
- * Fetch all CZI records from S3 and save them to the DB
- * Files will be read from the path specified in S3_CZI_FOLDER_PATH env var
- */
+const asapFilePath = process.env.ASAP_LOCAL_FILE_PATH
+
 const asapImport = async () => {
-  logger.info(`######### Start Reading ASAP files from local ######### `)
+  try {
+    console.log('######### Start Reading ASAP files from local #########')
 
-  const asapFilePath = process.env.ASAP_LOCAL_FILE_PATH
+    // Ensure the file path is defined
+    if (!asapFilePath) {
+      throw new Error('ASAP_LOCAL_FILE_PATH environment variable is not set.')
+    }
 
-  await seedSource.createInstanceFromFile(asapFilePath)
+    // Ensure the file exists
+    if (!fs.existsSync(asapFilePath)) {
+      throw new Error(`ASAP file not found at path: ${asapFilePath}`)
+    }
 
-  // logger.info(`######### CZI files read from S3  ######### `)
-  // logger.info(`######### Start Retreving Data from API ######### `)
+    // Step 1: Read and parse the CSV file into an array of records
+    const rawContent = fs.readFileSync(asapFilePath, 'utf8') // Read file content
+    const fileContent = parse(rawContent, { 
+      columns: true,          // Parse the first row as column headers
+      skip_empty_lines: true, // Ignore empty lines
+    })
 
-  // await CorpusDataFactory.loadDataInParallelFromDB()
+    // Step 2: Pass parsed data to SeedSource
+    const seedSource = await SeedSource.createInstanceFromFile(fileContent)
 
-  // await db.raw('REFRESH MATERIALIZED VIEW last_10_years_assertions')
-  // await db.raw('REFRESH MATERIALIZED VIEW count_growth_per_day')
-  // await db.raw('REFRESH MATERIALIZED VIEW facet_unique_counts')
+    console.log('Processed records:', seedSource.data)
 
-  // const sourceAssertions = await Assertion.query()
-  //   .select(
-  //     db.raw(
-  //       'count(doi) as doicnt, count(accession_number) as doiaccessionnumer, source_id',
-  //     ),
-  //   )
-  //   .groupBy('source_id')
-
-  // await Promise.all(
-  //   sourceAssertions.map(assertion =>
-  //     Source.query()
-  //       .findOne({ id: assertion.sourceId })
-  //       .patch({
-  //         doiCount: assertion.doicnt ? parseInt(assertion.doicnt, 10) : 0,
-  //         accessionNumberCount: assertion.doiaccessionnumer
-  //           ? parseInt(assertion.doiaccessionnumer, 10)
-  //           : 0,
-  //       }),
-  //   ),
-  // )
-  // logger.info(`######### Source counts refreshed ######### `)
+  } catch (e) {
+    throw new Error(e)
+  }
 }
 
 module.exports = asapImport

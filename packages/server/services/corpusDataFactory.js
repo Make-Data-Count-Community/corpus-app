@@ -39,8 +39,9 @@ class CorpusDataFactory {
     return corpusData
   }
 
+  // Added for handling ASAP file workflow
   static async asapFile() {
-    // Read the file path from environment
+    // Read the file path from environment variable
     const asapFilePath = process.env.ASAP_LOCAL_FILE_PATH
 
     // Ensure the file exists
@@ -48,11 +49,26 @@ class CorpusDataFactory {
       throw new Error(`ASAP file not found at path: ${asapFilePath}`)
     }
 
-    // Create the seed and metadata sources
-    const seedSource = await SeedSource.createInstanceFromFile(asapFilePath)
-    const metadataSource = await MetadataSource.createInstance()
+    // Determine the input file type (CSV or JSON)
+    let seedSource
+    if (asapFilePath.endsWith('.csv')) {
+      // Parse CSV data
+      const rawData = fs.readFileSync(asapFilePath, 'utf-8')
+      const parsedData = parse(rawData, { columns: true, skip_empty_lines: true })
+      seedSource = await SeedSource.createInstanceFromFile(parsedData)
+    } else if (asapFilePath.endsWith('.json')) {
+      // Stream JSON data
+      const fileStream = fs.createReadStream(asapFilePath)
+      seedSource = await SeedSource.createInstanceAsap({
+        fileKey: 'asap_file_v1',
+        fileStream,
+      })
+    } else {
+      throw new Error('ASAP file must be a JSON or CSV file.')
+    }
 
-    // Return new CorpusData instance with ASAP data
+    // Enrich metadata if needed, then return the CorpusData object
+    const metadataSource = await MetadataSource.createInstance()
     return new CorpusData(seedSource, metadataSource)
   }
 
