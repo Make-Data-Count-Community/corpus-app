@@ -1,6 +1,4 @@
 const { logger } = require('@coko/server')
-const fs = require('fs')
-const { parse } = require('csv-parse/sync')
 const DataCiteEventData = require('./dataCiteEventData')
 const axios = require('../axiosService')
 const CziFile = require('./cziFile')
@@ -18,16 +16,19 @@ class SeedSource {
   static async createInstanceFromFile(fileContent) {
     const processedData = fileContent.map(record => ({
       doi: record['dataset_id']?.startsWith('10.')
-        ? record['dataset_id'] // Handle DOIs
+        ? record['dataset_id']
         : null,
       accessionNumber: !record['dataset_id']?.startsWith('10.')
-        ? record['dataset_id'] // Handle accession numbers
+        ? record['dataset_id']
         : null,
-      title: record['dataset_id']?.startsWith('10.')
-        ? null // Title can be derived from DOI metadata
-        : record['title'],
-      repository: record['Repository'], // Repository name
-      source: 'asap', // Explicitly mark the source as "asap"
+      source: 'asap',
+      datacite: {},
+      crossref: {},
+      event: {
+        dataCiteDoi: record['dataset_id']?.startsWith('10.')
+        ? record['dataset_id']
+        : null
+      }
     }))
 
     const seedSource = new SeedSource()
@@ -44,8 +45,8 @@ class SeedSource {
   static async createInstanceAsap(file) {
     try {
       logger.info('##### Starting ASAP File Processing #####')
-      const processor = new AsapFile(file) // Pass ASAP file to AsapFile
-      await processor.process() // Execute the processing pipeline for ASAP
+      const processor = new AsapFile(file)
+      await processor.process()
       logger.info('##### ASAP File Processing Completed Successfully #####')
       return processor
     } catch (error) {
@@ -79,5 +80,4 @@ class SeedSource {
   }
 }
 
-// Export the SeedSource class (corrected the export)
 module.exports = SeedSource
