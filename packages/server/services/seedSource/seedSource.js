@@ -3,6 +3,7 @@ const DataCiteEventData = require('./dataCiteEventData')
 const axios = require('../axiosService')
 const CziFile = require('./cziFile')
 const AwsS3Service = require('../awsS3Service')
+const activityLog = require('../../models/activityLog')
 
 class SeedSource {
   static async createInstanceDatacite(filter) {
@@ -21,14 +22,15 @@ class SeedSource {
       accessionNumber: !record['dataset_id']?.startsWith('10.')
         ? record['dataset_id']
         : null,
-      source: 'asap',
+      source: '550e8400-e29b-41d4-a716-446655440000',
       datacite: {},
       crossref: {},
       event: {
         dataCiteDoi: record['dataset_id']?.startsWith('10.')
         ? record['dataset_id']
         : null
-      }
+      },
+      activityId: '9039c815-9440-403d-96e1-653bab7ed2e7'
     }))
 
     const seedSource = new SeedSource()

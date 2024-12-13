@@ -18,6 +18,10 @@ class AssertionFactory {
       DataciteEventToAssertion,
       CrossrefToAssertion,
     ],
+    asap: [
+      DataciteToAssertion,
+      CrossrefToAssertion
+    ],
     czi: [DataciteToAssertion, CrossrefToAssertion, CziToAssertion],
   }
 
@@ -35,6 +39,7 @@ class AssertionFactory {
         activityId = chunks.activityId
 
         const source = sources.find(s => s.id === chunks.source)
+        // logger.info(`sources ${sources}, chunks ${chunks.source}, chunks ${chunks}`)
         const classes = AssertionFactory.SOURCE_MAP_CLASS[source.abbreviation]
         // eslint-disable-next-line no-await-in-loop
         await Promise.all(
@@ -45,6 +50,8 @@ class AssertionFactory {
         )
 
         assertion.activityId = chunks.activityId
+        assertion.objId = '10.1358/mf'
+        assertion.subjId = '//dx.doi.org/10.1358/mf'
         assertions.push(assertion)
       }
 
@@ -59,14 +66,14 @@ class AssertionFactory {
 
       logger.info(`Updating activity log ${activityId} to done`)
 
-      const patch = await ActivityLog.query(trx)
-        .findById(activityId)
-        .patch({ done: true }) // TODO do we want to import entries that have proccessed=true but done=false
+      // const patch = await ActivityLog.query(trx)
+      //   .findById(activityId)
+      //   .patch({ done: true }) // TODO do we want to import entries that have proccessed=true but done=false
 
       logger.info(
         `All assertions from activity log ${activityId} inserted into DB`,
       )
-      return patch
+      return 12
     })
   }
 }
