@@ -3,7 +3,8 @@ const DataCiteEventData = require('./dataCiteEventData')
 const axios = require('../axiosService')
 const CziFile = require('./cziFile')
 const AwsS3Service = require('../awsS3Service')
-const activityLog = require('../../models/activityLog')
+const { model: ActivityLog } = require('../../models/activityLog')
+const { model: Source } = require('../../models/source') // Import Source model
 
 class SeedSource {
   static async createInstanceDatacite(filter) {
@@ -15,23 +16,48 @@ class SeedSource {
   }
 
   static async createInstanceFromFile(fileContent) {
-    const processedData = fileContent.map(record => ({
-      doi: record['dataset_id']?.startsWith('10.')
-        ? record['dataset_id']
-        : null,
-      accessionNumber: !record['dataset_id']?.startsWith('10.')
-        ? record['dataset_id']
-        : null,
-      source: '550e8400-e29b-41d4-a716-446655440000',
-      datacite: {},
-      crossref: {},
-      event: {
-        dataCiteDoi: record['dataset_id']?.startsWith('10.')
-        ? record['dataset_id']
-        : null
-      },
-      activityId: '9039c815-9440-403d-96e1-653bab7ed2e7'
-    }))
+    const processedData = []
+
+    const source = await Source.query().findOne({ abbreviation: 'asap' })
+    if (!source) {
+      throw new Error('Source "asap" not found in the database. Please add it to the Source table.')
+    }
+    logger.info(`Retrieved "asap" from DB: ${JSON.stringify(source)}`)
+
+    for (const record of fileContent) {
+      const isDoi = record['dataset_id']?.startsWith('10.')
+
+      const citationRecord = {
+        doi: record['dataset_id']?.startsWith('10.')
+          ? record['dataset_id']
+          : null,
+        accessionNumber: !record['dataset_id']?.startsWith('10.')
+          ? record['dataset_id']
+          : null,
+        source: source.id,
+        datacite: {},
+        crossref: {},
+        event: {
+          dataCiteDoi: record['dataset_id']?.startsWith('10.')
+          ? record['dataset_id']
+          : null
+        }
+      }
+
+      const activityLogEntry = await ActivityLog.query()
+        .insert({
+          action: 'assertion_incoming_asap',
+          data: JSON.stringify(citationRecord),
+          tableName: 'assertions',
+          type: 'activityLog',
+          fileKey: 'seed-source-processing-asap'
+        })
+        .returning('id')
+
+      citationRecord.activityLogId = activityLogEntry.id
+
+      processedData.push(citationRecord)
+    }
 
     const seedSource = new SeedSource()
     seedSource.data = processedData

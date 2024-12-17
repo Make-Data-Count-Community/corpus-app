@@ -27,7 +27,7 @@ class AsapFile {
       try {
         const source = await this.getSource()
         const citationBulk = await this.streamFile()
-        await this.insertActivityLog(citationBulk, source)
+        await this.insertActivityLogs(citationBulk, source) // Update method call
         resolve(citationBulk)
       } catch (error) {
         logger.error(`Error processing ASAP file: ${error.message}`)
@@ -47,21 +47,18 @@ class AsapFile {
 
   async streamFile() {
     const citationBulk = []
-    const { fileKey, fileStream } = this.file
-
-    return new Promise((resolve, reject) => {
-      const JSONFileStream = fileStream.pipe(JSONStream.parse('*'))
-
-      JSONFileStream.pipe(
-        es.mapSync(data => {
-          const record = this.buildCitationRecord(data)
-          if (record) citationBulk.push(record)
-          else this.excludedRecords += 1
-        }),
-      )
-      .on('end', () => resolve(citationBulk))
-      .on('error', err => reject(err))
-    })
+    const { records } = this.file // Use the parsed records array
+  
+    logger.info(`Processing ${records.length} rows`)
+  
+    // Loop through each record
+    for (const row of records) {
+      const record = this.buildCitationRecord(row) // Transform the record
+      if (record) citationBulk.push(record)
+      else this.excludedRecords += 1 // Track excluded records
+    }
+  
+    return citationBulk // Return the processed bulk data
   }
 
   buildCitationRecord(row) {
@@ -78,17 +75,23 @@ class AsapFile {
     }
   }
 
-  async insertActivityLog(citations, source) {
+  async insertActivityLogs(citations, source) {
     const { fileKey } = this.file
-    await ActivityLog.query().insert({
-      action: 'assertion_incoming_asap',
-      data: JSON.stringify(citations),
-      tableName: 'assertions',
-      countDoi: this.numberOfDOI,
-      countAccessionNumber: this.numberOfNotDOI,
-      source_id: source.id,
-      fileKey,
-    })
+
+    // Insert one activity log per citation
+    for (const citation of citations) {
+      await ActivityLog.query().insert({
+        action: 'assertion_incoming_asap',
+        data: JSON.stringify(citation), // Insert single citation
+        type: 'assertions',
+        countDoi: citation.articleDoi ? 1 : 0, // 1 if DOI exists, else 0
+        countAccessionNumber: citation.accessionNumber ? 1 : 0, // 1 if Accession Number exists, else 0
+        source_id: source.id,
+        fileKey,
+      })
+    }
+
+    logger.info(`Inserted ${citations.length} activity log entries for file: ${fileKey}`)
   }
 }
 
