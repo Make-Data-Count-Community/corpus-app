@@ -1,4 +1,4 @@
-const { logger } = require('@coko/server')
+const { logger, uuid } = require('@coko/server')
 const DataCiteEventData = require('./dataCiteEventData')
 const axios = require('../axiosService')
 const CziFile = require('./cziFile')
@@ -16,52 +16,52 @@ class SeedSource {
   }
 
   static async createInstanceFromFile(fileContent) {
-    const processedData = []
-
-    const source = await Source.query().findOne({ abbreviation: 'asap' })
+    const processedData = [];
+  
+    // Retrieve the source from the database
+    const source = await Source.query().findOne({ abbreviation: 'asap' });
     if (!source) {
-      throw new Error('Source "asap" not found in the database. Please add it to the Source table.')
+      throw new Error('Source "asap" not found in the database. Please add it to the Source table.');
     }
-    logger.info(`Retrieved "asap" from DB: ${JSON.stringify(source)}`)
-
-    for (const record of fileContent) {
-      const isDoi = record['dataset_id']?.startsWith('10.')
-
-      const citationRecord = {
-        doi: record['dataset_id']?.startsWith('10.')
-          ? record['dataset_id']
-          : null,
-        accessionNumber: !record['dataset_id']?.startsWith('10.')
-          ? record['dataset_id']
-          : null,
+    logger.info(`Retrieved "asap" from DB: ${JSON.stringify(source)}`);
+  
+    // Create citations array
+    const citations = fileContent.map(record => {
+      const isDoi = record['dataset_id']?.startsWith('10.');
+      
+      return {
+        id: uuid(),
+        doi: isDoi ? record['dataset_id'] : null,
+        accessionNumber: !isDoi ? record['dataset_id'] : null,
         source: source.id,
         datacite: {},
         crossref: {},
         event: {
-          dataCiteDoi: record['dataset_id']?.startsWith('10.')
-          ? record['dataset_id']
-          : null
-        }
-      }
-
-      const activityLogEntry = await ActivityLog.query()
-        .insert({
-          action: 'assertion_incoming_asap',
-          data: JSON.stringify(citationRecord),
-          tableName: 'assertions',
-          type: 'activityLog',
-          fileKey: 'seed-source-processing-asap'
-        })
-        .returning('id')
-
-      citationRecord.activityLogId = activityLogEntry.id
-
-      processedData.push(citationRecord)
+          dataCiteDoi: isDoi ? record['dataset_id'] : null,
+        },
+      };
+    });
+  
+    // Create a single ActivityLog entry with all citations as JSON
+    const activityLogEntry = await ActivityLog.query()
+      .insert({
+        action: 'assertion_incoming_asap',
+        data: JSON.stringify(citations),
+        tableName: 'assertions',
+        type: 'activityLog',
+        fileKey: 'seed-source-processing-asap',
+      })
+      .returning('id');
+  
+    // Assign the activity log ID to each citation
+    for (const citation of citations) {
+      citation.activityLogId = activityLogEntry.id;
+      processedData.push(citation);
     }
-
-    const seedSource = new SeedSource()
-    seedSource.data = processedData
-    return seedSource
+  
+    const seedSource = new SeedSource();
+    seedSource.data = processedData;
+    return seedSource;
   }
 
   /**
