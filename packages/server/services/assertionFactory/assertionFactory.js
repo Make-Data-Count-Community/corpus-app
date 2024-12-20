@@ -4,7 +4,6 @@ const { useTransaction, logger } = require('@coko/server')
 const Source = require('../../models/source/source')
 const { model: Subject } = require('../../models/subject')
 const Assertion = require('../../models/assertion/assertion')
-const ActivityLog = require('../../models/activityLog/activityLog')
 
 const DataciteToAssertion = require('./dataciteToAssertion')
 const DataciteEventToAssertion = require('./dataciteEventToAssertion')
@@ -39,7 +38,6 @@ class AssertionFactory {
         activityId = chunks.activityId
 
         const source = sources.find(s => s.id === chunks.source)
-        // logger.info(`sources ${sources}, chunks ${chunks.source}, chunks ${chunks}`)
         const classes = AssertionFactory.SOURCE_MAP_CLASS[source.abbreviation]
         // eslint-disable-next-line no-await-in-loop
         await Promise.all(

@@ -4,7 +4,7 @@ const axios = require('../axiosService')
 const CziFile = require('./cziFile')
 const AwsS3Service = require('../awsS3Service')
 const { model: ActivityLog } = require('../../models/activityLog')
-const { model: Source } = require('../../models/source') // Import Source model
+const { model: Source } = require('../../models/source')
 
 class SeedSource {
   static async createInstanceDatacite(filter) {
@@ -28,7 +28,8 @@ class SeedSource {
     // Create citations array
     const citations = fileContent.map(record => {
       const isDoi = record['dataset_id']?.startsWith('10.');
-      
+      const isCrossrefDoi = record['article_id']?.startsWith('10.');
+
       return {
         id: uuid(),
         doi: isDoi ? record['dataset_id'] : null,
@@ -38,6 +39,7 @@ class SeedSource {
         crossref: {},
         event: {
           dataCiteDoi: isDoi ? record['dataset_id'] : null,
+          crossrefDoi: isCrossrefDoi ? record['article_id'] : null,
         },
       };
     });
@@ -55,7 +57,7 @@ class SeedSource {
   
     // Assign the activity log ID to each citation
     for (const citation of citations) {
-      citation.activityLogId = activityLogEntry.id;
+      citation.activityId = activityLogEntry.id;
       processedData.push(citation);
     }
   

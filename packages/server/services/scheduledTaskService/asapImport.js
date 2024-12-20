@@ -9,7 +9,7 @@ const asapFilePath = process.env.ASAP_LOCAL_FILE_PATH
 
 const asapImport = async () => {
   try {
-    console.log('######### Start Reading ASAP files from local #########')
+    logger.info('######### Start Reading ASAP files from local #########')
 
     if (!asapFilePath) {
       throw new Error('ASAP_LOCAL_FILE_PATH environment variable is not set.')
@@ -20,6 +20,7 @@ const asapImport = async () => {
     }
 
     const rawContent = fs.readFileSync(asapFilePath, 'utf8')
+
     const fileContent = parse(rawContent, { 
       columns: true, 
       skip_empty_lines: true,
