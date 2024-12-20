@@ -36,7 +36,6 @@ const asapImport = async () => {
     metadataSource.startStreamCitations(null)
     const result = await metadataSource.getResult
     logger.info(`Saving ${result.length} assertions for ASAP file...`)
-    logger.info(`${JSON.stringify(result, null, 2)}`)
     await AssertionFactory.saveDataToAssertionModel(result)
   } catch (e) {
     throw new Error(e)

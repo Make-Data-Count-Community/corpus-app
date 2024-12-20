@@ -48,8 +48,15 @@ class AssertionFactory {
         )
 
         assertion.activityId = chunks.activityId
-        assertion.objId = '10.1358/mf'
-        assertion.subjId = '//dx.doi.org/10.1358/mf'
+
+        if(!assertion.objId) {
+          assertion.objId = 'none'
+        }
+
+        if(!assertion.subjId) {
+          assertion.subjId = 'none'
+        }
+
         assertions.push(assertion)
       }
 
