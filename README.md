@@ -39,14 +39,21 @@ The app should be available at `http://localhost/dashboard`
 
 For the production build, the client files are bundled into a static `_build` directory from which the client app is served, through the port specified in the `.env` variable `CLIENT_PORT`.
 
-In order to create a production build, you need to connect to the `DataciteReadSeedSource-1` as `ec2-user`, then cd into the `/datacite` directory. From there you can build the production docker image and run it using:
+1. ssh to EC2 machine using `ec2-user` (download key from 1Password, get machine public DNS from AWS)
 
-```
-docker-compose -f docker-compose.production.yml build
-docker-compose -f docker-compose.production.yml up
-```
+    ssh-add -K [PATH TO KEY FILE]
+    ssh -A -i [PATH TO KEY FILE] ec2-user@[MACHINE PUBLIC IPV4 DNS]
 
-The app should now be available throught that ec2 instances DNS, or ideally through `http://corpus.stage.datacite.org/`
+2. Move to the corpus-app directory
+
+    cd corpus-app
+
+3. Build the app using the production docker file and run it
+
+    docker-compose -f docker-compose.production.yml build
+    docker-compose -f docker-compose.production.yml up
+
+The app should now be available throught ec2 instances DNS, or through the load balancer at `https://corpus.datacite.org/`
 
 ## Data Ingestion
 
@@ -167,6 +174,6 @@ This should allow traffic through port 80 until the container is rebuilt.
 
 ## Authors and acknowledgment
 
-Development by Giannis Kopanas and Grant van Helsdingen 
+Development by Giannis Kopanas and Grant van Helsdingen
 
 Contact Dione Mentis at dione@coko.foundation for any other questions.
