@@ -71,14 +71,14 @@ class AssertionFactory {
 
       logger.info(`Updating activity log ${activityId} to done`)
 
-      // const patch = await ActivityLog.query(trx)
-      //   .findById(activityId)
-      //   .patch({ done: true }) // TODO do we want to import entries that have proccessed=true but done=false
+      const patch = await ActivityLog.query(trx)
+        .findById(activityId)
+        .patch({ done: true }) // TODO do we want to import entries that have proccessed=true but done=false
 
       logger.info(
         `All assertions from activity log ${activityId} inserted into DB`,
       )
-      return 12
+      return patch
     })
   }
 }
