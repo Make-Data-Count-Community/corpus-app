@@ -35,6 +35,10 @@ class SeedSource {
         doi: isDoi ? record['dataset_id'] : null,
         accessionNumber: !isDoi ? record['dataset_id'] : null,
         source: source.id,
+        dataset: record['dataset_id'],
+        subjId: record['dataset_id'],
+        objId: record['article_id'],
+        publication: record['article_id'],
         datacite: {},
         crossref: {},
         event: {
