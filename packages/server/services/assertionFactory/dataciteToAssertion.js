@@ -19,11 +19,6 @@ class DataciteToAssertion extends AssertionHelpers {
     assertionInstance.title = chunk.datacite.title
     assertionInstance.id = assertionInstance.id || uuid()
 
-    assertionInstance.dataset = chunk.dataset_id
-    assertionInstance.subjId = chunk.dataset_id // subject ID from dataset_id
-    assertionInstance.objId = chunk.article_id // object ID from article_id
-    assertionInstance.publication = chunk.article_id // publication from article_id
-
     if (chunk.datacite.subjects) {
       const titles = chunk.datacite.subjects
 

@@ -130,6 +130,12 @@ class Assertion extends BaseModel {
           type: 'string',
           format: 'uuid',
         },
+        dataset: {
+          type: ['string', 'null'],
+        },
+        publication: {
+          type: ['string', 'null'],
+        },
       },
       type: 'object',
     }

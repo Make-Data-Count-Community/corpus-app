@@ -3,8 +3,8 @@ const { chunk } = require('lodash')
 const { useTransaction, logger } = require('@coko/server')
 const Source = require('../../models/source/source')
 const { model: Subject } = require('../../models/subject')
+const { model: ActivityLog } = require('../../models/activityLog')
 const Assertion = require('../../models/assertion/assertion')
-
 const DataciteToAssertion = require('./dataciteToAssertion')
 const DataciteEventToAssertion = require('./dataciteEventToAssertion')
 const CrossrefToAssertion = require('./crossrefToAssertion')
@@ -48,14 +48,11 @@ class AssertionFactory {
         )
 
         assertion.activityId = chunks.activityId
+        assertion.objId = chunks.objId
+        assertion.subjId =chunks.subjId
 
-        if(!assertion.objId) {
-          assertion.objId = 'none'
-        }
-
-        if(!assertion.subjId) {
-          assertion.subjId = 'none'
-        }
+        assertion.dataset = chunks.subjId
+        assertion.publication =chunks.objId
 
         assertions.push(assertion)
       }
