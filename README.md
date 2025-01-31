@@ -55,7 +55,11 @@ For the production build, the client files are bundled into a static `_build` di
 
 The app should now be available throught ec2 instances DNS, or through the load balancer at `https://corpus.datacite.org/`
 
-### Update production dashboard after data ingestion
+### Update production dashboard after data ingestion & re-deploy
+
+Data ingestions are done in a new database copy. After each ingestion is complete, the dashboard is updated by switching over to the new database.
+
+**Always perform the steps below on the staging instance https://corpus.stage.datacite.org before updating the production instance https://corpus.datacite.org .**
 
 1. Make sure the aggregate data in the database has been updated per [Refreshing aggregate data](#Refreshing-aggregate-data) below
 2. Follow steps 1 and 2 above to ssh to EC2 instance and move to corpus-app directory.
