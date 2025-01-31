@@ -39,21 +39,36 @@ The app should be available at `http://localhost/dashboard`
 
 For the production build, the client files are bundled into a static `_build` directory from which the client app is served, through the port specified in the `.env` variable `CLIENT_PORT`.
 
-1. ssh to EC2 machine using `ec2-user` (download key from 1Password, get machine public DNS from AWS)
+1. ssh to EC2 instance using `ec2-user` (download key from 1Password, get machine public DNS from AWS)
 
-    ssh-add -K [PATH TO KEY FILE]
-    ssh -A -i [PATH TO KEY FILE] ec2-user@[MACHINE PUBLIC IPV4 DNS]
+        ssh-add -K [PATH TO KEY FILE]
+        ssh -A -i [PATH TO KEY FILE] ec2-user@[MACHINE PUBLIC IPV4 DNS]
 
 2. Move to the corpus-app directory
 
-    cd corpus-app
+        cd corpus-app
 
 3. Build the app using the production docker file and run it
 
-    docker-compose -f docker-compose.production.yml build
-    docker-compose -f docker-compose.production.yml up
+        sudo docker-compose -f docker-compose.production.yml build
+        sudo docker-compose -f docker-compose.production.yml up -d
 
 The app should now be available throught ec2 instances DNS, or through the load balancer at `https://corpus.datacite.org/`
+
+### Update production dashboard after data ingestion
+
+1. Make sure the aggregate data in the database has been updated per [Refreshing aggregate data](#Refreshing-aggregate-data) below
+2. Follow steps 1 and 2 above to ssh to EC2 instance and move to corpus-app directory.
+3. Open the .env file, update the POSTGRES_HOST var with the latest database instance and save the file.
+
+        vim .env
+
+4. Stop the application
+
+        sudo docker-compose -f docker-compose.production.yml stop
+
+4. Follow step 3 above to build and run the app.
+
 
 ## Data Ingestion
 
