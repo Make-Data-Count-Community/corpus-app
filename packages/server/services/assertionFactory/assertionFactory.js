@@ -48,11 +48,25 @@ class AssertionFactory {
         )
 
         assertion.activityId = chunks.activityId
-        assertion.objId = chunks.objId
-        assertion.subjId =chunks.subjId
 
-        assertion.dataset = chunks.subjId
-        assertion.publication =chunks.objId
+        if (!assertion.objId) {
+          assertion.objId = chunks.objId
+        }
+
+        if (!assertion.subjId) {
+          assertion.subjId = chunks.subjId
+        }
+
+        assertion.dataset = assertion.subjId
+        assertion.publication = assertion.objId
+
+        if (!assertion.accessionNumber){
+          assertion.accessionNumber = chunks.accessionNumber
+        }
+
+        if (!assertion.doi){
+          assertion.doi = chunks.doi
+        }
 
         assertions.push(assertion)
       }

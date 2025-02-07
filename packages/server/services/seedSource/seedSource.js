@@ -2,6 +2,7 @@ const { logger, uuid } = require('@coko/server')
 const DataCiteEventData = require('./dataCiteEventData')
 const axios = require('../axiosService')
 const CziFile = require('./cziFile')
+const AsapFile = require('./asapFile')
 const AwsS3Service = require('../awsS3Service')
 const { model: ActivityLog } = require('../../models/activityLog')
 const { model: Source } = require('../../models/source')
@@ -29,16 +30,17 @@ class SeedSource {
     const citations = fileContent.map(record => {
       const isDoi = record['dataset_id']?.startsWith('10.');
       const isCrossrefDoi = record['article_id']?.startsWith('10.');
+      const doiBaseUrl = 'https://doi.org/';
 
       return {
         id: uuid(),
         doi: isDoi ? record['dataset_id'] : null,
         accessionNumber: !isDoi ? record['dataset_id'] : null,
         source: source.id,
-        dataset: record['dataset_id'],
-        subjId: record['dataset_id'],
-        objId: record['article_id'],
-        publication: record['article_id'],
+        dataset: isDoi ? `${doiBaseUrl}${record['dataset_id']}` : record['dataset_id'],
+        subjId: isDoi ? `${doiBaseUrl}${record['dataset_id']}` : record['dataset_id'],
+        objId: isCrossrefDoi ? `${doiBaseUrl}${record['article_id']}` : record['article_id'],
+        publication: isCrossrefDoi ? `${doiBaseUrl}${record['article_id']}` : record['article_id'],
         datacite: {},
         crossref: {},
         event: {
