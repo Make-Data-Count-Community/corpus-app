@@ -305,7 +305,7 @@ const bySourceFilterParams = [
   },
 ]
 
-const bySourceDefaultTab = 'chart'
+const bySourceDefaultTab = 'table'
 
 const corpusGrowthTableColumns = [
   {
@@ -552,15 +552,8 @@ const DashboardPage = () => {
     [],
   )
 
-  const [bySourceSelectedFacetCount, setBySourceSelectedFacetCount] =
-    useState(0)
-
   const [bySourceSelectedFacetValues, setBySourceSelectedFacetValues] =
     useState([])
-
-  const [bySourceShowApplyFilter, setBySourceShowApplyFilter] = useState(false)
-
-  const [bySourceShowClearFilter, setBySourceShowClearFilter] = useState(false)
 
   const [bySourceVisualisationData, setBySourceVisualisationData] = useState([])
 
@@ -569,10 +562,6 @@ const DashboardPage = () => {
   const [bySourceIsDownloadListOpen, setBySourceIsDownloadListOpen] =
     useState(false)
 
-  const [
-    bySourceEmptyFacetValueListLabel,
-    setBySourceEmptyFacetValueListLabel,
-  ] = useState(facetNotSelectedLabel)
 
   const bySourceNewView = useRef(null)
 
@@ -1876,37 +1865,12 @@ const DashboardPage = () => {
         byPublisherShowClearFilterButton={byPublisherShowClearFilter}
         byPublisherShowExpandButton
         byPublisherTableColumns={byPublisherTableColumns}
-        bySourceData={
-          bySourceSelectedTab === 'chart'
-            ? bySourceVisualisationData
-            : transformChartData(
-                bySourceVisualisationData,
-                'xField',
-                'stackField',
-                'yField',
-              )
-        }
-        bySourceFilterParams={bySourceFilters}
-        bySourceFilterValueOptions={bySourceDisplayFacetValues}
+        bySourceData={bySourceVisualisationData}
         bySourceIsDownloadListOpen={bySourceIsDownloadListOpen}
-        bySourceIsFilterOpen={bySourceIsFilterOpen}
         bySourceLoading={bySourceDataLoading || fullFacetOptionsLoading}
-        bySourceOnApplyFilters={handleBySourceApplyFilters}
-        bySourceOnClearFilters={handleBySourceClearFilters}
         bySourceOnDownloadOptionClick={handleBySourceDownloadOptionClick}
-        bySourceOnEmptyListLabel={bySourceEmptyFacetValueListLabel}
-        bySourceOnFacetItemClick={handleBySourceFacetItemClick}
-        bySourceOnFacetValueClick={handleBySourceFacetValueClick}
-        bySourceOnFilterClick={handleBySourceFilterButtonClick}
-        bySourceOnFilterClose={handleBySourceOnClose}
-        bySourceOnFilterSearchChange={handleBySourceSearchChange}
         bySourceOnFooterTabClick={handleBySourceFooterTabClick}
-        bySourceOnNewView={handleBySourceOnNewView}
-        bySourceSelectedFacetCount={bySourceSelectedFacetCount}
-        bySourceSelectedFacetValues={bySourceSelectedFacetValues}
         bySourceSelectedFooterTab={bySourceSelectedTab}
-        bySourceShowApplyFilterButton={bySourceShowApplyFilter}
-        bySourceShowClearFilterButton={bySourceShowClearFilter}
         bySourceShowExpandButton
         bySourceTableColumns={bySourceTableColumns}
         bySubjectData={

@@ -45,28 +45,12 @@ const expandPath = '/visualisation/citation-counts-by-source'
 const CitationCountsBySource = props => {
   const {
     data,
-    filterParams,
-    filterValueOptions,
     isDownloadListOpen,
-    isFilterOpen,
     loading,
-    onApplyFilters,
-    onClearFilters,
     onDownloadOptionClick,
-    onEmptyListLabel,
-    onFacetItemClick,
-    onFacetValueClick,
-    onFilterClick,
-    onFilterClose,
-    onFilterSearchChange,
     onFooterTabClick,
-    onNewView,
     selectedFooterTab,
-    selectedFacetCount,
-    selectedFacetValues,
     showExpandButton,
-    showApplyFilterButton,
-    showClearFilterButton,
     tableColumns,
   } = props
 
@@ -74,43 +58,14 @@ const CitationCountsBySource = props => {
     <Visualisation
       downloadOptions={downloadOptions}
       expandPath={expandPath}
-      filterParams={filterParams}
-      filterValueOptions={filterValueOptions}
       isDownloadListOpen={isDownloadListOpen}
-      isFilterOpen={isFilterOpen}
       loading={loading}
-      onApplyFilters={onApplyFilters}
-      onClearFilters={onClearFilters}
       onDownloadOptionClick={onDownloadOptionClick}
-      onEmptyListLabel={onEmptyListLabel}
-      onFacetItemClick={onFacetItemClick}
-      onFacetValueClick={onFacetValueClick}
-      onFilterClick={onFilterClick}
-      onFilterClose={onFilterClose}
-      onFilterSearchChange={onFilterSearchChange}
       onFooterTabClick={onFooterTabClick}
-      selectedFacetCount={selectedFacetCount}
-      selectedFacetValues={selectedFacetValues}
       selectedFooterTab={selectedFooterTab}
-      showApplyFilterButton={showApplyFilterButton}
-      showClearFilterButton={showClearFilterButton}
       showExpandButton={showExpandButton}
-      showFilterButton
-      showFooterChartTab
       visualisationTitle={title}
     >
-      {selectedFooterTab === 'chart' && (
-        <StackedBarChart
-          data={data}
-          onNewView={onNewView}
-          stackField={stackField}
-          stackFieldTooltipTitle={stackFieldTooltipTitle}
-          stackItems={stackItems}
-          xField={xField}
-          yField={yField}
-          yFieldTooltipTitle={yFieldTooltipTitle}
-        />
-      )}
       {selectedFooterTab === 'table' && (
         <Table columns={tableColumns} data={data} />
       )}
@@ -120,49 +75,12 @@ const CitationCountsBySource = props => {
 
 CitationCountsBySource.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  filterParams: PropTypes.arrayOf(
-    PropTypes.shape({
-      isFacetSelected: PropTypes.bool,
-      type: PropTypes.string,
-      values: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.string,
-          value: PropTypes.string,
-        }),
-      ),
-    }),
-  ).isRequired,
-  filterValueOptions: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      value: PropTypes.string,
-    }),
-  ).isRequired,
-  isFilterOpen: PropTypes.bool.isRequired,
   isDownloadListOpen: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
-  onApplyFilters: PropTypes.func.isRequired,
-  onClearFilters: PropTypes.func.isRequired,
   onDownloadOptionClick: PropTypes.func.isRequired,
-  onEmptyListLabel: PropTypes.string.isRequired,
-  onFacetItemClick: PropTypes.func.isRequired,
-  onFacetValueClick: PropTypes.func.isRequired,
-  onFilterClick: PropTypes.func.isRequired,
-  onFilterClose: PropTypes.func.isRequired,
-  onFilterSearchChange: PropTypes.func.isRequired,
   onFooterTabClick: PropTypes.func.isRequired,
-  onNewView: PropTypes.func.isRequired,
   selectedFooterTab: PropTypes.string.isRequired,
-  selectedFacetCount: PropTypes.number.isRequired,
-  selectedFacetValues: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      value: PropTypes.string,
-    }),
-  ).isRequired,
   showExpandButton: PropTypes.bool,
-  showApplyFilterButton: PropTypes.bool.isRequired,
-  showClearFilterButton: PropTypes.bool.isRequired,
   tableColumns: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string,

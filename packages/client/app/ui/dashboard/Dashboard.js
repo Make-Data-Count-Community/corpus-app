@@ -59,28 +59,12 @@ const Dashboard = props => {
     uniqueCountTableColumns,
 
     bySourceData,
-    bySourceFilterParams,
-    bySourceFilterValueOptions,
     bySourceIsDownloadListOpen,
-    bySourceIsFilterOpen,
     bySourceLoading,
-    bySourceOnApplyFilters,
-    bySourceOnClearFilters,
     bySourceOnDownloadOptionClick,
-    bySourceOnEmptyListLabel,
-    bySourceOnFacetItemClick,
-    bySourceOnFacetValueClick,
-    bySourceOnFilterClick,
-    bySourceOnFilterClose,
-    bySourceOnFilterSearchChange,
     bySourceOnFooterTabClick,
-    bySourceOnNewView,
-    bySourceSelectedFacetCount,
-    bySourceSelectedFacetValues,
     bySourceSelectedFooterTab,
     bySourceShowExpandButton,
-    bySourceShowApplyFilterButton,
-    bySourceShowClearFilterButton,
     bySourceTableColumns,
 
     byPublisherData,
@@ -259,27 +243,11 @@ const Dashboard = props => {
       <VisualisationRow>
         <CitationCountsBySource
           data={bySourceData}
-          filterParams={bySourceFilterParams}
-          filterValueOptions={bySourceFilterValueOptions}
           isDownloadListOpen={bySourceIsDownloadListOpen}
-          isFilterOpen={bySourceIsFilterOpen}
           loading={bySourceLoading}
-          onApplyFilters={bySourceOnApplyFilters}
-          onClearFilters={bySourceOnClearFilters}
           onDownloadOptionClick={bySourceOnDownloadOptionClick}
-          onEmptyListLabel={bySourceOnEmptyListLabel}
-          onFacetItemClick={bySourceOnFacetItemClick}
-          onFacetValueClick={bySourceOnFacetValueClick}
-          onFilterClick={bySourceOnFilterClick}
-          onFilterClose={bySourceOnFilterClose}
-          onFilterSearchChange={bySourceOnFilterSearchChange}
           onFooterTabClick={bySourceOnFooterTabClick}
-          onNewView={bySourceOnNewView}
-          selectedFacetCount={bySourceSelectedFacetCount}
-          selectedFacetValues={bySourceSelectedFacetValues}
           selectedFooterTab={bySourceSelectedFooterTab}
-          showApplyFilterButton={bySourceShowApplyFilterButton}
-          showClearFilterButton={bySourceShowClearFilterButton}
           showExpandButton={bySourceShowExpandButton}
           tableColumns={bySourceTableColumns}
         />

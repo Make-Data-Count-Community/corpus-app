@@ -125,7 +125,7 @@ const bySourceFilterParams = [
   },
 ]
 
-const bySourceDefaultTab = 'chart'
+const bySourceDefaultTab = 'table'
 
 const CitationCountsBySourcePage = () => {
   const [fullFacetOptions, setFullFacetOptions] = useState([])
@@ -470,37 +470,13 @@ const CitationCountsBySourcePage = () => {
         Citation counts by source of citation page
       </VisuallyHiddenElement>
       <CitationCountsBySource
-        data={
-          bySourceSelectedTab === 'chart'
-            ? bySourceVisualisationData
-            : transformChartData(
-                bySourceVisualisationData,
-                'xField',
-                'stackField',
-                'yField',
-              )
-        }
-        filterParams={bySourceFilters}
-        filterValueOptions={bySourceDisplayFacetValues}
+        data={bySourceVisualisationData}
         isDownloadListOpen={bySourceIsDownloadListOpen}
-        isFilterOpen={bySourceIsFilterOpen}
         loading={bySourceDataLoading || fullFacetOptionsLoading}
-        onApplyFilters={handleBySourceApplyFilters}
-        onClearFilters={handleBySourceClearFilters}
         onDownloadOptionClick={handleBySourceDownloadOptionClick}
-        onEmptyListLabel={bySourceEmptyFacetValueListLabel}
-        onFacetItemClick={handleBySourceFacetItemClick}
-        onFacetValueClick={handleBySourceFacetValueClick}
-        onFilterClick={handleBySourceFilterButtonClick}
-        onFilterClose={handleBySourceOnClose}
-        onFilterSearchChange={handleBySourceSearchChange}
         onFooterTabClick={handleBySourceFooterTabClick}
-        onNewView={handleBySourceOnNewView}
-        selectedFacetCount={bySourceSelectedFacetCount}
-        selectedFacetValues={bySourceSelectedFacetValues}
         selectedFooterTab={bySourceSelectedTab}
-        showApplyFilterButton={bySourceShowApplyFilter}
-        showClearFilterButton={bySourceShowClearFilter}
+        showExpandButton
         tableColumns={bySourceTableColumns}
       />
       <VisuallyHiddenElement
