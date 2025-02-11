@@ -305,7 +305,7 @@ const bySourceFilterParams = [
   },
 ]
 
-const bySourceDefaultTab = 'chart'
+const bySourceDefaultTab = 'table'
 
 const corpusGrowthTableColumns = [
   {
@@ -1747,17 +1747,6 @@ const DashboardPage = () => {
       )
 
       downloadFile(csvString, 'Citation counts by source of citation.csv')
-    } else if (type === 'png' || type === 'svg') {
-      const imgString = await bySourceNewView.current.toImageURL(
-        type,
-        type === 'png' ? 4 : 2,
-      )
-
-      downloadFile(
-        imgString,
-        `Citation counts by source of citation.${type}`,
-        type,
-      )
     }
   }
 
