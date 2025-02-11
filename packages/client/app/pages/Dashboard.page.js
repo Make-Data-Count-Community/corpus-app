@@ -1139,14 +1139,14 @@ const DashboardPage = () => {
         },
       )
 
-      downloadFile(csvString, 'Citation counts over time.csv')
+      downloadFile(csvString, 'Citation counts by publication date.csv')
     } else if (type === 'png' || type === 'svg') {
       const imgString = await overTimeNewView.current.toImageURL(
         type,
         type === 'png' ? 4 : 2,
       )
 
-      downloadFile(imgString, `Citation counts over time.${type}`, type)
+      downloadFile(imgString, `Citation counts by publication date.${type}`, type)
     }
   }
 
@@ -1788,14 +1788,14 @@ const DashboardPage = () => {
         },
       )
 
-      downloadFile(csvString, 'Data citations corpus growth.csv')
+      downloadFile(csvString, 'Data Citation Corpus growth.csv')
     } else if (type === 'png' || type === 'svg') {
       const imgString = await corpusGrowthNewView.current.toImageURL(
         type,
         type === 'png' ? 4 : 2,
       )
 
-      downloadFile(imgString, `Data citations corpus growth.${type}`, type)
+      downloadFile(imgString, `Data Citation Corpus growth.${type}`, type)
     }
   }
 

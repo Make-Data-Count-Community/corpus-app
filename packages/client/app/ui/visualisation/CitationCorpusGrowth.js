@@ -9,7 +9,7 @@ import CsvSymbol from '../../../static/symbol-csv-file.svg'
 import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
-const title = 'Data citations corpus growth'
+const title = 'Data Citation Corpus growth'
 const stackField = 'stackField'
 const stackItems = ['DOI', 'Accession Number']
 const xField = 'xField'
