@@ -9,8 +9,7 @@ services:
     entrypoint:
       [
         'node_modules/.bin/wait-for-it',
-        # 'asap-ingest-jan-09.cpcwgoa3uzw1.eu-west-1.rds.amazonaws.com:5432',
-        'corpus-v3.cpcwgoa3uzw1.eu-west-1.rds.amazonaws.com:5432',
+        'asap-11-15-2024.cpcwgoa3uzw1.eu-west-1.rds.amazonaws.com:5432',
         '--',
         'sh',
         'scripts/setupDevServer.sh',
@@ -18,7 +17,7 @@ services:
     command:
       [
         'node_modules/.bin/nodemon',
-        'dataciteImport.js',
+        'asapImport.js',
         '--watch',
         '--ext',
         'js,graphql',
@@ -34,11 +33,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-dev_user_password}
       - PUBSWEET_SECRET=${PUBSWEET_SECRET:-superSecretThing}
       - SERVER_PORT=${SERVER_PORT:-3000}
-      - START_YEAR=${START_YEAR}
-      - START_YEAR_MONTH=${START_YEAR_MONTH}
-      - END_YEAR=${END_YEAR}
-      - END_YEAR_MONTH=${END_YEAR_MONTH}
-      - END_YEAR_MONTH_LAST_DAY=${END_YEAR_MONTH_LAST_DAY}
       - HOSTNAME=${HOSTNAME}
       - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
       - PASSWORD_RESET_PATH=${PASSWORD_RESET_PATH:-password-reset}
@@ -49,6 +43,7 @@ services:
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-nonRootPassword}
       - S3_BUCKET=${S3_BUCKET:-uploads}
       - S3_CZI_FOLDER_PATH=${S3_CZI_FOLDER_PATH}
+      - ASAP_LOCAL_FILE_PATH=${ASAP_LOCAL_FILE_PATH:-ingest-data/asap_citations.csv}
     volumes:
       - ./packages/server/api:/home/node/app/api
       - ./packages/server/config:/home/node/app/config
@@ -57,3 +52,4 @@ services:
       - ./packages/server/rest:/home/node/app/rest
       - ./packages/server/scripts:/home/node/app/scripts
       - ./packages/server/services:/home/node/app/services
+      - ./packages/server/data:/home/node/app/data

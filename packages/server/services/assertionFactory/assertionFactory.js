@@ -3,9 +3,8 @@ const { chunk } = require('lodash')
 const { useTransaction, logger } = require('@coko/server')
 const Source = require('../../models/source/source')
 const { model: Subject } = require('../../models/subject')
+const { model: ActivityLog } = require('../../models/activityLog')
 const Assertion = require('../../models/assertion/assertion')
-const ActivityLog = require('../../models/activityLog/activityLog')
-
 const DataciteToAssertion = require('./dataciteToAssertion')
 const DataciteEventToAssertion = require('./dataciteEventToAssertion')
 const CrossrefToAssertion = require('./crossrefToAssertion')
@@ -17,6 +16,10 @@ class AssertionFactory {
       DataciteToAssertion,
       DataciteEventToAssertion,
       CrossrefToAssertion,
+    ],
+    asap: [
+      DataciteToAssertion,
+      CrossrefToAssertion
     ],
     czi: [DataciteToAssertion, CrossrefToAssertion, CziToAssertion],
   }
@@ -45,6 +48,26 @@ class AssertionFactory {
         )
 
         assertion.activityId = chunks.activityId
+
+        if (!assertion.objId) {
+          assertion.objId = chunks.objId
+        }
+
+        if (!assertion.subjId) {
+          assertion.subjId = chunks.subjId
+        }
+
+        assertion.dataset = assertion.subjId
+        assertion.publication = assertion.objId
+
+        if (!assertion.accessionNumber){
+          assertion.accessionNumber = chunks.accessionNumber
+        }
+
+        if (!assertion.doi){
+          assertion.doi = chunks.doi
+        }
+
         assertions.push(assertion)
       }
 

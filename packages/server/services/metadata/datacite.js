@@ -33,13 +33,14 @@ class Datacite extends Transform {
       )
 
       if (chunk.datacite.type && chunk.datacite.type !== 'Dataset') {
-        logger.info(`Excluding ${dataCiteDoi} because it is not a dataset`)
+        logger.info(`Excluding ${dataCiteDoi} because it is not a dataset ${chunk.datacite.type}`)
         // set excluded flag to prevent this chunk from being saved on pipeline finish
         chunk.excluded = true
         callback(null, chunk)
         return
       }
 
+      logger.info(`Including ${dataCiteDoi} because it is a dataset ${chunk.datacite.type}`)
       // Get Title
       chunk.datacite.title = get(
         data,

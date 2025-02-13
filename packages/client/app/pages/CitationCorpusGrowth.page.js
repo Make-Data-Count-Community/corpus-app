@@ -164,14 +164,14 @@ const CitationCorpusGrowthPage = () => {
         },
       )
 
-      downloadFile(csvString, 'Data citations corpus growth.csv')
+      downloadFile(csvString, 'Data Citation Corpus growth.csv')
     } else if (type === 'png' || type === 'svg') {
       const imgString = await corpusGrowthNewView.current.toImageURL(
         type,
         type === 'png' ? 4 : 2,
       )
 
-      downloadFile(imgString, `Data citations corpus growth.${type}`, type)
+      downloadFile(imgString, `Data Citation Corpus growth.${type}`, type)
     }
   }
 
@@ -182,7 +182,7 @@ const CitationCorpusGrowthPage = () => {
   return (
     <>
       <VisuallyHiddenElement as="h1">
-        Data citations corpus growth
+        Data Citation Corpus growth
       </VisuallyHiddenElement>
       <CitationCorpusGrowth
         data={

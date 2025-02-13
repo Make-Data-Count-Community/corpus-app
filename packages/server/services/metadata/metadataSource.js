@@ -1,6 +1,7 @@
 const { Writable, Readable } = require('stream')
 const DataCite = require('./datacite')
 const Crossref = require('./crossref')
+const { logger } = require('@coko/server')
 
 class MetadataSource {
   constructor(streamApis) {

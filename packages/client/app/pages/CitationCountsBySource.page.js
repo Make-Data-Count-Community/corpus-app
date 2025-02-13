@@ -125,7 +125,7 @@ const bySourceFilterParams = [
   },
 ]
 
-const bySourceDefaultTab = 'chart'
+const bySourceDefaultTab = 'table'
 
 const CitationCountsBySourcePage = () => {
   const [fullFacetOptions, setFullFacetOptions] = useState([])
