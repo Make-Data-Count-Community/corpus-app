@@ -39,14 +39,40 @@ The app should be available at `http://localhost/dashboard`
 
 For the production build, the client files are bundled into a static `_build` directory from which the client app is served, through the port specified in the `.env` variable `CLIENT_PORT`.
 
-In order to create a production build, you need to connect to the `DataciteReadSeedSource-1` as `ec2-user`, then cd into the `/datacite` directory. From there you can build the production docker image and run it using:
+1. ssh to EC2 instance using `ec2-user` (download key from 1Password, get machine public DNS from AWS)
 
-```
-docker-compose -f docker-compose.production.yml build
-docker-compose -f docker-compose.production.yml up
-```
+        ssh-add -K [PATH TO KEY FILE]
+        ssh -A -i [PATH TO KEY FILE] ec2-user@[MACHINE PUBLIC IPV4 DNS]
 
-The app should now be available throught that ec2 instances DNS, or ideally through `http://corpus.stage.datacite.org/`
+2. Move to the corpus-app directory
+
+        cd corpus-app
+
+3. Build the app using the production docker file and run it
+
+        sudo docker-compose -f docker-compose.production.yml build
+        sudo docker-compose -f docker-compose.production.yml up -d
+
+The app should now be available throught ec2 instances DNS, or through the load balancer at `https://corpus.datacite.org/`
+
+### Update production dashboard after data ingestion & re-deploy
+
+Data ingestions are done in a new database copy. After each ingestion is complete, the dashboard is updated by switching over to the new database.
+
+**Always perform the steps below on the staging instance https://corpus.stage.datacite.org before updating the production instance https://corpus.datacite.org .**
+
+1. Make sure the aggregate data in the database has been updated per [Refreshing aggregate data](#Refreshing-aggregate-data) below
+2. Follow steps 1 and 2 above to ssh to EC2 instance and move to corpus-app directory.
+3. Open the .env file, update the POSTGRES_HOST var with the latest database instance and save the file.
+
+        vim .env
+
+4. Stop the application
+
+        sudo docker-compose -f docker-compose.production.yml stop
+
+4. Follow step 3 above to build and run the app.
+
 
 ## Data Ingestion
 
@@ -167,6 +193,6 @@ This should allow traffic through port 80 until the container is rebuilt.
 
 ## Authors and acknowledgment
 
-Development by Giannis Kopanas and Grant van Helsdingen 
+Development by Giannis Kopanas and Grant van Helsdingen
 
 Contact Dione Mentis at dione@coko.foundation for any other questions.

@@ -10,29 +10,8 @@ import PngSymbol from '../../../static/symbol-png-file.svg'
 import SvgSymbol from '../../../static/symbol-svg-file.svg'
 
 const title = 'Citation counts by source of citation'
-const stackField = 'stackField'
-const stackItems = ['DOI', 'Accession Number']
-const xField = 'xField'
-const yField = 'yField'
-const stackFieldTooltipTitle = 'Value'
-const yFieldTooltipTitle = 'Citations'
 
 const downloadOptions = [
-  {
-    type: 'png',
-    label: 'PNG',
-    symbol: PngSymbol,
-  },
-  //   {
-  //     type: 'pdf',
-  //     label: 'PDF',
-  //     symbol: PdfSymbol,
-  //   },
-  {
-    type: 'svg',
-    label: 'SVG',
-    symbol: SvgSymbol,
-  },
   {
     type: 'csv',
     label: 'CSV',
@@ -96,21 +75,9 @@ const CitationCountsBySource = props => {
       showClearFilterButton={showClearFilterButton}
       showExpandButton={showExpandButton}
       showFilterButton
-      showFooterChartTab
       visualisationTitle={title}
     >
-      {selectedFooterTab === 'chart' && (
-        <StackedBarChart
-          data={data}
-          onNewView={onNewView}
-          stackField={stackField}
-          stackFieldTooltipTitle={stackFieldTooltipTitle}
-          stackItems={stackItems}
-          xField={xField}
-          yField={yField}
-          yFieldTooltipTitle={yFieldTooltipTitle}
-        />
-      )}
+
       {selectedFooterTab === 'table' && (
         <Table columns={tableColumns} data={data} />
       )}

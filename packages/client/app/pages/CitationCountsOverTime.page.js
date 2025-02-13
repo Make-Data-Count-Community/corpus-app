@@ -447,14 +447,14 @@ const CitationCountsOverTimePage = () => {
         },
       )
 
-      downloadFile(csvString, 'Citation counts over time.csv')
+      downloadFile(csvString, 'Citation counts by publication date.csv')
     } else if (type === 'png' || type === 'svg') {
       const imgString = await overTimeNewView.current.toImageURL(
         type,
         type === 'png' ? 4 : 2,
       )
 
-      downloadFile(imgString, `Citation counts over time.${type}`, type)
+      downloadFile(imgString, `Citation counts by publication date.${type}`, type)
     }
   }
 
@@ -465,7 +465,7 @@ const CitationCountsOverTimePage = () => {
   return (
     <>
       <VisuallyHiddenElement as="h1">
-        Citation counts over time page
+        Citation counts by publication date page
       </VisuallyHiddenElement>
       <CitationCountsOverTime
         data={

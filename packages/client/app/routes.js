@@ -30,7 +30,7 @@ const regexPaths = [
   },
   {
     path: /^\/visualisation\/citation-counts-over-time$/,
-    name: 'Citation counts over time page',
+    name: 'Citation counts by publication date page',
   },
   {
     path: /^\/visualisation\/citation-counts-by-subject$/,
@@ -50,7 +50,7 @@ const regexPaths = [
   },
   {
     path: /^\/visualisation\/citation-corpus-growth$/,
-    name: 'Data citations corpus growth',
+    name: 'Data Citation Corpus growth',
   },
 ]
 
