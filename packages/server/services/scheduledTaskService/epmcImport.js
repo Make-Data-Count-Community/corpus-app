@@ -28,7 +28,7 @@ const epmcImport = async () => {
       skip_empty_lines: true,
     })
 
-    const seedSource = await SeedSource.createInstanceFromFile(fileContent)
+    const seedSource = await SeedSource.createInstanceEupmc(fileContent)
     const metadataSource = await MetadataSource.createInstance()
 
     for (const record of seedSource.data) {

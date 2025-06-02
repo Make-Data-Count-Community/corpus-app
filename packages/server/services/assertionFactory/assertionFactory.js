@@ -21,6 +21,10 @@ class AssertionFactory {
       DataciteToAssertion,
       CrossrefToAssertion
     ],
+    eupmc: [
+      DataciteToAssertion,
+      CrossrefToAssertion
+    ],
     czi: [DataciteToAssertion, CrossrefToAssertion, CziToAssertion],
   }
 
