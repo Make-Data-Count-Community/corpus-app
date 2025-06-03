@@ -6,6 +6,9 @@ const AsapFile = require('./asapFile')
 const AwsS3Service = require('../awsS3Service')
 const { model: ActivityLog } = require('../../models/activityLog')
 const { model: Source } = require('../../models/source')
+const fs = require('fs')
+const path = require('path')
+const { parse } = require('csv-parse/sync') // Use csv-parse for parsing CSV files
 
 class SeedSource {
   static async createInstanceDatacite(filter) {
@@ -16,70 +19,72 @@ class SeedSource {
     return new CziFile()
   }
 
-  static async createInstanceEupmc(fileContent) {
-    const processedData = [];
-
-    // Retrieve the source from the database
-    const source = await Source.query().findOne({ abbreviation: 'eupmc' });
+  static async createInstanceEupmcFromLocalFolder(folderPath) {
+    const processedData = []
+    const source = await Source.query().findOne({ abbreviation: 'eupmc' })
     if (!source) {
-      throw new Error('Source "eupmc" not found in the database. Please add it to the Source table.');
+      throw new Error('Source "eupmc" not found in the database. Please add it to the Source table.')
     }
-    logger.info(`Retrieved "eupmc" from DB: ${JSON.stringify(source)}`);
+    logger.info(`Retrieved "eupmc" from DB: ${JSON.stringify(source)}`)
 
-    // Create citations array from CSV rows
-    const citations = fileContent.map(record => {
-      const datasetId = record['dataset_id']?.trim();
-      const publicationDoi = record['publication']?.trim();
-      const repository = record['repository']?.trim();
+    const files = fs.readdirSync(folderPath).filter(file => file.endsWith('.csv'))
+    for (const file of files) {
+      const filePath = path.join(folderPath, file)
+      const rawContent = fs.readFileSync(filePath, 'utf8')
+      const fileContent = parse(rawContent, { columns: true, skip_empty_lines: true })
 
-      if (!datasetId || !publicationDoi) {
-        logger.warn(`Skipping row due to missing required fields: ${JSON.stringify(record)}`);
-        return null;
+      const citations = fileContent.map(record => {
+        const datasetId = record['dataset_id']?.trim()
+        const publicationDoi = record['publication']?.trim()
+        const repository = record['repository']?.trim()
+
+        if (!datasetId || !publicationDoi) {
+          logger.warn(`Skipping row due to missing required fields: ${JSON.stringify(record)}`)
+          return null
+        }
+
+        const isDatasetDoi = datasetId.startsWith('10.')
+        const isPublicationDoi = publicationDoi.startsWith('10.')
+        const doiBaseUrl = 'https://doi.org/'
+
+        return {
+          id: uuid(),
+          doi: isDatasetDoi ? datasetId : null,
+          accessionNumber: !isDatasetDoi ? datasetId : null,
+          source: source.id,
+          dataset: isDatasetDoi ? `${doiBaseUrl}${datasetId}` : datasetId,
+          subjId: isDatasetDoi ? `${doiBaseUrl}${datasetId}` : datasetId,
+          objId: isPublicationDoi ? `${doiBaseUrl}${publicationDoi}` : publicationDoi,
+          publication: isPublicationDoi ? `${doiBaseUrl}${publicationDoi}` : publicationDoi,
+          repository,
+          datacite: {},
+          crossref: {},
+          event: {
+            dataCiteDoi: isDatasetDoi ? datasetId : null,
+            crossrefDoi: isPublicationDoi ? publicationDoi : null,
+          },
+        }
+      }).filter(Boolean)
+
+      const activityLogEntry = await ActivityLog.query()
+        .insert({
+          action: 'assertion_incoming_eupmc',
+          data: JSON.stringify(citations),
+          tableName: 'assertions',
+          type: 'activityLog',
+          fileKey: `seed-source-processing-eupmc-${file}`,
+        })
+        .returning('id')
+
+      for (const citation of citations) {
+        citation.activityId = activityLogEntry.id
+        processedData.push(citation)
       }
-
-      const isDatasetDoi = datasetId.startsWith('10.');
-      const isPublicationDoi = publicationDoi.startsWith('10.');
-      const doiBaseUrl = 'https://doi.org/';
-
-      return {
-        id: uuid(),
-        doi: isDatasetDoi ? datasetId : null,
-        accessionNumber: !isDatasetDoi ? datasetId : null,
-        source: source.id,
-        dataset: isDatasetDoi ? `${doiBaseUrl}${datasetId}` : datasetId,
-        subjId: isDatasetDoi ? `${doiBaseUrl}${datasetId}` : datasetId,
-        objId: isPublicationDoi ? `${doiBaseUrl}${publicationDoi}` : publicationDoi,
-        publication: isPublicationDoi ? `${doiBaseUrl}${publicationDoi}` : publicationDoi,
-        repository,
-        datacite: {},
-        crossref: {},
-        event: {
-          dataCiteDoi: isDatasetDoi ? datasetId : null,
-          crossrefDoi: isPublicationDoi ? publicationDoi : null,
-        },
-      };
-    }).filter(Boolean); // Filter out nulls
-
-    // Create activity log
-    const activityLogEntry = await ActivityLog.query()
-      .insert({
-        action: 'assertion_incoming_eupmc',
-        data: JSON.stringify(citations),
-        tableName: 'assertions',
-        type: 'activityLog',
-        fileKey: 'seed-source-processing-eupmc',
-      })
-      .returning('id');
-
-    // Attach activity ID to each citation
-    for (const citation of citations) {
-      citation.activityId = activityLogEntry.id;
-      processedData.push(citation);
     }
 
-    const seedSource = new SeedSource();
-    seedSource.data = processedData;
-    return seedSource;
+    const seedSource = new SeedSource()
+    seedSource.data = processedData
+    return seedSource
   }
 
 
