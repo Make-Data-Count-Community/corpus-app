@@ -34,7 +34,7 @@ class SeedSource {
       const fileContent = parse(rawContent, { columns: true, skip_empty_lines: true })
 
       const citations = fileContent.map(record => {
-        const datasetId = record['dataset_id']?.trim()
+        const datasetId = record['dataset']?.trim()
         const publicationDoi = record['publication']?.trim()
         const repository = record['repository']?.trim()
 

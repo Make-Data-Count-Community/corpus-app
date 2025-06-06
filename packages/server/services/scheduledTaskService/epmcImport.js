@@ -28,7 +28,7 @@ const epmcImport = async () => {
     }
 
     metadataSource.startStreamCitations(null)
-    const result = await metadataSource.getResult()
+    const result = await metadataSource.getResult
     logger.info(`Saving ${result.length} assertions for EUPMC folder...`)
     await AssertionFactory.saveDataToAssertionModel(result)
 
