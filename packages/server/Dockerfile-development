@@ -16,3 +16,5 @@ USER node
 RUN yarn install --frozen-lockfile
 # RUN yarn cache clean
 COPY --chown=node:node . .
+
+#CMD ["node", "--max-old-space-size=4096", "importer.js"]

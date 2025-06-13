@@ -8,7 +8,10 @@ const { model: ActivityLog } = require('../../models/activityLog')
 const { model: Source } = require('../../models/source')
 const fs = require('fs')
 const path = require('path')
-const { parse } = require('csv-parse/sync') // Use csv-parse for parsing CSV files
+const { parse } = require('csv-parse')
+const { finished } = require('stream/promises')
+const BATCH_SIZE = 500
+const doiBaseUrl = 'https://doi.org/'
 
 class SeedSource {
   static async createInstanceDatacite(filter) {
@@ -20,34 +23,33 @@ class SeedSource {
   }
 
   static async createInstanceEupmcFromLocalFolder(folderPath) {
-    const processedData = []
     const source = await Source.query().findOne({ abbreviation: 'eupmc' })
-    if (!source) {
-      throw new Error('Source "eupmc" not found in the database. Please add it to the Source table.')
-    }
-    logger.info(`Retrieved "eupmc" from DB: ${JSON.stringify(source)}`)
+    if (!source) throw new Error('Source "eupmc" not found.')
 
-    const files = fs.readdirSync(folderPath).filter(file => file.endsWith('.csv'))
+    const files = fs.readdirSync(folderPath).filter(f => f.endsWith('.csv'))
+
     for (const file of files) {
       const filePath = path.join(folderPath, file)
-      const rawContent = fs.readFileSync(filePath, 'utf8')
-      const fileContent = parse(rawContent, { columns: true, skip_empty_lines: true })
+      const parser = fs.createReadStream(filePath).pipe(parse({ columns: true, skip_empty_lines: true }))
 
-      const citations = fileContent.map(record => {
+      let batch = []
+      let total = 0
+      let batchCount = 0
+
+      for await (const record of parser) {
         const datasetId = record['dataset']?.trim()
         const publicationDoi = record['publication']?.trim()
         const repository = record['repository']?.trim()
 
         if (!datasetId || !publicationDoi) {
-          logger.warn(`Skipping row due to missing required fields: ${JSON.stringify(record)}`)
-          return null
+          logger.warn(`Skipping invalid row: ${JSON.stringify(record)}`)
+          continue
         }
 
         const isDatasetDoi = datasetId.startsWith('10.')
         const isPublicationDoi = publicationDoi.startsWith('10.')
-        const doiBaseUrl = 'https://doi.org/'
 
-        return {
+        batch.push({
           id: uuid(),
           doi: isDatasetDoi ? datasetId : null,
           accessionNumber: !isDatasetDoi ? datasetId : null,
@@ -62,31 +64,28 @@ class SeedSource {
           event: {
             dataCiteDoi: isDatasetDoi ? datasetId : null,
             crossrefDoi: isPublicationDoi ? publicationDoi : null,
-          },
-        }
-      }).filter(Boolean)
-
-      const activityLogEntry = await ActivityLog.query()
-        .insert({
-          action: 'assertion_incoming_eupmc',
-          data: JSON.stringify(citations),
-          tableName: 'assertions',
-          type: 'activityLog',
-          fileKey: `seed-source-processing-eupmc-${file}`,
+          }
         })
-        .returning('id')
 
-      for (const citation of citations) {
-        citation.activityId = activityLogEntry.id
-        processedData.push(citation)
+        if (batch.length === BATCH_SIZE) {
+          await insertActivity(batch, file, ++batchCount)
+          total += batch.length
+          batch = []
+        }
       }
+
+      // insert remaining rows
+      if (batch.length > 0) {
+        await insertActivity(batch, file, ++batchCount)
+        total += batch.length
+      }
+
+      logger.info(`✅ Finished processing file "${file}" — ${total} citations in ${batchCount} batch(es).`)
     }
 
-    const seedSource = new SeedSource()
-    seedSource.data = processedData
-    return seedSource
+    return { success: true }
   }
-
+  
 
   static async createInstanceFromFile(fileContent) {
     const processedData = [];
@@ -186,6 +185,20 @@ class SeedSource {
 
     return false
   }
+}
+
+async function insertActivity(batch, file, batchNum) {
+  const activity = await ActivityLog.query().insert({
+    action: 'assertion_incoming_eupmc',
+    data: JSON.stringify(batch),
+    tableName: 'assertions',
+    type: 'activityLog',
+    fileKey: `eupmc-${file}-batch-${batchNum}`
+  }).returning('id')
+
+  batch.forEach(citation => citation.activityId = activity.id)
+
+  logger.info(`Created activity ${activity.id} for "${file}", batch ${batchNum} (${batch.length} rows)`)
 }
 
 module.exports = SeedSource
