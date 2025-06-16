@@ -17,6 +17,7 @@ services:
     command:
       [
         'node_modules/.bin/nodemon',
+        '--max-old-space-size=8192',
         'epmcImport.js',
         '--watch',
         '--ext',
