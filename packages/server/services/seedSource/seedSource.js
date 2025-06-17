@@ -41,7 +41,6 @@ class SeedSource {
       for (const record of records) {
         const datasetId = record['dataset']?.trim();
         const publicationDoi = record['publication']?.trim();
-        const repository = record['repository']?.trim();
   
         if (!datasetId || !publicationDoi) {
           logger.warn(`Skipping row due to missing fields: ${JSON.stringify(record)}`);
@@ -58,9 +57,8 @@ class SeedSource {
           source: source.id,
           dataset: isDatasetDoi ? `${doiBaseUrl}${datasetId}` : datasetId,
           subjId: isDatasetDoi ? `${doiBaseUrl}${datasetId}` : datasetId,
-          objId: isPublicationDoi ? `${doiBaseUrl}${publicationDoi}` : publicationDoi,
-          publication: isPublicationDoi ? `${doiBaseUrl}${publicationDoi}` : publicationDoi,
-          repository,
+          objId: publicationDoi,
+          publication: publicationDoi,
           datacite: {},
           crossref: {},
           event: {
@@ -90,9 +88,6 @@ class SeedSource {
   
         const activityId = activityLogEntry.id;
         batch.forEach(citation => (citation.activityId = activityId));
-  
-        // Optional: Bulk insert citations
-        // await CitationModel.query().insert(batch);
   
         processedData.push(...batch);
         batchCount++;
