@@ -42,8 +42,8 @@ services:
       - S3_PORT=${S3_PORT:-9000}
       - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID:-nonRootUser}
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-nonRootPassword}
-      - S3_BUCKET=${S3_BUCKET:-uploads}
-      - S3_CZI_FOLDER_PATH=${S3_CZI_FOLDER_PATH}
+      - S3_EUROPEPMC_BUCKET=${S3_EUROPEPMC_BUCKET}
+      - S3_EUROPEPMC_FOLDER=${S3_EUROPEPMC_FOLDER}
       - EPMC_LOCAL_FILE_PATH=${EPMC_LOCAL_FILE_PATH:-ingest-data/eroupepmc.csv}
     volumes:
       - ./packages/server/api:/home/node/app/api

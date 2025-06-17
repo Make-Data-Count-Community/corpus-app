@@ -19,7 +19,7 @@ class SeedSource {
     return new CziFile()
   }
 
-  static async createInstanceEupmcFromLocalFolder(folderPath) {
+  static async createInstanceEupmcFromLocalFolder() {
     const BATCH_SIZE = 500;
     const processedData = [];
     const doiBaseUrl = 'https://doi.org/';
@@ -29,27 +29,47 @@ class SeedSource {
       throw new Error('Source "eupmc" not found in the database.');
     }
   
-    const files = fs.readdirSync(folderPath).filter(file => file.endsWith('.csv'));
+    const awsService = new AwsS3Service()
+    const files = await awsService.readS3Folder(process.env.S3_EUROPEPMC_BUCKET, process.env.S3_EUROPEPMC_FOLDER)
+
+    logger.info(`We fetched ${files.length} files.`);
   
-    for (const file of files) {
-      const filePath = path.join(folderPath, file);
-      const rawContent = fs.readFileSync(filePath, 'utf8');
-      const records = parse(rawContent, { columns: true, skip_empty_lines: true });
-  
-      const citations = [];
-  
+    for (const { fileKey, fileStream } of files) {
+      logger.info(`📄 Processing S3 file: ${fileKey}`)
+    
+      const rawContent = await streamToString(fileStream)
+      //const records = parse(rawContent, { columns: true, skip_empty_lines: true })
+      const records = parse(rawContent, {
+        columns: true,
+        skip_empty_lines: true,
+        relax_column_count: true, // <== allows missing fields without crashing
+        on_record: (record, context) => {
+          const datasetId = record['dataset']?.trim();
+          const publicationDoi = record['publication']?.trim();
+      
+          if (!datasetId || !publicationDoi) {
+            logger.warn(`⚠️ Skipping malformed row on line ${context.lines}: ${JSON.stringify(record)}`);
+            return null;
+          }
+      
+          return record;
+        },
+      });
+      
+          
+      const citations = []
       for (const record of records) {
-        const datasetId = record['dataset']?.trim();
-        const publicationDoi = record['publication']?.trim();
-  
+        const datasetId = record['dataset']?.trim()
+        const publicationDoi = record['publication']?.trim()
+    
         if (!datasetId || !publicationDoi) {
-          logger.warn(`Skipping row due to missing fields: ${JSON.stringify(record)}`);
-          continue;
+          logger.warn(`⚠️ Skipping row due to missing fields: ${JSON.stringify(record)}`)
+          continue
         }
-  
-        const isDatasetDoi = datasetId.startsWith('10.');
-        const isPublicationDoi = publicationDoi.startsWith('10.');
-  
+    
+        const isDatasetDoi = datasetId.startsWith('10.')
+        const isPublicationDoi = publicationDoi.startsWith('10.')
+    
         citations.push({
           id: uuid(),
           doi: isDatasetDoi ? datasetId : null,
@@ -65,40 +85,37 @@ class SeedSource {
             dataCiteDoi: isDatasetDoi ? datasetId : null,
             crossrefDoi: isPublicationDoi ? publicationDoi : null,
           },
-        });
+        })
       }
-  
-      let batchCount = 0;
-  
+    
+      let batchCount = 0
+    
       for (let i = 0; i < citations.length; i += BATCH_SIZE) {
-        const batch = citations.slice(i, i + BATCH_SIZE);
-  
-        const batchId = i / BATCH_SIZE + 1;
-        const fileKey = `seed-source-processing-eupmc-${file}-batch-${batchId}`;
-  
+        const batch = citations.slice(i, i + BATCH_SIZE)
+        const batchId = i / BATCH_SIZE + 1
+        const batchFileKey = `seed-source-processing-eupmc-${path.basename(fileKey)}-batch-${batchId}`
+    
         const activityLogEntry = await ActivityLog.query()
           .insert({
             action: 'assertion_incoming_eupmc',
             data: JSON.stringify(batch),
             tableName: 'assertions',
             type: 'activityLog',
-            fileKey,
+            fileKey: batchFileKey,
           })
-          .returning('id');
-  
-        const activityId = activityLogEntry.id;
-        batch.forEach(citation => (citation.activityId = activityId));
-  
-        processedData.push(...batch);
-        batchCount++;
-  
-        // Log for each activity
-        logger.info(`Created ActivityLog ${activityId} for file "${file}" — batch ${batchId} with ${batch.length} citations.`);
+          .returning('id')
+    
+        const activityId = activityLogEntry.id
+        batch.forEach(citation => (citation.activityId = activityId))
+        processedData.push(...batch)
+    
+        logger.info(`✅ Created ActivityLog ${activityId} for batch ${batchId} of file "${fileKey}" with ${batch.length} citations.`)
+        batchCount++
       }
-  
-      // Log for each file
-      logger.info(`Finished processing file "${file}" — ${citations.length} total citations in ${batchCount} batch(es).`);
+    
+      logger.info(`✅ Finished processing file "${fileKey}" — ${citations.length} citations in ${batchCount} batch(es).`)
     }
+    
     
     logger.info(`Finished processing ${processedData.length} total citations across ${files.length} files.`);
 
@@ -206,6 +223,15 @@ class SeedSource {
 
     return false
   }
+}
+
+function streamToString(stream) {
+  const chunks = []
+  return new Promise((resolve, reject) => {
+    stream.on('data', chunk => chunks.push(chunk))
+    stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
+    stream.on('error', reject)
+  })
 }
 
 module.exports = SeedSource

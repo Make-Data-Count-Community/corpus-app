@@ -20,7 +20,7 @@ const epmcImport = async () => {
       throw new Error(`EUPMC folder not found at path: ${epmcFolderPath}`)
     }
 
-    const seedSource = await SeedSource.createInstanceEupmcFromLocalFolder(epmcFolderPath)
+    const seedSource = await SeedSource.createInstanceEupmcFromLocalFolder()
     const metadataSource = await MetadataSource.createInstance()
 
     for (const record of seedSource.data) {

@@ -4,8 +4,8 @@ const { logger } = require('@coko/server')
 class AwsS3Service {
   constructor() {
     AWS.config.update({
-      accessKeyId: 'xzy', // TODO fetch these creds from environments variables
-      secretAccessKey: 'xyz',
+      accessKeyId: process.env.S3_ACCESS_KEY_ID,
+      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
       region: 'eu-west-1',
     })
 
