@@ -44,7 +44,6 @@ services:
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY:-nonRootPassword}
       - S3_EUROPEPMC_BUCKET=${S3_EUROPEPMC_BUCKET}
       - S3_EUROPEPMC_FOLDER=${S3_EUROPEPMC_FOLDER}
-      - EPMC_LOCAL_FILE_PATH=${EPMC_LOCAL_FILE_PATH:-ingest-data/eroupepmc.csv}
     volumes:
       - ./packages/server/api:/home/node/app/api
       - ./packages/server/config:/home/node/app/config

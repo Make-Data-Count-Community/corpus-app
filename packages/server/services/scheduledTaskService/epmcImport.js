@@ -10,17 +10,9 @@ const epmcFolderPath = process.env.EPMC_LOCAL_FILE_PATH
 
 const epmcImport = async () => {
   try {
-    logger.info('######### Start Reading EPMC files from local folder #########')
+    logger.info('######### Start Reading EPMC files from S3 #########')
 
-    if (!epmcFolderPath) {
-      throw new Error('EPMC_LOCAL_FOLDER_PATH environment variable is not set.')
-    }
-
-    if (!fs.existsSync(epmcFolderPath)) {
-      throw new Error(`EUPMC folder not found at path: ${epmcFolderPath}`)
-    }
-
-    const seedSource = await SeedSource.createInstanceEupmcFromLocalFolder()
+    const seedSource = await SeedSource.createInstanceEupmcFromS3()
     const metadataSource = await MetadataSource.createInstance()
 
     for (const record of seedSource.data) {

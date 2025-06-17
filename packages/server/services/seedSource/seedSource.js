@@ -19,7 +19,7 @@ class SeedSource {
     return new CziFile()
   }
 
-  static async createInstanceEupmcFromLocalFolder() {
+  static async createInstanceEupmcFromS3() {
     const BATCH_SIZE = 500;
     const processedData = [];
     const doiBaseUrl = 'https://doi.org/';
