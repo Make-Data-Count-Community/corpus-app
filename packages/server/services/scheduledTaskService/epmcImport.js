@@ -1,28 +1,19 @@
 const { db, logger } = require('@coko/server')
-const fs = require('fs')
-const SeedSource = require('../seedSource/seedSource')
-const MetadataSource = require('../metadata/metadataSource')
-const AssertionFactory = require('../assertionFactory/assertionFactory')
 const Assertion = require('../../models/assertion/assertion')
+const CorpusDataFactory = require('../corpusDataFactory')
+const SeedSource = require('../seedSource/seedSource')
 const Source = require('../../models/source/source')
 
-const epmcFolderPath = process.env.EPMC_LOCAL_FILE_PATH
 
 const epmcImport = async () => {
   try {
     logger.info('######### Start Reading EPMC files from S3 #########')
 
-    const seedSource = await SeedSource.createInstanceEupmcFromS3()
-    const metadataSource = await MetadataSource.createInstance()
+    await SeedSource.createInstanceReadS3Eupmc()
 
-    for (const record of seedSource.data) {
-      metadataSource.startStreamCitations(record)
-    }
+    logger.info(`######### Start Retreving Data from API ######### `)
 
-    metadataSource.startStreamCitations(null)
-    const result = await metadataSource.getResult
-    logger.info(`Saving ${result.length} assertions for EUPMC folder...`)
-    await AssertionFactory.saveDataToAssertionModel(result)
+    await CorpusDataFactory.loadDataInParallelFromDB()
 
     await db.raw('REFRESH MATERIALIZED VIEW last_10_years_assertions')
     await db.raw('REFRESH MATERIALIZED VIEW count_growth_per_day')
