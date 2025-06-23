@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-const { Publisher, Journal } = require('@pubsweet/models')
+const { Publisher, Journal, Repository } = require('@pubsweet/models')
 
 class CrossrefToAssertion {
   // eslint-disable-next-line class-methods-use-this
@@ -30,6 +30,21 @@ class CrossrefToAssertion {
       }
 
       assertionInstance.journalId = journal.id
+    }
+
+    if( chunk.repository) {
+      const title = chunk.repository
+
+      const exists = await Repository.query(trx).findOne({ title })
+      let repository = exists
+
+      if (!exists) {
+        repository = await Repository.query(trx)
+          .insert({ title })
+          .returning('*')
+      }
+
+      assertionInstance.repositoryId = repository.id
     }
   }
 }

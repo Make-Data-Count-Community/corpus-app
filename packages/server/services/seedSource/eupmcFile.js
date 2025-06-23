@@ -118,6 +118,7 @@ class EupmcFile {
 		subjId: isDatasetDoi ? `${this.doiBaseUrl}${result.dataset}` : result.dataset,
 		objId: result.publication,
 		publication: result.publication,
+		repository: result.repository,
 		datacite: {},
 		crossref: {},
 		event: {
