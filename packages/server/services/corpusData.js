@@ -67,17 +67,26 @@ class CorpusData {
     const data = JSON.parse(res.data)
 
     data.forEach(citation => {
-      const { id } = sources.find(
+      const { id, abbreviation } = sources.find(
         s => s.abbreviation === res.action.replace('assertion_incoming_', ''),
       )
 
       if (id) {
-        const assertions = {
-          activityId: activityLogRecord.id,
-          source: id,
-          event: citation,
-          datacite: {},
-          crossref: {},
+        let assertions;
+
+        if (abbreviation === 'eupmc') {
+          assertions = {
+             activityId: activityLogRecord.id,
+             ...citation
+          }
+        }else{
+          assertions = {
+            activityId: activityLogRecord.id,
+            source: id,
+            event: citation,
+            datacite: {},
+            crossref: {},
+          }
         }
 
         metadataSource.startStreamCitations(assertions)

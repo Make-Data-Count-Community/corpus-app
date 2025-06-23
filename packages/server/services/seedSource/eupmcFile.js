@@ -98,7 +98,8 @@ class EupmcFile {
 
   buildActivityLogRecord(result) {
 	const isDatasetDoi = this.doiPattern.test(result.dataset)
-	const isPublicationDoi = this.doiPattern.test(result.publication)
+	const publicationDoi = result.publication.split('doi.org/')[1]
+	const isPublicationDoi = this.doiPattern.test(publicationDoi)
 
 	if (isDatasetDoi) {
 	  // eslint-disable-next-line no-plusplus
@@ -121,7 +122,7 @@ class EupmcFile {
 		crossref: {},
 		event: {
 			dataCiteDoi: isDatasetDoi ? result.dataset : null,
-			crossrefDoi: isPublicationDoi ? result.publication : null,
+			crossrefDoi: isPublicationDoi ? publicationDoi : null,
 		}
 	}
   }
