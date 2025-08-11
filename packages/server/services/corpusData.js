@@ -7,7 +7,7 @@ const AssertionFactory = require('./assertionFactory/assertionFactory')
 const ActivityLog = require('../models/activityLog/activityLog')
 const Source = require('../models/source/source')
 
-const NUMBER_OF_PARALLEL_IMPORT_STREAMS = 5
+const NUMBER_OF_PARALLEL_IMPORT_STREAMS = 50
 
 class CorpusData {
   constructor(seedSource, metadataSource) {
@@ -58,12 +58,6 @@ class CorpusData {
       return 0
     }
 
-    await ActivityLog.query()
-      .patch({
-        proccessed: true,
-      })
-      .findById(activityLogRecord.id)
-
     const data = JSON.parse(res.data)
 
     data.forEach(citation => {
@@ -104,6 +98,13 @@ class CorpusData {
         `Saving ${result.length} assertions for activity log ${activityLogRecord.id}...`,
       )
       await AssertionFactory.saveDataToAssertionModel(result)
+
+      await ActivityLog.query()
+        .patch({
+          proccessed: true,
+        })
+        .findById(activityLogRecord.id)
+
       return result.length
     } catch (e) {
       logger.info(e)
