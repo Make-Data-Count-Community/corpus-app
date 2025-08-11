@@ -15,6 +15,8 @@ const epmcImport = async () => {
 
     await CorpusDataFactory.loadDataInParallelFromDB()
 
+    logger.info(`######### Start Refreshing materialized views ######### `)
+
     await db.raw('REFRESH MATERIALIZED VIEW last_10_years_assertions')
     await db.raw('REFRESH MATERIALIZED VIEW count_growth_per_day')
     await db.raw('REFRESH MATERIALIZED VIEW facet_unique_counts')
