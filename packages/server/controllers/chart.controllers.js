@@ -98,7 +98,7 @@ const getAssertionsPerYear = async ({ input }) => {
 
   const results = await searchedAssertions.search(
     db.raw(
-      `COUNT(CASE WHEN dataset LIKE 'https://doi.org%' THEN 1 END) AS countDoi, COUNT(CASE WHEN dataset NOT LIKE 'https://doi.org%' THEN 1 END) AS accessionumber, year`,
+      `count(doi) as countDoi, count(accession_number) as accessionumber, year`,
     ),
   )
 
