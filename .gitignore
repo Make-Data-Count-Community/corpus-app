@@ -43,7 +43,7 @@ typings/
 .stylelintcache
 
 # env & config
-*.env*
+.env
 packages/server/config/local*
 
 # Storybook build outputs
