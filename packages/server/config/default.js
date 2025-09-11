@@ -65,6 +65,12 @@ module.exports = {
       idleTimeoutMillis: 1000 * 10,
     },
     useFileStorage: false,
+    cors: {
+      origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+      credentials: true,
+      methods: ['GET', 'POST', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    }
   },
   teams: {
     global: {},
