@@ -31,6 +31,7 @@ services:
       - SERVER_PORT=${SERVER_PORT:-3000}
       - HOSTNAME=${HOSTNAME}
       - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://0.0.0.0:3000}
       - MAILER_SENDER=${MAILER_SENDER:-dev@example.com}
       - MAILER_HOSTNAME=${MAILER_HOSTNAME}
       - MAILER_PORT=${MAILER_PORT}
