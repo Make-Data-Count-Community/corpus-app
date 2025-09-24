@@ -1,5 +1,6 @@
 module.exports = {
   clientUrl: 'CLIENT_URL',
+  corsOrigin: 'CORS_ORIGIN',
   'pubsweet-server': {
     admin: {
       username: 'ADMIN_USERNAME',
