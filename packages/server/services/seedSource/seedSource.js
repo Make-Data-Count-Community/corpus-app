@@ -3,9 +3,13 @@ const DataCiteEventData = require('./dataCiteEventData')
 const axios = require('../axiosService')
 const CziFile = require('./cziFile')
 const AsapFile = require('./asapFile')
+const EupmcFile = require('./eupmcFile')
 const AwsS3Service = require('../awsS3Service')
 const { model: ActivityLog } = require('../../models/activityLog')
 const { model: Source } = require('../../models/source')
+const { model: CziFileModel } = require('../../models/cziFileModel')
+const path = require('path')
+const { parse } = require('csv-parse/sync') // Use csv-parse for parsing CSV files
 
 class SeedSource {
   static async createInstanceDatacite(filter) {
@@ -15,7 +19,7 @@ class SeedSource {
   static async createInstanceCzi() {
     return new CziFile()
   }
-
+  
   static async createInstanceFromFile(fileContent) {
     const processedData = [];
   
@@ -108,6 +112,43 @@ class SeedSource {
       const czi = new CziFile(files)
 
       return await czi.readSource()
+    } catch (e) {
+      logger.error(e)
+    }
+
+    return false
+  }
+
+  static async createInstanceReadS3Eupmc() {
+    try {
+      const source = await Source.query().findOne({ abbreviation: 'eupmc' });
+
+      if (!source) {
+        throw new Error('Source "eupmc" not found in the database.');
+      }
+
+      const awsService = new AwsS3Service()
+
+      const files = await awsService.readS3Folder(
+        process.env.S3_EUROPEPMC_BUCKET,
+        process.env.S3_EUROPEPMC_FOLDER
+      )
+
+      const filesToProcess = await Promise.all(files.map(async (file) => {
+        const existingFile = await CziFileModel.query().findOne({ file_name: file.fileKey });
+        return { file, isProcessed: existingFile && existingFile.proccessed === true };
+      }));
+
+      const unprocessedFiles = filesToProcess
+        .filter(item => !item.isProcessed)
+        .map(item => item.file);
+
+      // eslint-disable-next-line no-console
+      console.log(`Processing ${unprocessedFiles.length} out of ${files.length} files`);
+
+      const eupmc = new EupmcFile(unprocessedFiles, source.id)
+
+      return await eupmc.readSource()
     } catch (e) {
       logger.error(e)
     }

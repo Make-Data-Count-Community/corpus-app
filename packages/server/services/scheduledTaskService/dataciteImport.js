@@ -8,11 +8,11 @@ const Assertion = require('../../models/assertion/assertion')
  * Fetch datacite records from the API
  */
 const dataciteImport = async () => {
-  const startDate = new Date(process.env.START_YEAR, process.env.START_YEAR_MONTH, 1)
+  const startDate = new Date('2025', '0', 1)
   logger.info(`######### Start Date : ${startDate} ######### `)
 
   // const endDate = new Date(new Date().getFullYear(), 11, 31)
-  const endDate = new Date(process.env.END_YEAR, process.env.END_YEAR_MONTH, process.env.END_YEAR_MONTH_LAST_DAY)
+  const endDate = new Date('2025', '5', '30')
   endDate.setHours(23, 59, 59, 999) // set to end of the day
   logger.info(`######### End Date : ${endDate} ######### `)
 

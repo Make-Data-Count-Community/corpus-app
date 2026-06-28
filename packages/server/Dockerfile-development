@@ -1,8 +1,9 @@
-FROM node:16.19.0
+FROM node:16.20.2-bullseye-slim
 
 RUN apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y ranger vim p7zip-full
+    && apt-get install -y ranger vim p7zip-full build-essential python3 \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home/node/app
 
@@ -16,3 +17,5 @@ USER node
 RUN yarn install --frozen-lockfile
 # RUN yarn cache clean
 COPY --chown=node:node . .
+
+#CMD ["node", "--max-old-space-size=4096", "importer.js"]

@@ -31,11 +31,25 @@ module.exports = {
     return response
   },
   crossrefApi: (url, headers = {}) => {
-    url = `${url}/transform/application/vnd.crossref.unixsd+xml`
+    url = `${url}/transform/application/vnd.crossref.unixsd+xml?mailto:${encodeURIComponent('kuda.siziva@datacite.org')}`
 
     const response = request({
       url,
       baseURL: 'https://api.crossref.org',
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': `DataCite-Corpus-App/4.0 (https://datacite.org/; mailto:kuda.siziva@datacite.org)`,
+        ...headers,
+      },
+    })
+
+    return response
+  },
+  crossrefLocalApi: (url, headers = {}) => {
+    const response = request({
+      url,
+      baseURL: 'http://host.docker.internal:8000',
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
